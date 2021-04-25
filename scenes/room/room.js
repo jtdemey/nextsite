@@ -2,7 +2,7 @@ import * as Three from '../../lib/three.module.js';
 import { initLights, updateLights } from './light.js';
 import { updateMeshes, initMeshes,  } from './meshes.js';
 import camera, { setCameraAngle, updateCamera, CAM_ANGLES } from './camera.js';
-import { onMouseMove, updateMouseIntersects } from './mouse';
+import { onMouseMove } from './mouse';
 import { initText } from './text';
 import { initTiles } from './tiles.js';
 
@@ -42,7 +42,7 @@ const init = () => {
 
   initLights(scene);
 
-  document.addEventListener('pointermove', e => onMouseMove(e));
+  document.addEventListener('pointermove', e => onMouseMove(e, renderer));
 
   play();
 };
@@ -73,5 +73,5 @@ const update = () => {
   updateCamera(config.cameraAngle);
   updateMeshes();
   updateLights();
-  updateMouseIntersects(); 
+  //updateMouseIntersects(); 
 };
