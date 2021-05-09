@@ -1,4 +1,5 @@
 import * as Three from '../../lib/three.module.js';
+import Tween from '@tweenjs/tween.js';
 
 const camera = new Three.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 800);
 export default camera;

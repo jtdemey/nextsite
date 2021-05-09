@@ -1,4 +1,5 @@
 import * as Three from '../../lib/three.module.js';
+import * as Tween from '@tweenjs/tween.js';
 import { createMesh } from "./meshes";
 import { addText } from "./text";
 import { getDegree, getHexNum } from "../sceneUtils";
@@ -26,6 +27,27 @@ export const TILE_COLORS = [
   },
 ];
 
+const getRgbTarget = hex => {
+  const c = new Three.Color(hex);
+  return {
+    r: c.r,
+    g: c.g,
+    b: c.b
+  };
+};
+
+const addTweensToTile = (tile, tileIndex) => {
+  const primaryColor = getRgbTarget(TILE_COLORS[tileIndex].primary);
+  const highlightColor = getRgbTarget(TILE_COLORS[tileIndex].highlight);
+  const updateFunc = v => {
+    tile.material.color.setRGB(v.r, v.g, v.b);
+  };
+  tile.focusTween = new Tween.Tween(primaryColor)
+    .to(highlightColor, 500)
+    .onUpdate(updateFunc);
+    console.log(tile.focusTween)
+};
+
 const addTile = (scene, geom, c) => {
   const tile = createMesh(scene, geom, new Three.MeshStandardMaterial({
     color: new Three.Color(c.color)
@@ -34,6 +56,7 @@ const addTile = (scene, geom, c) => {
   tile.rotation.set(getDegree(90), 0, 0);
   tile.scale.set(0.6, 0.01, 0.1);
   tile.hoverEffect = false;
+  addTweensToTile(tile, tiles.length);
   tiles.push(tile);
   addText(scene, c.text, ResourcePaths.FONT_HELVETIKER, {
     x: c.tx, y: c.ty, z: c.tz, scale: 0.015 

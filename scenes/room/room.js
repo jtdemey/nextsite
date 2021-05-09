@@ -1,10 +1,12 @@
 import * as Three from '../../lib/three.module.js';
+import * as Tween from '@tweenjs/tween.js';
 import { initLights, updateLights } from './light.js';
 import { updateMeshes, initMeshes,  } from './meshes.js';
 import camera, { setCameraAngle, updateCamera, CAM_ANGLES } from './camera.js';
 import { onMouseMove } from './mouse';
 import { initText } from './text';
 import { initTiles } from './tiles.js';
+import { initParticles, updateParticles } from './particles.js';
 
 var scene, renderer;
 
@@ -42,6 +44,8 @@ const init = () => {
 
   initLights(scene);
 
+  //initParticles(scene);
+
   document.addEventListener('pointermove', e => onMouseMove(e, renderer));
 
   play();
@@ -73,5 +77,7 @@ const update = () => {
   updateCamera(config.cameraAngle);
   updateMeshes();
   updateLights();
-  //updateMouseIntersects(); 
+  //updateParticles();
+  //updateMouseIntersects();
+  Tween.update();
 };

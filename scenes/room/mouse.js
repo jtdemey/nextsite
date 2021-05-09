@@ -18,12 +18,19 @@ const updateMouseIntersects = () => {
   raycaster.setFromCamera(mouse, camera);
   tiles.forEach((tile, i) => {
     const intersection = raycaster.intersectObject(tile);
+    const isTweening = tile.focusTween.isPlaying();
     if(tile.hoverEffect === true && intersection.length < 1) {
       tile.hoverEffect = false;
-      tile.material.color.set(getHexNum(TILE_COLORS[i].primary));
+      if(isTweening) {
+        console.log(1)
+        tile.focusTween.stop();
+      }
     } else if(intersection.length > 0) {
       tile.hoverEffect = true;
-      tile.material.color.set(getHexNum(TILE_COLORS[i].highlight));
+      if(!isTweening) {
+        console.log(2)
+        tile.focusTween.start();
+      }
     }
   });
 };
