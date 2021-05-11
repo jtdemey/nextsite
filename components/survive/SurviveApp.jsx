@@ -1,12 +1,8 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-// import GamePanel from './middle/GamePanel';
-// import ButtonBar from './bottom/ButtonBar';
-import { delay } from './SurviveUtils';
-import { gameTick, GAME_STATES } from './redux/gameSlice';
-import GameView from './explore/GameView';
-import MainMenuView from './menu/MainMenuView';
+import { gameTick } from './redux/gameSlice';
+import ViewRouter from './ViewRouter';
 
 /*
 $black-bean: #460c0cff;
@@ -28,15 +24,13 @@ const App = styled.div`
 `;
 
 const SurviveApp = () => {
-  const view = useSelector(state => state.game.gameState);
   const dispatch = useDispatch();
   React.useEffect(() => setInterval(() => {
     dispatch(gameTick());
   }, 500), []);
   return (
     <App>
-      <MainMenuView active={view === GAME_STATES.MAINMENU} />
-      <GameView active={view === GAME_STATES.EXPLORE} />
+      <ViewRouter />
     </App>
   );
 };

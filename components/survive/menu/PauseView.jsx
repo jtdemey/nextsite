@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useSpring } from 'react-spring';
+import { useSpring } from '@react-spring/web';
 import styled from 'styled-components';
 import MenuHeader from './MenuHeader';
 

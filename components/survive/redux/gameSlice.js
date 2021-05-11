@@ -26,6 +26,7 @@ export const gameSlice = createSlice({
       state.gameTime = getTimeFromTick(t);
     },
     initGame: state => {
+      console.log('a')
       state.paused = false;
       state.gameState = GAME_STATES.EXPLORE;
     },

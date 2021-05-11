@@ -1,15 +1,17 @@
 import React from 'react';
-import { animated, useSprings } from 'react-spring';
+import { useDispatch } from 'react-redux';
+import { animated, useSprings } from '@react-spring/web';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { initGame } from '../redux/gameSlice';
+import { initGame, loadGame, showOptions } from '../redux/gameSlice';
 
 const MENU_ACTIONS = [
   initGame, //Attempt
-
+  loadGame,
+  showOptions
 ];
 
-const List = styled.ul`
+const List = styled(animated.ul)`
   position: absolute;
   bottom: 0;
   right: 0;
@@ -27,12 +29,13 @@ const Li = styled(animated.li)`
 `;
 
 const MainMenuList = props => {
+  const dispatch = useDispatch();
   const [springs, api] = useSprings(props.listItems.length, i => ({ opacity: 0, x: 80 }));
-  api.start(i => props.visible ? ({ opacity: 1, x: 0, delay: i * 200 }) : ({ opacity: 0, x: 80 }));
+  React.useEffect(() => api.start(i => ({ delay: (i * 300) + 800, opacity: 1, x: 0 })), []);
   return (
     <List>
       {springs.map((spring, i) => (
-        <Li key={i} style={spring}>{props.listItems[i].text}</Li>
+        <Li key={i} onClick={() => dispatch(MENU_ACTIONS[i]())} style={spring}>{props.listItems[i].text}</Li>
       ))}
     </List>
   );
