@@ -1,15 +1,16 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { showOptions } from '../redux/gameSlice';
+import { resumeGame } from '../redux/gameSlice';
 
 const Button = styled.div`
-  height: 100%;
   display: flex;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
-  text-align: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 3rem;
+  height: 3rem;
+  margin: 2rem;
 `;
 
 const Image = styled.img`
@@ -17,13 +18,13 @@ const Image = styled.img`
   margin: auto;
 `;
 
-const OptionsGear = () => {
+const ExitMenuButton = () => {
   const dispatch = useDispatch();
   return (
     <Button>
-      <Image src="survive/gear.svg" onClick={() => dispatch(showOptions())} />
+      <Image src="survive/x.svg" onClick={() => dispatch(resumeGame())} />
     </Button>
   );
 };
 
-export default OptionsGear;
+export default ExitMenuButton;

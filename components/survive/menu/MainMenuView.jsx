@@ -20,9 +20,10 @@ const View = styled(animated.div)`
 `;
 
 const MainMenuView = props => {
-  const spring = useSpring({ opacity: props.active ? 1 : 0, y: props.active ? 0 : 10 });
+  const [spring, api] = useSpring(() => ({ display: 'none', opacity: 0, y: 10 }));
+  React.useEffect(() => api.start({ display: props.active ? 'block' : 'none', opacity: props.active ? 1 : 0, y: props.active ? 0 : 10 }));
   return (
-    <View tabIndex="1" style={{...spring}}>
+    <View style={{...spring}}>
       <MenuHeader text="Survive." />
       <MainMenuList listItems={LIST_ITEMS} />
     </View>

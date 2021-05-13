@@ -13,13 +13,13 @@ const BtnBar = styled.div`
   border-top: 1px solid #333333;
 `;
 
-const ButtonBar = props => {
+const ButtonBar = () => {
   return (
     <BtnBar>
-      <ViewButton imgSrc="survive/tabicon1.svg" />
-      <ViewButton imgSrc="survive/tabicon2.svg" />
-      <ViewButton imgSrc="survive/tabicon3.svg" />
-      <ViewButton imgSrc="survive/tabicon4.svg" />
+      <ViewButton gamePanelView={0} imgSrc="survive/tabicon1.svg" />
+      <ViewButton gamePanelView={1} imgSrc="survive/tabicon2.svg" />
+      <ViewButton gamePanelView={2} imgSrc="survive/tabicon3.svg" />
+      <ViewButton gamePanelView={3} imgSrc="survive/tabicon4.svg" />
     </BtnBar>
   );
 };

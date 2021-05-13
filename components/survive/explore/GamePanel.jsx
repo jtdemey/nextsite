@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import GamePanelRouter from './GamePanelRouter';
 
 const Panel = styled.div`
   width: 100%;
@@ -8,7 +9,7 @@ const Panel = styled.div`
 
 const GamePanel = () => (
   <Panel>
-
+    <GamePanelRouter />
   </Panel>
 );
 

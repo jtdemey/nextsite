@@ -1,14 +1,13 @@
+
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { animated, useSprings } from '@react-spring/web';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { initGame, loadGame, showOptions } from '../redux/gameSlice';
+import { saveGame } from '../redux/gameSlice';
 
 const MENU_ACTIONS = [
-  initGame, //Attempt
-  loadGame,
-  showOptions
+  saveGame
 ];
 
 const List = styled(animated.ul)`
@@ -28,7 +27,7 @@ const Li = styled(animated.li)`
   font-size: 1.5rem;
 `;
 
-const MainMenuList = props => {
+const OptionsList = props => {
   const dispatch = useDispatch();
   const [springs, api] = useSprings(props.listItems.length, i => ({ opacity: 0, x: 80 }));
   React.useEffect(() => api.start(i => ({ delay: (i * 300) + 800, opacity: 1, x: 0 })), []);
@@ -41,8 +40,8 @@ const MainMenuList = props => {
   );
 };
 
-MainMenuList.propTypes = {
+OptionsList.propTypes = {
   listItems: PropTypes.array
 };
 
-export default MainMenuList;
+export default OptionsList;

@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
-import ButtonBar from './ButtonBar';
-import StatusBar from './StatusBar';
-import GamePanel from './GamePanel';
+import MenuHeader from './MenuHeader';
+import ExitMenuButton from './ExitMenuButton';
 
 const View = styled(animated.div)`
   position: absolute;
@@ -14,20 +13,19 @@ const View = styled(animated.div)`
   height: 100%;
 `;
 
-const GameView = props => {
+const OptionsView = props => {
   const [spring, api] = useSpring(() => ({ display: 'none', opacity: 0, y: 10 }));
   React.useEffect(() => api.start({ display: props.active ? 'block' : 'none', opacity: props.active ? 1 : 0, y: props.active ? 0 : 10 }));
   return (
     <View style={spring}>
-      <StatusBar />
-      <GamePanel />
-      <ButtonBar />
+      <ExitMenuButton />
+      <MenuHeader text="Options" />
     </View>
   );
 };
 
-GameView.propTypes = {
+OptionsView.propTypes = {
   active: PropTypes.bool
 };
 
-export default GameView;
+export default OptionsView;

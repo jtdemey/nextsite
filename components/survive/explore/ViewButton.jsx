@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { setGamePanelView } from '../redux/gameSlice';
 
 const Button = styled.div`
   height: 100%;
@@ -17,14 +19,16 @@ const Image = styled.img`
 `;
 
 const ViewButton = props => {
+  const dispatch = useDispatch();
   return (
     <Button>
-      <Image src={props.imgSrc} />
+      <Image src={props.imgSrc} onClick={() => dispatch(setGamePanelView(props.gamePanelView))} />
     </Button>
   );
 };
 
 ViewButton.propTypes = {
+  gamePanelView: PropTypes.number,
   imgSrc: PropTypes.string
 };
 

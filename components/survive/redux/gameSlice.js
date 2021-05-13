@@ -1,54 +1,59 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { getTimeFromTick } from '../SurviveUtils';
-
-export const GAME_STATES = {
-  MAINMENU: 0,
-  EXPLORE: 1,
-  COMBAT: 2,
-  PAUSEMENU: 3,
-  OPTIONSMENU: 4,
-  DIALOGUE: 5
-};
+import { CINEMATICS, GAME_STATES, GAME_PANEL_VIEWS } from './gameConstants';
 
 export const gameSlice = createSlice({
   name: 'game',
   initialState: {
-    tick: 0,
+    //Cinematics
+    cinematicId: 0,
+    cinematicStartTick: 0,
     gameState: GAME_STATES.MAINMENU,
-    gameTime: new Date(1987, 11, 12, 9, 44, 0, 0).toString(),
     gameClock: undefined,
-    paused: true 
+    gameTime: new Date(1987, 11, 12, 9, 44, 0, 0).toString(),
+    gamePanelView: GAME_PANEL_VIEWS.CONSOLE,
+    tick: 0
   },
   reducers: {
     gameTick: state => {
+      if(!(state.gameState > 0 && state.gameState < 3)) return;
       let t = state.tick + 1;
       state.tick = t;
       state.gameTime = getTimeFromTick(t);
     },
     initGame: state => {
-      console.log('a')
-      state.paused = false;
       state.gameState = GAME_STATES.EXPLORE;
     },
     loadGame: (state, action) => {
 
     },
     pauseGame: state => {
-      state.paused = true;
       state.gameState = GAME_STATES.PAUSEMENU;
     },
     resumeGame: state => {
-      state.paused = false;
       state.gameState = GAME_STATES.EXPLORE;
     },
+    saveGame: state => {
+      const clone = {};
+      Object.keys(state).forEach(k => clone[k] = state[k]);
+      window.localStorage['JTD_SURVIVE_GS_SAVE_TS'] = new Date().toISOString();
+      window.localStorage['JTD_SURVIVE_GS_SAVE'] = clone;
+    },
     showOptions: state => {
-      state.paused = true;
       state.gameState = GAME_STATES.OPTIONSMENU;
+    },
+    setGamePanelView: (state, action) => {
+      state.gamePanelView = action.payload;
+    },
+    startCinematic: (state, action) => {
+      state.gameState = GAME_STATES.CINEMATIC;
+      state.cinematicId = action.cinematicId;
+      state.cinematicStartTick = state.tick;
     }
   },
   extraReducers: {}
 });
 
-export const { gameTick, initGame, loadGame, pauseGame, resumeGame, showOptions } = gameSlice.actions;
+export const { gameTick, initGame, loadGame, pauseGame, resumeGame, setGamePanelView, showOptions, startCinematic } = gameSlice.actions;
 
 export default gameSlice.reducer;
