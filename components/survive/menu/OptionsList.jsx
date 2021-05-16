@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { saveGame } from '../redux/gameSlice';
 
 const MENU_ACTIONS = [
+  saveGame,
+  saveGame,
   saveGame
 ];
 
@@ -34,7 +36,7 @@ const OptionsList = props => {
   return (
     <List>
       {springs.map((spring, i) => (
-        <Li key={i} onClick={() => dispatch(MENU_ACTIONS[i]())} style={{ color: i === 0 ? '#7d0013' : '#f5f5f5', ...spring }}>{props.listItems[i].text}</Li>
+        <Li key={i} onClick={() => dispatch(MENU_ACTIONS[i]())} style={spring}>{props.listItems[i].text}</Li>
       ))}
     </List>
   );

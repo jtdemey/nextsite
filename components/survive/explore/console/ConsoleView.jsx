@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
 import CommandLine from './CommandLine';
+import ConsolePane from './ConsolePane';
 
 const View = styled(animated.div)`
   position: relative;
@@ -17,6 +18,7 @@ const ConsoleView = props => {
   React.useEffect(() => api.start({ display: props.active ? 'block' : 'none', opacity: props.active ? 1 : 0, y: props.active ? 0 : 10 }));
   return (
     <View style={spring}>
+      <ConsolePane />
       <CommandLine />
     </View>
   );

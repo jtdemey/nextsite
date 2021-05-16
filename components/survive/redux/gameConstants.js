@@ -1,7 +1,13 @@
+export const CONSOLE_COLORS = {
+  WHITE: 0,
+  RED: 1
+};
+
 export const CINEMATICS = {
-  INTRO: 0,
-  DEATH: 1,
-  PICKUP: 2
+  NONE:   0,
+  INTRO:  1,
+  DEATH:  2,
+  PICKUP: 3
 };
 
 export const GAME_STATES = {

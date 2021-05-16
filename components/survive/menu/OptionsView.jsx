@@ -4,6 +4,13 @@ import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
 import MenuHeader from './MenuHeader';
 import ExitMenuButton from './ExitMenuButton';
+import OptionsList from './OptionsList';
+
+const LIST_ITEMS = [
+  { text: 'Save Game' },
+  { text: 'Text Size' },
+  { text: 'I Dunno' }
+];
 
 const View = styled(animated.div)`
   position: absolute;
@@ -20,6 +27,7 @@ const OptionsView = props => {
     <View style={spring}>
       <ExitMenuButton />
       <MenuHeader text="Options" />
+      <OptionsList listItems={LIST_ITEMS} />
     </View>
   );
 };

@@ -21,8 +21,8 @@ const Image = styled.img`
 const ViewButton = props => {
   const dispatch = useDispatch();
   return (
-    <Button>
-      <Image src={props.imgSrc} onClick={() => dispatch(setGamePanelView(props.gamePanelView))} />
+    <Button onClick={() => dispatch(setGamePanelView(props.gamePanelView))}>
+      <Image src={props.imgSrc} />
     </Button>
   );
 };
