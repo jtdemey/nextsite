@@ -19,7 +19,7 @@ const Line = styled.pre`
   height: 26px;
   margin: 0;
   padding: 0 0.5rem;
-  font-family: 'DM Serif Display', serif;
+  font-family: 'Newsreader', serif;
   font-size: 1rem;
 `;
 

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
+import LocaleItemList from './LocaleItemList';
 
 const View = styled(animated.div)`
   position: relative;
@@ -16,7 +17,7 @@ const InventoryView = props => {
   React.useEffect(() => api.start({ display: props.active ? 'block' : 'none', opacity: props.active ? 1 : 0, y: props.active ? 0 : 10 }));
   return (
     <View style={spring}>
-
+      <LocaleItemList />
     </View>
   );
 };

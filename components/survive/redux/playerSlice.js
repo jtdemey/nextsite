@@ -25,7 +25,9 @@ export const playerSlice = createSlice({
     equipped: []
   },
   reducers: {
+    takeItem: (state, action) => {
 
+    }
   },
   extraReducers: {
     'game/initGame': (state, action) => {
@@ -34,7 +36,6 @@ export const playerSlice = createSlice({
     'game/saveGame': state => {
       const clone = {};
       Object.keys(state).forEach(k => clone[k] = state[k]);
-      window.localStorage['JTD_SURVIVE_PS_SAVE_TS'] = new Date().toISOString();
       window.localStorage['JTD_SURVIVE_PS_SAVE'] = clone;
     }
   }

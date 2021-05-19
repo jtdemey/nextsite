@@ -39,7 +39,7 @@ const CommandLine = () => {
   React.useEffect(() => api.start({ opacity: 1, y: 0 }));
   const dispatch = useDispatch();
   return (
-    <Input type="text" onChange={e => handleChange(e, setTextVal)} onKeyDown={e => handleKeyDown(e, dispatch, setTextVal)} style={spring} value={textVal} />
+    <Input type="text" placeholder=">>" onChange={e => handleChange(e, setTextVal)} onKeyDown={e => handleKeyDown(e, dispatch, setTextVal)} style={spring} value={textVal} />
   );
 };
 

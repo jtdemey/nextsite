@@ -23,7 +23,6 @@ const ConsolePane = () => {
       consoleRef.current.scrollTop = 26 * consoleIndex;
     }
   }, [consoleLines]);
-  console.log(consoleRef.current)
   return (
     <Pane ref={consoleRef}>
       <ConsoleOutput consoleLines={consoleLines} />

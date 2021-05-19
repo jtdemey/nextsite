@@ -47,7 +47,7 @@ export const gameSlice = createSlice({
     saveGame: state => {
       const clone = {};
       Object.keys(state).forEach(k => clone[k] = state[k]);
-      window.localStorage['JTD_SURVIVE_GS_SAVE_TS'] = new Date().toISOString();
+      window.localStorage['JTD_SURVIVE_SAVE_TS'] = new Date().toISOString();
       window.localStorage['JTD_SURVIVE_GS_SAVE'] = clone;
       state.notificationText = 'Game saved to local storage.';
     },
