@@ -16,8 +16,8 @@ const Text = styled(animated.h4)`
 `;
 
 const CenteredText = props => {
-  const [spring, api] = useSpring(() => ({ opacity: 0, y: -10 }));
-  React.useEffect(() => api.start(props.visible ? ({ delay: props.delay, opacity: 1, y: 0 }) : ({ opacity: 0, y: -10 })));
+  const [spring, api] = useSpring(() => ({ opacity: 0, x: -10, y: 0 }));
+  React.useEffect(() => api.start(props.visible ? ({ delay: props.delay, opacity: 1, x: 0, y: 0 }) : ({ opacity: 0, x: -10, y: 3 })));
   return (
     <Text style={spring}>
       {props.text}

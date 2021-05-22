@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import * as Factory from '../world/LocaleFactory';
 
 export const playerSlice = createSlice({
   name: 'player',
@@ -21,12 +22,22 @@ export const playerSlice = createSlice({
     inCombat: false,
     lastCombat: 0,
     currentEnemy: undefined,
-    items: [],
+    items: [ Factory.createItem('handwarmers', 1) ],
     equipped: []
   },
   reducers: {
     takeItem: (state, action) => {
-
+      if(action.payload.item.stackable && state.items.some(item => item.name === action.payload.item.name)) {
+        state.items.forEach(item => {
+          if(item.name === action.payload.item.name) {
+            console.log('match');
+            item.amount += 1;
+          }
+          return;
+        });
+        return;
+      }
+      state.items = state.items.concat([action.payload.item]);
     }
   },
   extraReducers: {
@@ -41,6 +52,6 @@ export const playerSlice = createSlice({
   }
 });
 
-export const { increment, decrement, incrementByAmount } = playerSlice.actions;
+export const { takeItem } = playerSlice.actions;
 
 export default playerSlice.reducer;

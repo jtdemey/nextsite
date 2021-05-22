@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
 import LocaleItemList from './LocaleItemList';
+import InventoryItemList from './InventoryItemList';
 
 const View = styled(animated.div)`
   position: relative;
@@ -18,6 +19,7 @@ const InventoryView = props => {
   return (
     <View style={spring}>
       <LocaleItemList />
+      <InventoryItemList />
     </View>
   );
 };

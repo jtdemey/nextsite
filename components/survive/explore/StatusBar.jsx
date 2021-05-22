@@ -10,7 +10,6 @@ const Bar = styled.div`
   grid-template-columns: 1.5fr 2fr 0.5fr;
   background-color: #151415;
   border-bottom: 1px solid #333333;
-  box-shadow: 0 20px 50px rgba(13, 12, 13, 0.7);
 `;
 
 const StatusBar = () => (

@@ -16,8 +16,8 @@ const handleKeyDown = (e, dispatch, setTextVal) => {
 };
 
 const Input = styled(animated.input)`
-  position: fixed;
-  bottom: 61px;
+  position: absolute;
+  bottom: 0px;
   width: 100%;
   height: 2rem;
   margin: 0;

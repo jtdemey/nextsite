@@ -1,3 +1,5 @@
+import { nanoid } from "nanoid";
+import ItemData from './Items';
 import { TEMPERATURES, VISIBILITIES } from "./LocaleConstants";
 
 export const createLocale = (name, display, x, y, z, overrides) => Object.assign({
@@ -43,15 +45,19 @@ export const createFeature = (name, visibilityThreshold, description) => ({
   description
 });
 
-export const createItem = (name, display, description, stackable, consumable, equipable) => ({
-  amount: 1,
-  name,
-  display,
-  description,
-  stackable,
-  consumable,
-  equipable
-});
+export const createItem = (name, amount) => {
+  const metadata = ItemData[name];
+  return {
+    itemId: nanoid(),
+    amount,
+    name,
+    display: metadata.display,
+    description: metadata.description,
+    stackable: metadata.stackable,
+    consumable: metadata.consumable,
+    equipable: metadata.equipable
+  };
+};
 
 export const createLoot = (probability, itemName, amounts) => ({
   probability,

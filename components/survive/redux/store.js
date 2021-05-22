@@ -2,12 +2,14 @@ import { combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/
 import createSagaMiddleware from 'redux-saga';
 import gameReducer from './gameSlice';
 import playerReducer from './playerSlice';
+import worldReducer from './worldSlice';
 
 const sagaMiddleware = createSagaMiddleware();
 
 const reducer = combineReducers({
   game: gameReducer,
-  player: playerReducer
+  player: playerReducer,
+  world: worldReducer
 });
 
 export default configureStore({
