@@ -9,7 +9,7 @@ const forestLocales = [
       ])
     ],
     exits: [
-      F.createExit(DIRECTIONS.OUTSIDE, 1000, 'You exit the vehicle.')
+      F.createExit(DIRECTIONS.OUTSIDE, 'mailbox', 1000, 'You exit the vehicle.')
     ],
     items: [
       F.createItem('handwarmers', 1)
@@ -22,11 +22,22 @@ const forestLocales = [
       ])
     ],
     exits: [
-      F.createExit(DIRECTIONS.INSIDE, 1500, 'You open the car door, duck, and step inside.')
+      F.createExit(DIRECTIONS.SOUTH, 'farm_front_driveway', 1000, 'You march through the decrepit entrance to the driveway'),
+      F.createExit(DIRECTIONS.INSIDE, 'car', 1500, 'You open the car door, duck, and step inside.')
     ],
     items: [
       F.createItem('handwarmers', 1)
-    ]
+    ],
+    temperature: TEMPERATURES.COLD
+  }),
+  F.createLocale('farm_front_driveway', 'Front Driveway', 7, 0, 6, {
+    exits: [
+      F.createExit(DIRECTIONS.NORTH, 'mailbox', 1000, 'You exit the mouth of the driveway, arriving back at the main road.')
+    ],
+    items: [
+      F.createItem('handwarmers', 1)
+    ],
+    temperature: TEMPERATURES.COLD
   })
 ];
 

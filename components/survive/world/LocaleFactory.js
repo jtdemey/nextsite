@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import { CONTAINER_STATES } from "../redux/gameConstants";
 import ItemData from './Items';
 import { TEMPERATURES, VISIBILITIES } from "./LocaleConstants";
 
@@ -26,15 +27,19 @@ export const createComment = (visibilityThreshold, text) => ({
   text
 });
 
-export const createContainer = (name, description, loot, locked = false) => ({
+export const createContainer = (name, description, loot, lock = false) => ({
+  containerId: nanoid(),
+  containerState: CONTAINER_STATES.UNKNOWN,
   name,
   description,
+  items: [],
   loot,
-  locked
+  lock
 });
 
-export const createExit = (direction, duration, exitPhrase) => ({
+export const createExit = (direction, destination, duration, exitPhrase) => ({
   direction,
+  destination,
   duration,
   exitPhrase
 });
@@ -46,22 +51,22 @@ export const createFeature = (name, visibilityThreshold, description) => ({
 });
 
 export const createItem = (name, amount) => {
-  const metadata = ItemData[name];
+  const meta = ItemData[name];
   return {
     itemId: nanoid(),
     amount,
     name,
-    display: metadata.display,
-    description: metadata.description,
-    stackable: metadata.stackable,
-    consumable: metadata.consumable,
-    equipable: metadata.equipable
+    display: meta.display,
+    description: meta.description,
+    stackable: meta.stackable,
+    consumable: meta.consumable,
+    equipable: meta.equipable
   };
 };
 
-export const createLoot = (probability, itemName, amounts) => ({
+export const createLoot = (probability, name, amounts) => ({
   probability,
-  itemName,
+  name,
   amounts
 });
 
