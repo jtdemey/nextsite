@@ -10,18 +10,18 @@ const ListItem = styled(animated.li)`
   font-family: 'DM Sans', sans-serif;
 `;
 
-const SubSpan = styled.span`
+const SubDiv = styled.div`
+  display: inline-block;
   font-size: 0.85rem;
 `;
 
-const SvgSpan = styled.span`
+const SvgDiv = styled.div`
+  display: inline-block;
   padding-left: 1rem;
   svg {
+    position: absolute;
+    top: 0.69rem;
     width: 1rem;
-    position:absolute;
-    top:50%;
-    bottom:50%;
-    transform:translate(-50%, -50%);
   }
 `;
 
@@ -34,11 +34,11 @@ const ListButtonItem = props => {
     <ListItem onClick={() => props.clickFunc()} style={{
       ...spring,
       background: getLinearGradientCss(props.rgb),
-      marginLeft: props.indentationLevel ? `${props.indentationLevel}rem` : '0rem'
+      marginLeft: props.indentationLevel ? `${props.indentationLevel / 2}rem` : '0rem'
     }}>
       {props.text}
-      <SubSpan>{` ${props.subText || ''}`}</SubSpan>
-      <SvgSpan>{props.subSvg || null}</SvgSpan>
+      <SubDiv>{` ${props.subText || ''}`}</SubDiv>
+      <SvgDiv>{props.subSvg || null}</SvgDiv>
     </ListItem>
   );
 };

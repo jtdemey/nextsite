@@ -32,7 +32,6 @@ const List = styled.ul`
 
 const ContainerItemList = props => {
   const isOpen = props.container.containerState === CONTAINER_STATES.OPEN;
-  console.log(isOpen)
   const [spring, api] = useSpring(() => ({ opacity: 0, scaleY: 0 }));
   React.useEffect(() => api.start({ opacity: isOpen ? 1 : 0, scaleY: isOpen ? 1 : 0 }));
   return (

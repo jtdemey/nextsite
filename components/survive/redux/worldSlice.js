@@ -10,19 +10,25 @@ export const worldSlice = createSlice({
       const locale = state[action.payload.localeName];
       const container = locale.containers
         .filter(container => container.containerId === action.payload.container.containerId)[0];
-      if(container.containerState === CONTAINER_STATES.UNKNOWN) {
-        if(container.lock) {
-          container.containerState = CONTAINER_STATES.LOCKED;
+      switch(container.containerState) {
+        case CONTAINER_STATES.UNLOCKED:
+          container.containerState = CONTAINER_STATES.OPEN;
           return;
-        }
-        if(container.loot) {
-          container.items = container.items.concat(rollLoot(container.loot));
-        }
-        container.containerState = CONTAINER_STATES.OPEN;
-        return;
-      }
-      if(container.containerState === CONTAINER_STATES.LOCKED) {
-        return;
+        case CONTAINER_STATES.LOCKED:
+          return;
+        case CONTAINER_STATES.OPEN:
+          container.containerState = CONTAINER_STATES.UNLOCKED;
+          return;
+        case CONTAINER_STATES.UNKNOWN:
+          if(container.lock) {
+            container.containerState = CONTAINER_STATES.LOCKED;
+            return;
+          }
+          if(container.loot) {
+            container.items = container.items.concat(rollLoot(container.loot));
+          }
+          container.containerState = CONTAINER_STATES.OPEN;
+          return;
       }
     }
   },
