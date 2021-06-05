@@ -2,15 +2,15 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
-import { appendLine } from '../../redux/gameSlice';
+import { appendLine, submitExploreCommand } from '../../redux/gameSlice';
 
 const handleChange = (e, setTextVal) => {
   setTextVal(e.target.value);
 };
 
-const handleKeyDown = (e, dispatch, setTextVal) => {
+const handleKeyDown = (e, dispatch, textVal, setTextVal) => {
   if(e.keyCode === 13) {  //Enter
-    dispatch(appendLine());
+    dispatch(submitExploreCommand(textVal));
     setTextVal('');
   }
 };
@@ -39,7 +39,7 @@ const CommandLine = () => {
   React.useEffect(() => api.start({ opacity: 1, y: 0 }));
   const dispatch = useDispatch();
   return (
-    <Input type="text" placeholder=">>" onChange={e => handleChange(e, setTextVal)} onKeyDown={e => handleKeyDown(e, dispatch, setTextVal)} style={spring} value={textVal} />
+    <Input type="text" placeholder=">>" onChange={e => handleChange(e, setTextVal)} onKeyDown={e => handleKeyDown(e, dispatch, textVal, setTextVal)} style={spring} value={textVal} />
   );
 };
 

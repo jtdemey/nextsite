@@ -26,6 +26,7 @@ export const playerSlice = createSlice({
     equipped: []
   },
   reducers: {
+    handleExitLocale: () => {},
     takeItem: (state, action) => {
       if(action.payload.item.stackable && state.items.some(item => item.name === action.payload.item.name)) {
         state.items.forEach(item => {
@@ -52,6 +53,6 @@ export const playerSlice = createSlice({
   }
 });
 
-export const { takeItem } = playerSlice.actions;
+export const { handleExitLocale, takeItem } = playerSlice.actions;
 
 export default playerSlice.reducer;

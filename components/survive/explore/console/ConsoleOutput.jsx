@@ -7,7 +7,6 @@ const Container = styled(animated.article)`
   display: flex;
   flex-flow: column;
   width: 100%;
-  min-height: 100%;
   justify-content: left;
   text-align: left;
   margin-top: calc(100vh - 2rem - 101px);
@@ -27,7 +26,7 @@ const ConsoleOutput = props => {
   return (
     <Container>
       {props.consoleLines.map(line => (
-        <Line key={line.index}>{line.text + ` ${line.index}`}</Line>
+        <Line key={line.index}>{line.text}</Line>
       ))}
     </Container>
   );

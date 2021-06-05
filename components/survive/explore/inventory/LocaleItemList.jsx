@@ -2,7 +2,6 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { faChevronDown, faLock, faQuestionCircle, faUnlock } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ListButtonItem from './ListButtonItem';
 import InventoryHeader from './InventoryHeader';
 import { takeItem } from '../../redux/playerSlice';
@@ -45,7 +44,10 @@ const LocaleItemList = () => {
       <InventoryHeader text={localeName} />
       <List>
         {containers.length < 1 ? null : containers.map(container => (
-          <ContainerItemList key={`${container.containerId}_list`} container={container} containerClickFunc={containerClickFunc} />
+          <ContainerItemList  key={`${container.containerId}_list`}
+                              container={container}
+                              containerClickFunc={containerClickFunc}
+                              itemClickFunc={item => itemClickFunc(localeName, item)} />
         ))}
         {items.length < 1 && containers.length < 1 ? <ListButtonItem clickFunc={() => false} rgb="50, 50, 50" text="(nothing here)" /> : items.map(item => (
           <ListButtonItem key={item.itemId} clickFunc={() => itemClickFunc(localeName, item)} subText={getItemAmountSpan(item.amount)} text={item.display} />

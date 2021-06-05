@@ -41,6 +41,9 @@ export const worldSlice = createSlice({
     'player/takeItem': (state, action) => {
       const locale = state[action.payload.localeName];
       locale.items = locale.items.filter(item => item.itemId !== action.payload.item.itemId);
+      locale.containers.forEach(container => {
+        container.items = container.items.filter(item => item.itemId !== action.payload.item.itemId);
+      });
     }
   }
 });

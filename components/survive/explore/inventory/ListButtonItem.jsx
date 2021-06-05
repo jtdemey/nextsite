@@ -12,12 +12,13 @@ const ListItem = styled(animated.li)`
 
 const SubDiv = styled.div`
   display: inline-block;
+  padding-left: 0.4rem;
   font-size: 0.85rem;
 `;
 
 const SvgDiv = styled.div`
   display: inline-block;
-  padding-left: 1rem;
+  padding-left: 0.6rem;
   svg {
     position: absolute;
     top: 0.69rem;

@@ -21,6 +21,8 @@ export const between = (min, max) => Math.floor(Math.random() * (max - min + 1))
 
 export const capitalize = str => `${str[0].toUpperCase()}${str.substr(1)}`;
 
+export const createCommand = (command, data) => ({ command, data });
+
 export const createConsoleLine = (index, text, color) => ({
   index,
   color,

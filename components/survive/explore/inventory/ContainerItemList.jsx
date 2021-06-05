@@ -40,10 +40,11 @@ const ContainerItemList = props => {
                       clickFunc={() => props.containerClickFunc(props.container)}
                       rgb="60, 60, 60"
                       subSvg={<FontAwesomeIcon icon={getContainerSvgIcon(props.container.containerState)} size="2x" />}
+                      subText={props.container.containerState !== CONTAINER_STATES.UNKNOWN && props.container.items.length < 1 ? '(empty)' : ''}
                       text={props.container.name} />
       <animated.div style={{ ...spring }}>
         {isOpen && props.container.items ? props.container.items.map(item => (
-          <ListButtonItem key={item.itemId} indentationLevel={2} subText={getItemAmountSpan(item.amount)} text={item.display} />
+          <ListButtonItem key={item.itemId} clickFunc={() => props.itemClickFunc(item)} indentationLevel={2} subText={getItemAmountSpan(item.amount)} text={item.display} />
         )) : null}
       </animated.div>
     </List>
@@ -52,7 +53,8 @@ const ContainerItemList = props => {
 
 ContainerItemList.propTypes = {
   container: PropTypes.object,
-  containerClickFunc: PropTypes.func
+  containerClickFunc: PropTypes.func,
+  itemClickFunc: PropTypes.func
 };
 
 export default ContainerItemList;

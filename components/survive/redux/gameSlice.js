@@ -14,6 +14,8 @@ export const gameSlice = createSlice({
     //Cinematics
     cinematicId: 0,
     cinematicStartTick: 0,
+    //Console
+    lastInput: '',
     //Notifications
     notificationText: '',
     //UI elements
@@ -22,7 +24,7 @@ export const gameSlice = createSlice({
   },
   reducers: {
     appendLine: (state, action) => {
-      state.consoleText = state.consoleText.concat([createConsoleLine(state.consoleLineIndex, 'beep boop', CONSOLE_COLORS.WHITE)]);
+      state.consoleText = state.consoleText.concat([createConsoleLine(state.consoleLineIndex, action.payload.text, CONSOLE_COLORS.WHITE)]);
       state.consoleLineIndex++;
     },
     gameTick: state => {
@@ -64,12 +66,16 @@ export const gameSlice = createSlice({
       state.gameState = GAME_STATES.CINEMATIC;
       state.cinematicId = action.cinematicId;
       state.cinematicStartTick = state.tick;
+    },
+    submitExploreCommand: (state, action) => {
+      console.log(action);
+      state.lastInput = action.payload;
     }
   },
   extraReducers: {}
 });
 
 export const { appendLine, gameTick, initGame, loadGame, pauseGame, resumeGame, saveGame, setGamePanelView, showOptions,
-  skipCinematic, startCinematic } = gameSlice.actions;
+  skipCinematic, startCinematic, submitExploreCommand } = gameSlice.actions;
 
 export default gameSlice.reducer;
