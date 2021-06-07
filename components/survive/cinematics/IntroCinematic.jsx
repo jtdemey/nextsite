@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import CenteredText from './CenteredText';
 import SkipPrompt from './SkipPrompt';
-import { skipCinematic } from '../redux/gameSlice';
+import { handleEndCinematic } from '../redux/gameSlice';
 
 const Container = styled.div`
   height: 100%;
@@ -15,18 +15,26 @@ const Container = styled.div`
   text-align: center;
 `;
 
+const timeouts = [];
+
 const IntroCinematic = props => {
   const [textAnim, setTextAnim] = React.useState(false);
   React.useEffect(() => {
     if(props.active) {
       setTextAnim(true);
-      setTimeout(() => setTextAnim(false), 5000);
-      setTimeout(() => dispatch(skipCinematic()), 7000);
+      timeouts.push(setTimeout(() => setTextAnim(false), 5000));
+      timeouts.push(setTimeout(() => dispatch(handleEndCinematic()), 7000));
     }
   }, [props.active]);
   const dispatch = useDispatch();
+  const skipFunc = () => {
+    if(timeouts.length > 0) {
+      timeouts.forEach(t => clearInterval(t));
+    }
+    dispatch(handleEndCinematic());
+  };
   return (
-    <Container onClick={() => dispatch(skipCinematic())} style={{ display: props.active ? 'block' : 'none' }}>
+    <Container onClick={() => skipFunc()} style={{ display: props.active ? 'block' : 'none' }}>
       <CenteredText delay={1000} text={'A dirt backroad.'} visible={textAnim} />
       <CenteredText delay={2000} text={'Caledonia County, Vermont.'} visible={textAnim} />
       <CenteredText delay={3500} text={'December 13th, 1987. 9:44PM'} visible={textAnim} />

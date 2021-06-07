@@ -18,12 +18,14 @@ const GO_DIRECTIONS = {
   inside: ['i', 'in', 'into'],
   outside: ['o', 'out', 'outta']
 };
+Object.keys(GO_DIRECTIONS).forEach(dir => GO_DIRECTIONS[dir].forEach(alias => ALIASES.go.push(alias)));
 
 const isAlias = (aliasCollection, input, command) => aliasCollection[command] && (input === command || aliasCollection[command].some(alias => alias === input));
 
 const parseGo = (input, actions) => {
   Object.keys(GO_DIRECTIONS).forEach(dir => {
     if(isAlias(GO_DIRECTIONS, input[0], dir) || isAlias(GO_DIRECTIONS, input[1], dir)) {
+      console.log(dir);
       actions.push(handleExitLocale({
         exitDirection: DIRECTIONS[dir.toUpperCase()]
       }));
@@ -45,7 +47,7 @@ export const exploreParse = raw => {
     }
   });
   if(actions.length === 0) {
-    actions.push(appendLine({ text: `I can't understand that` }));
+    actions.push(appendLine({ text: `I can't understand that.` }));
   }
   return actions;
 };

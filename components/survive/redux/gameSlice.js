@@ -23,11 +23,13 @@ export const gameSlice = createSlice({
     consoleText: []
   },
   reducers: {
+    handleEndCinematic: () => {},
     appendLine: (state, action) => {
       state.consoleText = state.consoleText.concat([createConsoleLine(state.consoleLineIndex, action.payload.text, CONSOLE_COLORS.WHITE)]);
       state.consoleLineIndex++;
     },
     gameTick: state => {
+      //Explore, combat states only
       if(!(state.gameState > 0 && state.gameState < 3)) return;
       let t = state.tick + 1;
       state.tick = t;
@@ -59,23 +61,19 @@ export const gameSlice = createSlice({
     setGamePanelView: (state, action) => {
       state.gamePanelView = action.payload;
     },
-    skipCinematic: state => {
-      state.gameState = GAME_STATES.EXPLORE;
-    },
     startCinematic: (state, action) => {
       state.gameState = GAME_STATES.CINEMATIC;
       state.cinematicId = action.cinematicId;
       state.cinematicStartTick = state.tick;
     },
     submitExploreCommand: (state, action) => {
-      console.log(action);
       state.lastInput = action.payload;
     }
   },
   extraReducers: {}
 });
 
-export const { appendLine, gameTick, initGame, loadGame, pauseGame, resumeGame, saveGame, setGamePanelView, showOptions,
-  skipCinematic, startCinematic, submitExploreCommand } = gameSlice.actions;
+export const { handleEndCinematic, appendLine, gameTick, initGame, loadGame, pauseGame, resumeGame, saveGame, setGamePanelView, showOptions,
+  endCinematic, startCinematic, submitExploreCommand } = gameSlice.actions;
 
 export default gameSlice.reducer;

@@ -3,6 +3,7 @@ import { DIRECTIONS, TEMPERATURES, VISIBILITIES } from './LocaleConstants';
 
 const forestLocales = [
   F.createLocale('car', 'Car', 7, 0, 7, {
+    enterPhrase: `You open the car door, duck your head, and step inside.`,
     containers: [
       F.createContainer('Glovebox', `It's modest glovebox; it seems unlocked.`, [
         F.createLoot(1, 'handwarmers', 1)

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import GameClock from './GameClock';
 import OptionsGear from './OptionsGear';
+import StatusIndicators from './StatusIndicators';
 
 const Bar = styled.div`
   width: 100%;
@@ -15,7 +16,7 @@ const Bar = styled.div`
 const StatusBar = () => (
   <Bar>
     <GameClock />
-    <div></div>
+    <StatusIndicators />
     <OptionsGear />
   </Bar>
 );
