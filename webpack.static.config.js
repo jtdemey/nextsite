@@ -1,7 +1,8 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HtmlPluginRemove = require('html-webpack-plugin-remove');
+const HtmlWebpackInjector = require('html-webpack-injector');
+const HtmlWebpackSkipAssetsPlugin = require('html-webpack-skip-assets-plugin').HtmlWebpackSkipAssetsPlugin;
 const webpack = require('webpack');
 
 module.exports = {
@@ -26,14 +27,19 @@ module.exports = {
     new HtmlWebpackPlugin({
       chunks: ['home'],
       filename: 'home.html',
+	  minify: false,
       template: './src/pages/home.html'
     }), 
     new HtmlWebpackPlugin({
       chunks: ['about'],
       filename: 'about.html',
+	  minify: false,
       template: './src/pages/about.html'
-    }), 
-    //new HtmlPluginRemove(/<\s*script[^>]*>(.*?)<\s*\/\s*script>/),
+    }),
+	new HtmlWebpackSkipAssetsPlugin({
+	  skipAssets: [/<\s*script[^>]*>(.*?)<\s*\/\s*script>/, (asset) => (asset.attributes && asset.attributes['x-skip'])]
+	}),
+	new HtmlWebpackInjector()
     // new Terser({
     //   parallel: true,
     //   terserOptions: {
