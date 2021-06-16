@@ -125,7 +125,7 @@ window.submitContactForm = function() {
 
 //Doodles
 const loadDoodle = async ind => {
-  const uri = `${window.location.origin}/media/doodles/`;
+  const uri = `${window.location.origin}/doodles/`;
   const dood = new Image();
   dood.src = `${uri}thumbs/img${ind}.jpg`; 
 

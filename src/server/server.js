@@ -1,24 +1,17 @@
-const { createServer } = require('http');
 const express = require('express');
-const path = require('path');
-const url = require('native-url');
 const next = require('next');
+const { default: router } = require('./routes');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
-const port = 3000;
+const port = process.env.SERVER_PORT || 3000;
 
 (async () => {
   try {
     await app.prepare();
     const server = express();
-    server.get('/', (req, res) => {
-      res.sendFile(path.join(process.cwd(), 'pages/home.html'));
-    });
-    server.get('/about', (req, res) => {
-      res.sendFile(path.join(process.cwd(), 'pages/about.html'));
-    });
+	server.use('/', router);
     server.all("*", (req, res) => {
       return handle(req, res);
     });
