@@ -1,6 +1,8 @@
-const express = require('express');
-const next = require('next');
-const { default: router } = require('./routes');
+import express from 'express';
+import logger from './logger';
+import morgan from 'morgan';
+import next from 'next';
+import router from './routes';
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -11,16 +13,15 @@ const port = process.env.SERVER_PORT || 3000;
   try {
     await app.prepare();
     const server = express();
-	server.use('/', router);
-    server.all("*", (req, res) => {
-      return handle(req, res);
-    });
-    server.listen(port, err => {
+		server.use(morgan('short'));
+    server.use('/', router);
+    server.all('*', (req, res) => handle(req, res));
+    server.listen(port, (err) => {
       if (err) throw err;
-      console.log(`> Ready on localhost:${port} - env ${process.env.NODE_ENV}`);
+      logger.info(`> Ready on localhost:${port} - env ${process.env.NODE_ENV}`);
     });
   } catch (e) {
-    console.error(e);
+    logger.error(e);
     process.exit(1);
   }
 })();
