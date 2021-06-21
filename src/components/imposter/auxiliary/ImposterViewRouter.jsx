@@ -1,36 +1,33 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import HostGameForm from '../mainmenu/HostGameForm';
+import MainMenuView from '../mainmenu/MainMenuView';
 import { IMPOSTER_VIEWS } from '../redux/imposterConstants';
 
-const Router = styled.div`
+const Container = styled.div`
 	width: 100%;
 	height: 100%;
 `;
 
 const getView = viewIndex => {
 	switch(viewIndex) {
-		// case IMPOSTER_VIEWS.MAIN_MENU:
-		// case IMPOSTER_VIEWS.HOST_GAME_FORM:
-		// case IMPOSTER_VIEWS.JOIN_GAME_FORM:
-		// case IMPOSTER_VIEWS.LOBBY:
-		// case IMPOSTER_VIEWS.IN_GAME:
-		// case IMPOSTER_VIEWS.TIME_EXPIRED:
-		// case IMPOSTER_VIEWS.IMPOSTER_VICTORY:
-		// case IMPOSTER_VIEWS.BYSTANDER_VICTORY:
-		// case IMPOSTER_VIEWS.LOADING:
+		case IMPOSTER_VIEWS.MAIN_MENU:
+			return <MainMenuView />;
+		case IMPOSTER_VIEWS.HOST_GAME_FORM:
+			return <HostGameForm />;
 		default:
-			return null;
+			return <div></div>;
 	}
 };
 
-const ImposterViewRouter = () => {
-	const view = getView(useSelector(state => state.game.view));
+const ImposterViewContainer = () => {
+	const view = useSelector(state => state.game.view);
   return (
-		<Router>
-
-		</Router>
+		<Container>
+			{getView(view)}
+		</Container>
 	);
 };
 
-export default ImposterViewRouter;
+export default ImposterViewContainer;

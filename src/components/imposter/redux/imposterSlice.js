@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { IMPOSTER_VIEWS } from './imposterConstants';
 
 export const imposterSlice = createSlice({
   name: 'game',
@@ -32,21 +33,24 @@ export const imposterSlice = createSlice({
     remainingTime: 60,
     lastSocketCommand: null,
     isPaused: false,
-		view: 0,
+		view: IMPOSTER_VIEWS.MAIN_MENU,
     votes: []
   },
   reducers: {
 		alertMessage: (state, action) => {
 			state.alertText = action.payload;
 		},
+		changeGameView: (state, action) => {
+			state.view = action.payload;
+		},
 		setPlayerSocket: (state, action) => {
 			state.socketId = action.payload.socketId;
 			state.socket = action.payload.socket;
-		},
+		}
   },
   extraReducers: {}
 });
 
-export const { alertMessage, setPlayerSocket } = imposterSlice.actions;
+export const { alertMessage, changeGameView, setPlayerSocket } = imposterSlice.actions;
 
 export default imposterSlice.reducer;

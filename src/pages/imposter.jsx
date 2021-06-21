@@ -84,17 +84,17 @@ const initImposter = dispatch => {
 
 const ImposterPage = () => {
   return (
-    <div>
+    <>
       <PageHead
         title="Imposter!"
         styleLinks={[
-          'https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap'
+          'https://fonts.googleapis.com/css2?family=Oleo+Script&family=Source+Sans+Pro:wght@600&display=swap'
         ]}
       />
       <Provider store={imposterStore}>
 				<ImposterApp />
 			</Provider>
-    </div>
+    </>
   );
 };
 
