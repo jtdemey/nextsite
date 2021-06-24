@@ -2,8 +2,8 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import MenuButton from '../auxiliary/MenuButton';
-import { IMPOSTER_VIEWS } from '../redux/imposterConstants';
-import { changeGameView } from '../redux/imposterSlice';
+import { IMPOSTER_VIEWS, MODAL_VIEWS } from '../redux/imposterConstants';
+import { changeGameView, showModal } from '../redux/imposterSlice';
 
 const Container = styled.div`
   display: flex;
@@ -24,6 +24,10 @@ const MainMenuBtns = () => {
       <MenuButton
         clickFunc={() => dispatch(changeGameView(IMPOSTER_VIEWS.JOIN_GAME_FORM))}
         text="Join Game"
+      ></MenuButton>
+      <MenuButton
+        clickFunc={() => dispatch(showModal(MODAL_VIEWS.SETTINGS))}
+        text="Settings"
       ></MenuButton>
     </Container>
   );

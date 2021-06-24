@@ -6,13 +6,13 @@ export const ENDGAME_REASONS = {
   IMPOSTER_QUIT: 4
 };
 
-const makeTheme = (primary, secondary, highlight) => ({ primary, secondary, highlight });
+const makeTheme = (title, primary, secondary, highlight) => ({ title, primary, secondary, highlight });
 export const IMPOSTER_THEMES = [
-	makeTheme('#3b3c3b', '#468387', '#74ba9f'),	//Synth
-	makeTheme('#41413e', '#88a26f', '#899264'),	//Remnant
-	makeTheme('#39141e', '#a62639', '#db324d'), //Crystal
-	makeTheme('#1b2c39', '#2d6a68', '#b4ad72'), //Seascape
-	makeTheme('#2a3c3c', '#6e7b6d', '#849c8a') //Slate
+	makeTheme('Synth', '#3b3c3b', '#468387', '#74ba9f'),
+	makeTheme('Remnant', '#41413e', '#88a26f', '#899264'),
+	makeTheme('Crystal', '#39141e', '#a62639', '#db324d'),
+	makeTheme('Seascape', '#1b2c39', '#2d6a68', '#b4ad72'),
+	makeTheme('Slate', '#2a3c3c', '#6e7b6d', '#849c8a')
 ];
 
 export const IMPOSTER_VIEWS = {
@@ -25,4 +25,11 @@ export const IMPOSTER_VIEWS = {
   BYSTANDER_VICTORY: 6,
   LOADING: 7,
   TIME_EXPIRED: 8
+};
+
+export const MODAL_VIEWS = {
+	NONE:			0,
+	RULES: 		1,
+	SETTINGS: 2,
+	CONFIRM:	3	
 };

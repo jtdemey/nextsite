@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { IMPOSTER_VIEWS } from './imposterConstants';
+import { IMPOSTER_VIEWS, MODAL_VIEWS } from './imposterConstants';
 
 export const imposterSlice = createSlice({
   name: 'game',
@@ -12,7 +12,7 @@ export const imposterSlice = createSlice({
     host: null,
     imposterId: null,
 		isAccusing: false,
-		modal: 0,
+		modal: MODAL_VIEWS.NONE,
 		notifications: [],
     phase: 0,
     player: {
@@ -43,14 +43,23 @@ export const imposterSlice = createSlice({
 		changeGameView: (state, action) => {
 			state.view = action.payload;
 		},
+		hideModal: state => {
+			state.modal = MODAL_VIEWS.NONE;
+		},
 		setPlayerSocket: (state, action) => {
 			state.socketId = action.payload.socketId;
 			state.socket = action.payload.socket;
+		},
+		setTheme: (state, action) => {
+			state.theme = action.payload;
+		},
+		showModal: (state, action) => {
+			state.modal = action.payload;
 		}
   },
   extraReducers: {}
 });
 
-export const { alertMessage, changeGameView, setPlayerSocket } = imposterSlice.actions;
+export const { alertMessage, changeGameView, hideModal, setPlayerSocket, setTheme, showModal } = imposterSlice.actions;
 
 export default imposterSlice.reducer;

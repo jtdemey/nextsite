@@ -537,7 +537,7 @@ strong {
 
 .jd-title {
   display: inline-block;
-  margin-top: 18px;
+  margin-top: 0.5em;
   font-family: "Abel", sans-serif;
   font-size: 3em;
   overflow: hidden;
