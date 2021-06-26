@@ -7,7 +7,7 @@ import { getTheme } from '../ImposterUtils';
 const Button = styled.div`
   width: 60%;
   max-width: 320px;
-  margin: 1rem;
+  margin: 0.5rem;
   padding: 1rem;
   color: #edf6f9;
   font-family: 'Source Sans Pro', sans-serif;

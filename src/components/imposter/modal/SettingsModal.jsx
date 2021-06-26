@@ -10,6 +10,7 @@ const Body = styled.div`
 	width: 80%;
 	height: 80%;
 	margin: auto;
+	background: #edf2f4;
 	border-radius: 0.5rem;
 	overflow-y: scroll;
 `;
@@ -19,9 +20,9 @@ const nullListener = e => e.stopPropagation();
 const SettingsModal = props => {
 	const theme = getTheme(useSelector(state => state.game.theme));
 	return (
-		<Body onClick={e => nullListener(e)} style={{ background: `linear-gradient(#edf2f4, #edf2f4, ${theme.highlight})`}}>
+		<Body onClick={e => nullListener(e)}>
 			<ModalCloseButton hideModal={props.hideModal} />
-			<ThemeSelector />
+			<ThemeSelector selectedTheme={theme.title} />
 		</Body>
 	);
 };

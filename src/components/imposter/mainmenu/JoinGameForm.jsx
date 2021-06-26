@@ -24,14 +24,15 @@ const BtnArea = styled.div`
 	width: 100%;
 `;
 
-const HostGameForm = () => {
+const JoinGameForm = () => {
   return (
 		<>
-			<Header>Host Game</Header>
+			<Header>Join Game</Header>
 			<Form>
 				<FormInput placeholder="Your name" />
+				<FormInput placeholder="Game code" />
 				<BtnArea>
-					<SubmitButton text="Play" />
+					<SubmitButton text="Join" />
 					<BackToMainButton />
 				</BtnArea>
 			</Form>
@@ -39,4 +40,4 @@ const HostGameForm = () => {
   );
 };
 
-export default HostGameForm;
+export default JoinGameForm;

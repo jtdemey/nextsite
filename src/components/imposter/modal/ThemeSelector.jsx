@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { IMPOSTER_THEMES } from '../redux/imposterConstants';
@@ -29,7 +30,7 @@ const Button = styled.li`
   text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.5);
 `;
 
-const ThemeSelector = () => {
+const ThemeSelector = props => {
 	const dispatch = useDispatch();
   return (
     <>
@@ -40,7 +41,7 @@ const ThemeSelector = () => {
 						onClick={() => dispatch(setTheme(i))}
 						style={{ 
 							background: theme.secondary,
-							border: `1px solid ${theme.primary}`
+							border: `${props.selectedTheme === theme.title ? 3 : 1}px solid ${theme.primary}`
 						}}
 					>
             {theme.title}
@@ -49,6 +50,10 @@ const ThemeSelector = () => {
       </List>
     </>
   );
+};
+
+ThemeSelector.propTypes = {
+	selectedTheme: PropTypes.string
 };
 
 export default ThemeSelector;

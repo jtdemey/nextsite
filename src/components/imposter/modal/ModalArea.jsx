@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { MODAL_VIEWS } from '../redux/imposterConstants';
 import { hideModal } from '../redux/imposterSlice';
 import SettingsModal from './SettingsModal';
+import RulesModal from './RulesModal';
 
 const Container = styled(animated.div)`
 	display: flex;
@@ -20,6 +21,8 @@ const Container = styled(animated.div)`
 
 const getModal = (modal, hideFunc) => {
 	switch(modal) {
+		case MODAL_VIEWS.RULES:
+			return <RulesModal hideModal={hideFunc} />;
 		case MODAL_VIEWS.SETTINGS:
 			return <SettingsModal hideModal={hideFunc} />;
 		default:

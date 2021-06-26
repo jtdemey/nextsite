@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import ImposterViewRouter from './auxiliary/ImposterViewRouter';
 import ModalArea from './modal/ModalArea';
 import { getTheme } from './ImposterUtils';
+import ImposterHeader from './auxiliary/ImposterHeader';
 
 const App = styled.div`
   position: fixed;
@@ -20,6 +21,7 @@ const ImposterApp = () => {
   return (
 		<App style={{ background: theme.primary }}>
 			<ModalArea modal={modal} />
+			<ImposterHeader />
 			<ImposterViewRouter />
 		</App>
 	);

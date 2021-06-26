@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import HostGameForm from '../mainmenu/HostGameForm';
+import JoinGameForm from '../mainmenu/JoinGameForm';
 import MainMenuView from '../mainmenu/MainMenuView';
 import { IMPOSTER_VIEWS } from '../redux/imposterConstants';
 
@@ -16,6 +17,8 @@ const getView = viewIndex => {
 			return <MainMenuView />;
 		case IMPOSTER_VIEWS.HOST_GAME_FORM:
 			return <HostGameForm />;
+		case IMPOSTER_VIEWS.JOIN_GAME_FORM:
+			return <JoinGameForm />;
 		default:
 			return <div></div>;
 	}

@@ -10,7 +10,7 @@ const Container = styled.div`
   flex-flow: column;
   align-items: center;
   width: 100%;
-  padding-top: 2rem;
+  padding-top: 1rem;
 `;
 
 const MainMenuBtns = () => {
@@ -28,6 +28,10 @@ const MainMenuBtns = () => {
       <MenuButton
         clickFunc={() => dispatch(showModal(MODAL_VIEWS.SETTINGS))}
         text="Settings"
+      ></MenuButton>
+      <MenuButton
+        clickFunc={() => dispatch(showModal(MODAL_VIEWS.RULES))}
+        text="How to Play"
       ></MenuButton>
     </Container>
   );

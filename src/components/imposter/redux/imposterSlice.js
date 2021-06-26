@@ -55,6 +55,9 @@ export const imposterSlice = createSlice({
 		},
 		showModal: (state, action) => {
 			state.modal = action.payload;
+		},
+		submitHostGame: (state, action) => {
+			state.player.name = action.payload.playerName;
 		}
   },
   extraReducers: {}
