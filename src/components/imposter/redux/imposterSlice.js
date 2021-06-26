@@ -43,6 +43,9 @@ export const imposterSlice = createSlice({
 		changeGameView: (state, action) => {
 			state.view = action.payload;
 		},
+		emitSocketMsg: (state, action) => {
+			state.lastSocketCommand = action.payload.command;
+		},
 		hideModal: state => {
 			state.modal = MODAL_VIEWS.NONE;
 		},
@@ -63,6 +66,6 @@ export const imposterSlice = createSlice({
   extraReducers: {}
 });
 
-export const { alertMessage, changeGameView, hideModal, setPlayerSocket, setTheme, showModal } = imposterSlice.actions;
+export const { alertMessage, changeGameView, emitSocketMsg, hideModal, setPlayerSocket, setTheme, showModal } = imposterSlice.actions;
 
 export default imposterSlice.reducer;

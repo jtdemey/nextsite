@@ -5,6 +5,7 @@ import HostGameForm from '../mainmenu/HostGameForm';
 import JoinGameForm from '../mainmenu/JoinGameForm';
 import MainMenuView from '../mainmenu/MainMenuView';
 import { IMPOSTER_VIEWS } from '../redux/imposterConstants';
+import LoadingView from './LoadingView';
 
 const Container = styled.div`
 	width: 100%;
@@ -19,6 +20,8 @@ const getView = viewIndex => {
 			return <HostGameForm />;
 		case IMPOSTER_VIEWS.JOIN_GAME_FORM:
 			return <JoinGameForm />;
+		case IMPOSTER_VIEWS.LOADING:
+			return <LoadingView />;
 		default:
 			return <div></div>;
 	}
