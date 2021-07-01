@@ -27,6 +27,26 @@ export const IMPOSTER_VIEWS = {
   TIME_EXPIRED: 8
 };
 
+export const SOCKET_COMMANDS = {
+	ACCEPT_IMPOSTER_LAUNCH: 'acceptImposterLaunch',
+	ACCUSE_PLAYER: 'accusePlayer',
+	CAST_VOTE: 'castVote',
+	EXTEND_TIMER: 'extendTimer',
+	HURRY_UP: 'hurryUp',
+	IDENTIFY_SCENARIO: 'identifyScenario',
+	INIT_GAME: 'initGame',
+	LAUNCHED_IMPOSTER: 'launchedImposter',
+	RETURN_TO_LOBBY: 'returnToLobby',
+	SOCKET_DISONNECT: 'socketDisconnect',
+	SUBMIT_HOST_GAME: 'submitHostGame',
+	SUBMIT_JOIN_GAME: 'submitJoinGame',
+	TOGGLE_READY_STATE: 'toggleReadyState'
+};
+
+export const STORAGE_KEYS = {
+	THEME: 'JTD_imposter_theme'
+};
+
 export const MODAL_VIEWS = {
 	NONE:			0,
 	RULES: 		1,

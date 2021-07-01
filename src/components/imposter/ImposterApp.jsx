@@ -1,10 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import ImposterViewRouter from './auxiliary/ImposterViewRouter';
 import ModalArea from './modal/ModalArea';
 import { getTheme } from './ImposterUtils';
 import ImposterHeader from './auxiliary/ImposterHeader';
+import { STORAGE_KEYS } from './redux/imposterConstants';
+import { setTheme } from './redux/imposterSlice';
 
 const App = styled.div`
   position: fixed;
@@ -15,9 +18,17 @@ const App = styled.div`
   overflow: hidden;
 `;
 
-const ImposterApp = () => {
+const ImposterApp = props => {
 	const modal = useSelector(state => state.game.modal);
 	const theme = getTheme(useSelector(state => state.game.theme));
+	const dispatch = useDispatch();
+	React.useEffect(() => {
+		const storedTheme = window.localStorage.getItem(STORAGE_KEYS.THEME);
+		if(storedTheme) {
+			dispatch(setTheme(storedTheme));
+		}
+		props.initImposter(dispatch);
+	}, []);
   return (
 		<App style={{ background: theme.primary }}>
 			<ModalArea modal={modal} />
@@ -25,6 +36,10 @@ const ImposterApp = () => {
 			<ImposterViewRouter />
 		</App>
 	);
+};
+
+ImposterApp.propTypes = {
+	initImposter: PropTypes.func
 };
 
 export default ImposterApp;

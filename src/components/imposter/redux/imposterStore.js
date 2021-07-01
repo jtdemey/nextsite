@@ -1,12 +1,19 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import createSagaMiddleware from 'redux-saga';
 import imposterReducer from './imposterSlice';
+import { watcherSaga } from './sagas/imposterRootSaga';
+
+const sagaMiddleware = createSagaMiddleware();
 
 const reducer = combineReducers({
-  game: imposterReducer 
+  game: imposterReducer
 });
 
-const imposterStore = configureStore({
+const store = configureStore({
+  middleware: getDefaultMiddleware => getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),
   reducer: reducer
 });
 
-export default imposterStore;
+sagaMiddleware.run(watcherSaga);
+
+export default store;

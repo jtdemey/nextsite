@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { IMPOSTER_VIEWS, MODAL_VIEWS } from './imposterConstants';
+import { IMPOSTER_VIEWS, MODAL_VIEWS, STORAGE_KEYS } from './imposterConstants';
+import { socket } from '../socket/socketClient';
 
 export const imposterSlice = createSlice({
   name: 'game',
@@ -44,16 +45,20 @@ export const imposterSlice = createSlice({
 			state.view = action.payload;
 		},
 		emitSocketMsg: (state, action) => {
+			socket.send(JSON.stringify(action.payload));
 			state.lastSocketCommand = action.payload.command;
 		},
 		hideModal: state => {
 			state.modal = MODAL_VIEWS.NONE;
 		},
-		setPlayerSocket: (state, action) => {
+		initGame: (state, action) => {
+
+		},
+		setSocketId: (state, action) => {
 			state.socketId = action.payload.socketId;
-			state.socket = action.payload.socket;
 		},
 		setTheme: (state, action) => {
+			window.localStorage.setItem(STORAGE_KEYS.THEME, action.payload);
 			state.theme = action.payload;
 		},
 		showModal: (state, action) => {
@@ -66,6 +71,8 @@ export const imposterSlice = createSlice({
   extraReducers: {}
 });
 
-export const { alertMessage, changeGameView, emitSocketMsg, hideModal, setPlayerSocket, setTheme, showModal } = imposterSlice.actions;
+export const { alertMessage, changeGameView, emitSocketMsg,
+	hideModal, initGame, setSocketId, setTheme, showModal,
+	submitHostGame } = imposterSlice.actions;
 
 export default imposterSlice.reducer;

@@ -16,19 +16,20 @@ const Input = styled.input`
 `;
 
 const FormInput = props => {
-	const [state, setState] = React.useState('');
   return (
     <Input
       type="text"
-			onChange={e => setState(e.target.value)}
+			onChange={e => props.setValue(e.target.value)}
       placeholder={props.placeholder}
-			value={state}
+			value={props.value}
     />
   );
 };
 
 FormInput.propTypes = {
-  placeholder: PropTypes.string
+  placeholder: PropTypes.string,
+	setValue: PropTypes.func,
+	value: PropTypes.string
 };
 
 export default FormInput;

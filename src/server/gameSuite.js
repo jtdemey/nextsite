@@ -1,5 +1,7 @@
 import logger from './logger';
 import { rollScenario } from './imposterScenarios';
+import { nanoid } from 'nanoid';
+import { SOCKET_COMMANDS } from '../components/imposter/redux/imposterConstants';
 
 export const makeGameSuite = () => {
   const gameSuite = {};
@@ -44,7 +46,7 @@ export const makeGameSuite = () => {
 
   gameSuite.makeGame = () => {
     return {
-      gameId: gameSuite.genGameId(),
+      gameId: nanoid(),
       gameTitle: 'imposter',
       gameOverReason: null,
       host: null,
@@ -77,7 +79,7 @@ export const makeGameSuite = () => {
 
   gameSuite.makeVote = (type, callerId, callerName, threshold, accusedId = null, accusedName = null) => {
     return {
-      voteId: gameSuite.genVoteId(),
+      voteId: nanoid(),
       voteType: type,
       callerId: callerId,
       callerName,
@@ -110,28 +112,6 @@ export const makeGameSuite = () => {
       logInfo(`Sending ${JSON.parse(command).command} to ${socketId}`);
     }
     player.socket.send(command);
-  };
-
-  gameSuite.genGameId = () => {
-    const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let id = '';
-    for(let i = 0; i < 4; i++) {
-      const cInd = Math.floor(Math.random() * abc.length);
-      const c = abc.charAt(cInd);
-      id += c;
-    }
-    return id;
-  };
-
-  gameSuite.genVoteId = () => {
-    const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
-    let id = '';
-    for(let i = 0; i < 8; i++) {
-      const cInd = Math.floor(Math.random() * abc.length);
-      const c = abc.charAt(cInd);
-      id += c;
-    }
-    return id;
   };
 
   gameSuite.parseRes = msg => {
@@ -379,6 +359,65 @@ export const makeGameSuite = () => {
       players: newPlayers
     };
   };
+	
+	//Message handler 
+	gameSuite.handleSocketMsg = (wss, ws, raw) => {
+		const msg = wss.gs.parseRes(raw);
+		if(msg.command !== 'ping') {
+			logInfo(`Socket ${msg.socketId} says "${msg.command}"`);
+		}
+		let result, playerId;
+		switch(msg.command) {
+			//General
+			case SOCKET_COMMANDS.SOCKET_DISONNECT:
+				wss.gs.removePlayer(msg.socketId, true);
+				break;
+			//Imposter
+			case SOCKET_COMMANDS.LAUNCHED_IMPOSTER:
+				playerId = nanoid();
+				wss.gs.addPlayer(wss.gs.makePlayer(ws, playerId), true);
+				ws.send(wss.gs.makeCommand(SOCKET_COMMANDS.ACCEPT_IMPOSTER_LAUNCH, {
+					socketId: playerId
+				}));
+				break;
+			case SOCKET_COMMANDS.SUBMIT_HOST_GAME:
+				result = wss.gs.handleSubmitHostGame(msg);
+				if(result) {
+					ws.send(wss.gs.makeCommand(SOCKET_COMMANDS.INIT_GAME, { gameState: result }));
+				}
+				break;
+			case SOCKET_COMMANDS.SUBMIT_JOIN_GAME:
+				result = wss.gs.handleSubmitJoinGame(msg);
+				if(result) {
+					ws.send(wss.gs.makeCommand(SOCKET_COMMANDS.INIT_GAME, { gameState: result }));
+				}
+				break;
+			case SOCKET_COMMANDS.EXTEND_TIMER:
+				wss.gs.extendTimer(msg.socketId, msg.gameId);
+				break;
+			case SOCKET_COMMANDS.HURRY_UP:
+				wss.gs.hurryUp(msg.socketId, msg.gameId);
+				break;
+			case SOCKET_COMMANDS.TOGGLE_READY_STATE:
+				wss.gs.toggleReadyState(msg);
+				break;
+			case SOCKET_COMMANDS.ACCUSE_PLAYER:
+				wss.gs.handleAccusePlayer(msg);
+				break;
+			case SOCKET_COMMANDS.RETURN_TO_LOBBY:
+				wss.gs.handleLobbyReturnVote(msg);
+				break;
+			case SOCKET_COMMANDS.CAST_VOTE:
+				wss.gs.castVote(msg);
+				break;
+			case SOCKET_COMMANDS.IDENTIFY_SCENARIO:
+				wss.gs.identifyScenario(msg);
+				break;
+			default:
+				logError(`Socket command '${msg.command}' not recognized`);
+				break;
+		}
+	};
 
   //Events
   gameSuite.applyScenario = (state, scene) => {
