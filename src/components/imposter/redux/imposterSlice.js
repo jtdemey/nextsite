@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { IMPOSTER_VIEWS, MODAL_VIEWS, STORAGE_KEYS } from './imposterConstants';
 import { socket } from '../socket/socketClient';
+import { parseDateStr } from '../ImposterUtils';
 
 export const imposterSlice = createSlice({
   name: 'game',
@@ -9,7 +10,6 @@ export const imposterSlice = createSlice({
     castedVotes: [],
     gameId: null,
     gameInSession: false,
-    gameOverReason: null,
     host: null,
     imposterId: null,
 		isAccusing: false,
@@ -52,9 +52,18 @@ export const imposterSlice = createSlice({
 			state.modal = MODAL_VIEWS.NONE;
 		},
 		initGame: (state, action) => {
-
+			state.gameInSession = true;
 		},
 		setSocketId: (state, action) => {
+			const storedId = window.localStorage.getItem('JTD_imposterSocketId');
+			if(storedId) {
+				const lastSeen = parseDateStr(window.localStorage.getItem('JTD_imposterHourLastSeen'));
+				if(storedId !== undefined && Math.abs(new Date().getTime() - lastSeen.getTime()) < 3600000) {
+					console.log(`Welcome back, ${storedId}`);
+				}
+			}
+			window.localStorage.setItem('JTD_imposterSocketId', action.payload.socketId);
+			window.localStorage.setItem('JTD_imposterHourLastSeen', new Date().toISOString());
 			state.socketId = action.payload.socketId;
 		},
 		setTheme: (state, action) => {
@@ -66,6 +75,10 @@ export const imposterSlice = createSlice({
 		},
 		submitHostGame: (state, action) => {
 			state.player.name = action.payload.playerName;
+		},
+		syncGameState: (state, action) => {
+			state.gameId = action.gameId;
+
 		}
   },
   extraReducers: {}
@@ -73,6 +86,6 @@ export const imposterSlice = createSlice({
 
 export const { alertMessage, changeGameView, emitSocketMsg,
 	hideModal, initGame, setSocketId, setTheme, showModal,
-	submitHostGame } = imposterSlice.actions;
+	submitHostGame, syncGameState } = imposterSlice.actions;
 
 export default imposterSlice.reducer;

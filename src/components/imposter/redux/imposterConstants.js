@@ -3,7 +3,8 @@ export const ENDGAME_REASONS = {
   IMPOSTER_ACCUSED: 1,
   IMPOSTER_CORRECT: 2,
   IMPOSTER_WRONG: 3,
-  IMPOSTER_QUIT: 4
+  IMPOSTER_QUIT: 4,
+	WRONG_ACCUSATION: 5
 };
 
 const makeTheme = (title, primary, secondary, highlight) => ({ title, primary, secondary, highlight });
@@ -25,6 +26,13 @@ export const IMPOSTER_VIEWS = {
   BYSTANDER_VICTORY: 6,
   LOADING: 7,
   TIME_EXPIRED: 8
+};
+
+export const PHASES = {
+	LOBBY: 'lobby',
+	IN_GAME: 'in-game',
+	BYSTANDER_VICTORY: 'bystander-victory',
+	IMPOSTER_VICTORY: 'imposter-victory'
 };
 
 export const SOCKET_COMMANDS = {

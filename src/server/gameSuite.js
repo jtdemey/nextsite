@@ -1,7 +1,7 @@
 import logger from './logger';
 import { rollScenario } from './imposterScenarios';
 import { nanoid } from 'nanoid';
-import { SOCKET_COMMANDS } from '../components/imposter/redux/imposterConstants';
+import { ENDGAME_REASONS, PHASES, SOCKET_COMMANDS } from '../components/imposter/redux/imposterConstants';
 
 export const makeGameSuite = () => {
   const gameSuite = {};
@@ -11,16 +11,6 @@ export const makeGameSuite = () => {
   gameSuite.clock = null;
   gameSuite.gameList = [];
   gameSuite.playerList = [];
-
-  //Constants
-  const endgameReasons = {
-    TIME_RAN_OUT: 0,
-    IMPOSTER_ACCUSED: 1,
-    IMPOSTER_CORRECT: 2,
-    IMPOSTER_WRONG: 3,
-    IMPOSTER_QUIT: 4,
-    WRONG_ACCUSATION: 5
-  };
 
   //Logs
   const logInfo = (msg, gameId = null) => {
@@ -44,53 +34,47 @@ export const makeGameSuite = () => {
     });
   };
 
-  gameSuite.makeGame = () => {
-    return {
-      gameId: nanoid(),
-      gameTitle: 'imposter',
-      gameOverReason: null,
-      host: null,
-      imposterId: null,
-      isPaused: false,
-      players: [],
-      phase: 'lobby',
-      remainingTime: 10, //To-do: change this
-      scenario: null,
-      scenarioList: [],
-      condition: null,
-      roles: [], 
-      tick: 0,
-      votes: []
-    };
-  };
+  gameSuite.makeGame = () => ({
+		gameId: nanoid(),
+		gameTitle: 'imposter',
+		gameOverReason: null,
+		host: null,
+		imposterId: null,
+		isPaused: false,
+		players: [],
+		phase: PHASES.LOBBY,
+		remainingTime: 10, //To-do: change this
+		scenario: null,
+		scenarioList: [],
+		condition: null,
+		roles: [], 
+		tick: 0,
+		votes: []
+  });
 
-  gameSuite.makePlayer = (socket, sockId) => {
-    return {
-      extendTimerCt: 0,
-      gameId: null,
-      hurryUpCt: 0,
-      isPlaying: false,
-      isReady: false,
-      name: null,
-      socket: socket,
-      socketId: sockId
-    };
-  };
+  gameSuite.makePlayer = (socket, sockId) => ({
+		extendTimerCt: 0,
+		gameId: null,
+		hurryUpCt: 0,
+		isPlaying: false,
+		isReady: false,
+		name: null,
+		socket: socket,
+		socketId: sockId
+  });
 
-  gameSuite.makeVote = (type, callerId, callerName, threshold, accusedId = null, accusedName = null) => {
-    return {
-      voteId: nanoid(),
-      voteType: type,
-      callerId: callerId,
-      callerName,
-      accusedId: accusedId,
-      accusedName,
-      tick: 15,
-      threshold,
-      yay: 0,
-      nay: 0
-    };
-  };
+  gameSuite.makeVote = (type, callerId, callerName, threshold, accusedId = null, accusedName = null) => ({
+		voteId: nanoid(),
+		voteType: type,
+		callerId: callerId,
+		callerName,
+		accusedId: accusedId,
+		accusedName,
+		tick: 15,
+		threshold,
+		yay: 0,
+		nay: 0
+  });
 
   //Utilities
   gameSuite.emitToGame = (gameId, command, debug = false) => {
@@ -201,8 +185,8 @@ export const makeGameSuite = () => {
         logInfo(`Removed empty game ${activeGame.gameId} (Total: ${gameSuite.gameList.length})`);
       } else if(socketId === activeGame.imposterId) {
         gameSuite.updateGame(activeGame.gameId, {
-          gameOverReason: getEndgameMessage(endgameReasons.IMPOSTER_QUIT),
-          phase: 'bystander-victory',
+          gameOverReason: getEndgameMessage(ENDGAME_REASONS.IMPOSTER_QUIT),
+          phase: PHASES.BYSTANDER_VICTORY,
           players: activeGame.players.filter(p => p.socketId !== socketId),
           remainingTime: 15
         });
@@ -240,25 +224,25 @@ export const makeGameSuite = () => {
       game.players[i].isReady = false;
     }
     switch(g.phase) {
-      case 'lobby':
+      case PHASES.LOBBY:
         if(g.players.length < 3) {
           g.remainingTime = 30;
           gameSuite.emitToGame(g.gameId, gameSuite.makeCommand('imposterError', {
             text: `At least 3 players are required to play`
           }));
         } else {
-          g.phase = 'in-game';
+          g.phase = PHASES.IN_GAME;
           g.remainingTime = 240;
           g = gameSuite.applyScenario(g, rollScenario());
         }
         break;
-      case 'in-game':
-        g.phase = 'imposter-victory';
+      case PHASES.IN_GAME:
+        g.phase = PHASES.IMPOSTER_VICTORY;
         g.remainingTime = 20;
         break;
-      case 'bystander-victory':
-      case 'imposter-victory':
-        g.phase = 'lobby';
+      case PHASES.BYSTANDER_VICTORY:
+      case PHASES.IMPOSTER_VICTORY:
+        g.phase = PHASES.LOBBY;
         g.remainingTime = 60;
         break;
       default:
@@ -276,7 +260,6 @@ export const makeGameSuite = () => {
         gameSuite.startIdleClock(gameSuite);
       }
       const activeGames = gameSuite.gameList.filter(g => g.isPaused === false && g.players.length > 0);
-      //logger.debug(gameSuite.gameList[0].players.length);
       for(let i = 0; i < activeGames.length; i++) {
         let g = activeGames[i];
         g = gameSuite.doGameTick(g);
@@ -359,7 +342,7 @@ export const makeGameSuite = () => {
       players: newPlayers
     };
   };
-	
+
 	//Message handler 
 	gameSuite.handleSocketMsg = (wss, ws, raw) => {
 		const msg = wss.gs.parseRes(raw);
@@ -480,22 +463,22 @@ export const makeGameSuite = () => {
     if(vote.yay >= vote.threshold) {
       if(vote.voteType === 'lobby') {
         gameSuite.updateGame(msg.gameId, {
-          phase: 'lobby',
+          phase: PHASES.LOBBY,
           remainingTime: 60,
           votes: []
         });
       } else if(vote.voteType === 'accusation') {
         if(vote.accusedId === currGame.imposterId) {
           gameSuite.updateGame(msg.gameId, {
-            phase: 'bystander-victory',
-            gameOverReason: getEndgameMessage(endgameReasons.IMPOSTER_ACCUSED),
+            phase: PHASES.BYSTANDER_VICTORY,
+            gameOverReason: getEndgameMessage(ENDGAME_REASONS.IMPOSTER_ACCUSED),
             remainingTime: 15,
             votes: []
           });
         } else {
           gameSuite.updateGame(msg.gameId, {
-            phase: 'imposter-victory',
-            gameOverReason: getEndgameMessage(endgameReasons.WRONG_ACCUSATION),
+            phase: PHASES.IMPOSTER_VICTORY,
+            gameOverReason: getEndgameMessage(ENDGAME_REASONS.WRONG_ACCUSATION),
             remainingTime: 15,
             votes: []
           });
@@ -541,7 +524,7 @@ export const makeGameSuite = () => {
     }
     if(currGame.players.length === 1) {
       gameSuite.updateGame(msg.gameId, {
-        phase: 'lobby',
+        phase: PHASES.LOBBY,
         remainingTime: 60,
         votes: []
       });
@@ -582,15 +565,15 @@ export const makeGameSuite = () => {
     }
     if(game.scenario.toUpperCase() === msg.scenario.toUpperCase()) {
       gameSuite.updateGame(msg.gameId, {
-        gameOverReason: getEndgameMessage(endgameReasons.IMPOSTER_CORRECT),
-        phase: 'imposter-victory',
+        gameOverReason: getEndgameMessage(ENDGAME_REASONS.IMPOSTER_CORRECT),
+        phase: PHASES.IMPOSTER_VICTORY,
         remainingTime: 15
       });
       logInfo(`Imposter for ${msg.gameId} guessed correct scenario`);
     } else {
       gameSuite.updateGame(msg.gameId, {
-        gameOverReason: getEndgameMessage(endgameReasons.IMPOSTER_WRONG),
-        phase: 'bystander-victory',
+        gameOverReason: getEndgameMessage(ENDGAME_REASONS.IMPOSTER_WRONG),
+        phase: PHASES.BYSTANDER_VICTORY,
         remainingTime: 15
       });
       logInfo(`Imposter for ${msg.gameId} guessed the wrong scenario`);

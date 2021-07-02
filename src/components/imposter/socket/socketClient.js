@@ -10,6 +10,7 @@ const initImposter = dispatch => {
   let socketId;
 
   socket.onopen = () => {
+		const storedId = window.localStorage.getItem('JTD_imposterSocketId');
     console.log(`Socket connection established.`);
     socket.send(JSON.stringify({
       command: SOCKET_COMMANDS.LAUNCHED_IMPOSTER
@@ -37,7 +38,7 @@ const initImposter = dispatch => {
 				console.log(`Successful handshake with GameSuite - welcome, player ${msg.socketId}.`);
         dispatch(setSocketId({ socketId: msg.socketId }));
         break;
-      case 'initGame':
+      case SOCKET_COMMANDS.INIT_GAME:
         dispatch(initGame(msg.gameState));
         break;
       // case 'gameTick':
