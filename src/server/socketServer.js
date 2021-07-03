@@ -1,5 +1,5 @@
 const WebSocket = require('ws');
-import { makeGameSuite } from './gameSuite';
+import { makeGameSuite } from './gamesuite/gameSuite';
 
 export const createWebSocketServer = server => {
   const wss = new WebSocket.Server({

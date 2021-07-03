@@ -1,5 +1,16 @@
 import { IMPOSTER_THEMES } from './redux/imposterConstants';
 
+export const genGameId = () => {
+	const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	let id = '';
+	for(let i = 0; i < 4; i++) {
+		const cInd = Math.floor(Math.random() * abc.length);
+		const c = abc.charAt(cInd);
+		id += c;
+	}
+	return id;
+};
+
 export const getTheme = themeIndex => IMPOSTER_THEMES[themeIndex];
 
 export const parseDateStr = isoStr => {

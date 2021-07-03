@@ -1,3 +1,4 @@
+import { parseDateStr } from '../ImposterUtils';
 import { SOCKET_COMMANDS } from '../redux/imposterConstants';
 import { alertMessage, initGame, setSocketId } from '../redux/imposterSlice';
 
@@ -10,11 +11,21 @@ const initImposter = dispatch => {
   let socketId;
 
   socket.onopen = () => {
-		const storedId = window.localStorage.getItem('JTD_imposterSocketId');
+		const launchCommand = { command: SOCKET_COMMANDS.LAUNCHED_IMPOSTER };
+		//TODO: Handle reconnecting
+		/*const storedId = window.localStorage.getItem('JTD_imposterSocketId');
+		if(storedId) {
+			const lastSeen = parseDateStr(window.localStorage.getItem('JTD_imposterHourLastSeen'));
+			console.log(Math.abs(new Date().getTime() - lastSeen.getTime()));
+			const validToRejoin = Math.abs(new Date().getTime() - lastSeen.getTime()) < 60000;
+			if(validToRejoin) {
+				socketId = storedId;
+				launchCommand.cachedSocketId = storedId;
+				console.log(`Welcome back, ${storedId}`);
+			}
+		}*/
     console.log(`Socket connection established.`);
-    socket.send(JSON.stringify({
-      command: SOCKET_COMMANDS.LAUNCHED_IMPOSTER
-    }));
+    socket.send(JSON.stringify(launchCommand));
   };
 
   socket.onerror = error => {
@@ -28,7 +39,7 @@ const initImposter = dispatch => {
     try {
       msg = JSON.parse(e.data);
     } catch(e) {
-      console.log('Unable to parse incoming socket message.', e);
+      console.error('Unable to parse incoming socket message.', e);
     }
     if(msg.command !== 'gameTick') {
       console.debug(`\tGot command "${msg.command}"`);
@@ -36,10 +47,14 @@ const initImposter = dispatch => {
     switch(msg.command) {
       case SOCKET_COMMANDS.ACCEPT_IMPOSTER_LAUNCH:
 				console.log(`Successful handshake with GameSuite - welcome, player ${msg.socketId}.`);
+				socketId = msg.socketId;
         dispatch(setSocketId({ socketId: msg.socketId }));
         break;
       case SOCKET_COMMANDS.INIT_GAME:
         dispatch(initGame(msg.gameState));
+        break;
+      case SOCKET_COMMANDS.PING:
+				socket.send(JSON.stringify({ command: 'pong', socketId }));
         break;
       // case 'gameTick':
       //   dispatch(gameTick(msg.gameState));

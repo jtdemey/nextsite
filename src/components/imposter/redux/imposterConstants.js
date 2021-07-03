@@ -28,6 +28,11 @@ export const IMPOSTER_VIEWS = {
   TIME_EXPIRED: 8
 };
 
+export const NOTIFICATIONS = {
+	EXTEND_TIMER_EXCEEDED: 0,
+	HURRY_UP_EXCEEDED: 1
+};
+
 export const PHASES = {
 	LOBBY: 'lobby',
 	IN_GAME: 'in-game',
@@ -44,6 +49,7 @@ export const SOCKET_COMMANDS = {
 	IDENTIFY_SCENARIO: 'identifyScenario',
 	INIT_GAME: 'initGame',
 	LAUNCHED_IMPOSTER: 'launchedImposter',
+	PING: 'ping',
 	RETURN_TO_LOBBY: 'returnToLobby',
 	SOCKET_DISONNECT: 'socketDisconnect',
 	SUBMIT_HOST_GAME: 'submitHostGame',

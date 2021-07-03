@@ -1,7 +1,8 @@
-import logger from './logger';
+import logger from '../logger';
 import { rollScenario } from './imposterScenarios';
 import { nanoid } from 'nanoid';
-import { ENDGAME_REASONS, PHASES, SOCKET_COMMANDS } from '../components/imposter/redux/imposterConstants';
+import { ENDGAME_REASONS, PHASES, SOCKET_COMMANDS } from '../../components/imposter/redux/imposterConstants';
+import { genGameId } from '../../components/imposter/ImposterUtils';
 
 export const makeGameSuite = () => {
   const gameSuite = {};
@@ -13,13 +14,11 @@ export const makeGameSuite = () => {
   gameSuite.playerList = [];
 
   //Logs
-  const logInfo = (msg, gameId = null) => {
+  const logInfo = (msg, gameId = null) =>
     logger.info(`[GS] ${gameId ? `[${gameId}] ` : ''}${msg}`);
-  };
 
-  const logError = (err, gameId = null) => {
+  const logError = (err, gameId = null) =>
     logger.error(`[GS] ${gameId ? `[${gameId}] ` : ''}${err}`);
-  };
 
   //Creators
   gameSuite.makeCommand = (commName, params = null) => {
@@ -35,7 +34,7 @@ export const makeGameSuite = () => {
   };
 
   gameSuite.makeGame = () => ({
-		gameId: nanoid(),
+		gameId: genGameId(),
 		gameTitle: 'imposter',
 		gameOverReason: null,
 		host: null,
@@ -56,6 +55,7 @@ export const makeGameSuite = () => {
 		extendTimerCt: 0,
 		gameId: null,
 		hurryUpCt: 0,
+		isDisconnected: false,
 		isPlaying: false,
 		isReady: false,
 		name: null,
@@ -347,7 +347,7 @@ export const makeGameSuite = () => {
 	gameSuite.handleSocketMsg = (wss, ws, raw) => {
 		const msg = wss.gs.parseRes(raw);
 		if(msg.command !== 'ping') {
-			logInfo(`Socket ${msg.socketId} says "${msg.command}"`);
+			logInfo(`${msg.socketId ? `Socket ${msg.socketId}` : `New player`} says ${msg.command}"`);
 		}
 		let result, playerId;
 		switch(msg.command) {
