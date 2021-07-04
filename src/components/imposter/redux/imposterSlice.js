@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { IMPOSTER_VIEWS, MODAL_VIEWS, NOTIFICATIONS, STORAGE_KEYS } from './imposterConstants';
+import { IMPOSTER_VIEWS, MODAL_VIEWS, NOTIFICATIONS, SOCKET_COMMANDS, STORAGE_KEYS } from './imposterConstants';
 import { socket } from '../socket/socketClient';
 
 export const imposterSlice = createSlice({
@@ -9,34 +9,39 @@ export const imposterSlice = createSlice({
     castedVotes: [],
     condition: null,
     gameId: null,
-    gameInSession: false,
     host: null,
     imposterId: null,
+		notifications: [],
     phase: 0,
     players: [],
+    remainingTime: 60,
     roles: [],
     scenario: null,
     tick: 0,
+    votes: [],
 		//Client
 		alertText: null,
 		isAccusing: false,
 		modal: MODAL_VIEWS.NONE,
-		notifications: [],
 		extendTimerCt: 3,
 		hurryUpCt: 6,
-		playerName: 'Some Goon',
+		playerName: 'Marv',
 		isReady: false,
-    scenarioList: [],
     socketId: null,
     socket: null,
 		theme: 0,
-    remainingTime: 60,
     lastSocketCommand: null,
-    isPaused: false,
-		view: IMPOSTER_VIEWS.MAIN_MENU,
-    votes: []
+		view: IMPOSTER_VIEWS.MAIN_MENU
   },
   reducers: {
+		accusePlayer: (state, action) => {
+			const command = SOCKET_COMMANDS.ACCUSE_PLAYER;
+			socket.send(JSON.stringify({
+				command,
+				...action.payload
+			}));
+			state.lastSocketCommand = command;
+		},
 		alertMessage: (state, action) => {
 			state.alertText = action.payload;
 		},
@@ -83,7 +88,6 @@ export const imposterSlice = createSlice({
 		},
 		initGame: (state, action) => {
 			const gs = action.payload;
-			state.gameInSession = false;
 			state.gameId = gs.gameId;
 			state.phase = gs.phase;
 			state.players = gs.players;
@@ -94,9 +98,17 @@ export const imposterSlice = createSlice({
 			state.extendTimerCt = 3;
 			state.hurryUpCt = 6;
 		},
+		returnToLobby: (state, action) => {
+			const command = SOCKET_COMMANDS.RETURN_TO_LOBBY;
+			socket.send(JSON.stringify({
+				command,
+				socketId: action.payload.socketId
+			}));
+			state.lastSocketCommand = command;
+		},
 		setSocketId: (state, action) => {
-			window.localStorage.setItem('JTD_imposterSocketId', action.payload.socketId);
-			window.localStorage.setItem('JTD_imposterHourLastSeen', new Date().toISOString());
+			window.localStorage.setItem(STORAGE_KEYS.SOCKET_ID, action.payload.socketId);
+			window.localStorage.setItem(STORAGE_KEYS.LAST_LAUNCHED, new Date().toISOString());
 			state.socketId = action.payload.socketId;
 		},
 		setTheme: (state, action) => {
@@ -115,21 +127,22 @@ export const imposterSlice = createSlice({
 		syncGameState: (state, action) => {
 			const gs = action.payload;
 			state.gameId = gs.gameId;
-			state.gameInSession = gs.gameInSession;
 			state.phase = gs.phase;
 			state.players = gs.players;
 			state.remainingTime = gs.remainingTime;
 			state.tick = gs.tick;
 			state.votes = gs.votes;
-
+		},
+		toggleAccusing: state => {
+			state.isAccusing = !action.payload;
 		}
   },
   extraReducers: {}
 });
 
-export const { alertMessage, appendNotification, changeGameView,
-	emitSocketMsg, extendTimer, hideModal, hurryUp, initGame,
-	setSocketId, setTheme, showModal, submitHostGame, submitJoinGame,
-	syncGameState } = imposterSlice.actions;
+export const { accusePlayer, alertMessage, appendNotification, changeGameView,
+	emitSocketMsg, extendTimer, hideModal, hurryUp, initGame, returnToLobby,
+	setSocketId, setTheme, showModal, submitHostGame,
+	submitJoinGame, syncGameState, toggleAccusing } = imposterSlice.actions;
 
 export default imposterSlice.reducer;

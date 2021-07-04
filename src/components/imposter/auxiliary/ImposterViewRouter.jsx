@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import ImposterGameView from '../ingame/ImposterGameView';
 import LobbyView from '../lobby/LobbyView';
 import HostGameForm from '../mainmenu/HostGameForm';
 import JoinGameForm from '../mainmenu/JoinGameForm';
@@ -23,6 +24,8 @@ const getView = viewIndex => {
 			return <JoinGameForm />;
 		case IMPOSTER_VIEWS.LOBBY:
 			return <LobbyView />;
+		case IMPOSTER_VIEWS.IN_GAME:
+			return <ImposterGameView />;
 		case IMPOSTER_VIEWS.LOADING:
 			return <LoadingView />;
 		default:

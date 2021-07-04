@@ -47,6 +47,7 @@ export const SOCKET_COMMANDS = {
 	EXTEND_TIMER: 'extendTimer',
 	HURRY_UP: 'hurryUp',
 	IDENTIFY_SCENARIO: 'identifyScenario',
+	IMPOSTER_ERROR: 'imposterError',
 	INIT_GAME: 'initGame',
 	LAUNCHED_IMPOSTER: 'launchedImposter',
 	PING: 'ping',
@@ -58,7 +59,9 @@ export const SOCKET_COMMANDS = {
 };
 
 export const STORAGE_KEYS = {
-	THEME: 'JTD_imposter_theme'
+	LAST_LAUNCHED: 'JTD_imposter_lastLaunched',
+	SOCKET_ID: 'JTD_imposter_socketId',
+	THEME: 'JTD_imposter_theme',
 };
 
 export const MODAL_VIEWS = {

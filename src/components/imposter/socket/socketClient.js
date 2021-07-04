@@ -59,10 +59,10 @@ const initImposter = dispatch => {
       // case 'gameTick':
       //   dispatch(gameTick(msg.gameState));
       //   break;
-      // case 'imposterError':
-      //   console.error(msg.text);
-      //   dispatch(alertMessage(msg.text, 5000));
-      //   break;
+      case SOCKET_COMMANDS.IMPOSTER_ERROR:
+        console.error(msg.text);
+        dispatch(alertMessage(msg.text));
+        break;
       // case 'refreshVotes':
       //   dispatch(refreshVotes(msg.votes));
       //   break;

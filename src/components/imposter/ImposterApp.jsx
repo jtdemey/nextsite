@@ -8,6 +8,7 @@ import { getTheme } from './ImposterUtils';
 import ImposterHeader from './auxiliary/ImposterHeader';
 import { STORAGE_KEYS } from './redux/imposterConstants';
 import { setTheme } from './redux/imposterSlice';
+import AlertBox from './auxiliary/AlertBox';
 
 const App = styled.div`
   position: fixed;
@@ -32,6 +33,7 @@ const ImposterApp = props => {
   return (
 		<App style={{ background: theme.primary }}>
 			<ModalArea modal={modal} />
+			<AlertBox />
 			<ImposterHeader />
 			<ImposterViewRouter />
 		</App>

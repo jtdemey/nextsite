@@ -1,5 +1,13 @@
 import { IMPOSTER_THEMES } from './redux/imposterConstants';
 
+export const addAOrAn = str => {
+  const vowels = [ ...'aeiou' ];
+  if(vowels.some(v => v === str.charAt(0))) {
+    return 'an ' + str;
+  }
+  return 'a ' + str;
+};
+
 export const genGameId = () => {
 	const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	let id = '';

@@ -5,6 +5,7 @@ import PlayerList from '../auxiliary/PlayerList';
 import GameCode from '../auxiliary/GameCode';
 import GameTimer from '../auxiliary/GameTimer';
 import NotificationArea from '../auxiliary/NotificationArea';
+import LobbyBtns from './LobbyBtns';
 
 const View = styled.div`
 	width: 100%;
@@ -20,6 +21,7 @@ const LobbyView = () => {
 			<GameCode	/>
 			<GameTimer title="Starting in:" />
 			<NotificationArea />
+			<LobbyBtns />
 		</View>
 	);
 };
