@@ -1,6 +1,5 @@
-import { parseDateStr } from '../ImposterUtils';
 import { SOCKET_COMMANDS } from '../redux/imposterConstants';
-import { alertMessage, initGame, setSocketId } from '../redux/imposterSlice';
+import { alertMessage, gameTick, initGame, setSocketId, updateVotes } from '../redux/imposterSlice';
 
 export let socket = null;
 
@@ -56,16 +55,16 @@ const initImposter = dispatch => {
       case SOCKET_COMMANDS.PING:
 				socket.send(JSON.stringify({ command: 'pong', socketId }));
         break;
-      // case 'gameTick':
-      //   dispatch(gameTick(msg.gameState));
-      //   break;
+      case SOCKET_COMMANDS.GAME_TICK:
+        dispatch(gameTick(msg.gameState));
+        break;
       case SOCKET_COMMANDS.IMPOSTER_ERROR:
         console.error(msg.text);
         dispatch(alertMessage(msg.text));
         break;
-      // case 'refreshVotes':
-      //   dispatch(refreshVotes(msg.votes));
-      //   break;
+      case SOCKET_COMMANDS.UPDATE_VOTES:
+        dispatch(updateVotes(msg.votes));
+        break;
       default:
         console.log(`Unrecognized socket message '${msg.command}'.`);
         break;

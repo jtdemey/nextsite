@@ -13,6 +13,9 @@ export const makeGameSuite = () => {
   gameSuite.gameList = [];
   gameSuite.playerList = [];
 
+	//Private
+	const pingedPlayers = {}; 
+
   //Logs
   const logInfo = (msg, gameId = null) =>
     logger.info(`[GS] ${gameId ? `[${gameId}] ` : ''}${msg}`);
@@ -202,6 +205,24 @@ export const makeGameSuite = () => {
     }
   };
 
+	//TODO
+	const kickUnreachablePlayers = game => {
+		playerList.forEach(player => {
+			gameSuite.emitToPlayer(player.socketId, gameSuite.makeCommand('ping'));
+			const pinged = pingedPlayers[player.socketId];
+			if(!pinged) {
+				pingedPlayers[player.socketId] = 3; //3 tries
+				return;
+			}
+		});
+		setTimeout(() => {
+			pingedPlayers.forEach(sockId => {
+				gameSuite.removePlayer(sockId);
+				logInfo(`Player ${sockId} removed due to inactivity`);
+			});
+		}, 5000);
+	};
+
   //Lifecycle
   gameSuite.doGameTick = game => {
     let g = {
@@ -256,7 +277,6 @@ export const makeGameSuite = () => {
     gameSuite.clock = setInterval(() => {
       if(gameSuite.gameList.length < 1) {
         logInfo('Going idle...');
-        clearInterval(gameSuite.clock);
         gameSuite.startIdleClock(gameSuite);
       }
       const activeGames = gameSuite.gameList.filter(g => g.isPaused === false && g.players.length > 0);
@@ -272,6 +292,7 @@ export const makeGameSuite = () => {
   };
 
   gameSuite.startIdleClock = () => {
+		clearInterval(gameSuite.clock);
     gameSuite.clock = setInterval(() => {
       if(gameSuite.gameList.length > 0) {
         logInfo(`Bootin' up!`);

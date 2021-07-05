@@ -48,8 +48,21 @@ export const imposterSlice = createSlice({
 		appendNotification: (state, action) => {
 			state.notifications = state.notifications.concat([action.payload]);
 		},
+		assignScenario: (state, action) => {
+			state.condition = action.payload.condition;
+			state.imposterId = action.payload.imposterId;
+			state.roles = action.payload.roles;
+			state.scenario = action.payload.scenario;
+			state.scenarioList = action.payload.scenarioList;
+		},
 		changeGameView: (state, action) => {
 			state.view = action.payload;
+		},
+		clearTempPhaseData: state => {
+			state.extendTimerCt = 3;
+			state.hurryUpCt = 6;
+			state.isAccusing = false;
+			state.isReady = false;
 		},
 		emitSocketMsg: (state, action) => {
 			socket.send(JSON.stringify(action.payload));
@@ -69,6 +82,7 @@ export const imposterSlice = createSlice({
 				}
 			}
 		},
+		gameTick: () => {},
 		hideModal: state => {
 			state.modal = MODAL_VIEWS.NONE;
 		},
@@ -135,14 +149,25 @@ export const imposterSlice = createSlice({
 		},
 		toggleAccusing: state => {
 			state.isAccusing = !action.payload;
+		},
+		updatePlayers: (state, action) => {
+			state.players = action.payload;
+		},
+		updateVotes: (state, action) => {
+			state.votes = action.payload;
 		}
   },
   extraReducers: {}
 });
 
-export const { accusePlayer, alertMessage, appendNotification, changeGameView,
-	emitSocketMsg, extendTimer, hideModal, hurryUp, initGame, returnToLobby,
-	setSocketId, setTheme, showModal, submitHostGame,
-	submitJoinGame, syncGameState, toggleAccusing } = imposterSlice.actions;
+export const {
+	accusePlayer, alertMessage, appendNotification,
+	assignScenario, changeGameView, clearTempPhaseData,
+	emitSocketMsg, extendTimer, gameTick, hideModal,
+	hurryUp, initGame, returnToLobby,
+	setSocketId, setTheme, showModal,
+	submitHostGame, submitJoinGame, syncGameState,
+	toggleAccusing, updatePlayers, updateVotes
+} = imposterSlice.actions;
 
 export default imposterSlice.reducer;

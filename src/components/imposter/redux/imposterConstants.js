@@ -34,10 +34,10 @@ export const NOTIFICATIONS = {
 };
 
 export const PHASES = {
-	LOBBY: 'lobby',
-	IN_GAME: 'in-game',
-	BYSTANDER_VICTORY: 'bystander-victory',
-	IMPOSTER_VICTORY: 'imposter-victory'
+	LOBBY: IMPOSTER_VIEWS.LOBBY,
+	IN_GAME: IMPOSTER_VIEWS.IN_GAME,
+	BYSTANDER_VICTORY: IMPOSTER_VIEWS.BYSTANDER_VICTORY,
+	IMPOSTER_VICTORY: IMPOSTER_VIEWS.IMPOSTER_VICTORY 
 };
 
 export const SOCKET_COMMANDS = {
@@ -45,6 +45,7 @@ export const SOCKET_COMMANDS = {
 	ACCUSE_PLAYER: 'accusePlayer',
 	CAST_VOTE: 'castVote',
 	EXTEND_TIMER: 'extendTimer',
+	GAME_TICK: 'gameTick',
 	HURRY_UP: 'hurryUp',
 	IDENTIFY_SCENARIO: 'identifyScenario',
 	IMPOSTER_ERROR: 'imposterError',
@@ -55,7 +56,8 @@ export const SOCKET_COMMANDS = {
 	SOCKET_DISONNECT: 'socketDisconnect',
 	SUBMIT_HOST_GAME: 'submitHostGame',
 	SUBMIT_JOIN_GAME: 'submitJoinGame',
-	TOGGLE_READY_STATE: 'toggleReadyState'
+	TOGGLE_READY_STATE: 'toggleReadyState',
+	UPDATE_VOTES: 'refreshVotes'
 };
 
 export const STORAGE_KEYS = {
