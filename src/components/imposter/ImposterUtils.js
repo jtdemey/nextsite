@@ -19,6 +19,24 @@ export const genGameId = () => {
 	return id;
 };
 
+export const getButterySpring = props => ({
+	...props,
+	config: {
+		mass: 1,
+		tension: 240,
+		friction: 20
+	}
+});
+
+export const getSyrupySpring = props => ({
+	...props,
+	config: {
+		mass: 4,
+		tension: 320,
+		friction: 28 
+	}
+});
+
 export const getTheme = themeIndex => IMPOSTER_THEMES[themeIndex];
 
 export const parseDateStr = isoStr => {

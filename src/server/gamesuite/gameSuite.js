@@ -3,6 +3,7 @@ import { rollScenario } from './imposterScenarios';
 import { nanoid } from 'nanoid';
 import { ENDGAME_REASONS, PHASES, SOCKET_COMMANDS } from '../../components/imposter/redux/imposterConstants';
 import { genGameId } from '../../components/imposter/ImposterUtils';
+import { handlePong, pingPlayers } from './playerCleaner';
 
 export const makeGameSuite = () => {
   const gameSuite = {};
@@ -14,7 +15,7 @@ export const makeGameSuite = () => {
   gameSuite.playerList = [];
 
 	//Private
-	const pingedPlayers = {}; 
+	let gsTick = 0;
 
   //Logs
   const logInfo = (msg, gameId = null) =>
@@ -205,24 +206,6 @@ export const makeGameSuite = () => {
     }
   };
 
-	//TODO
-	const kickUnreachablePlayers = game => {
-		playerList.forEach(player => {
-			gameSuite.emitToPlayer(player.socketId, gameSuite.makeCommand('ping'));
-			const pinged = pingedPlayers[player.socketId];
-			if(!pinged) {
-				pingedPlayers[player.socketId] = 3; //3 tries
-				return;
-			}
-		});
-		setTimeout(() => {
-			pingedPlayers.forEach(sockId => {
-				gameSuite.removePlayer(sockId);
-				logInfo(`Player ${sockId} removed due to inactivity`);
-			});
-		}, 5000);
-	};
-
   //Lifecycle
   gameSuite.doGameTick = game => {
     let g = {
@@ -273,6 +256,17 @@ export const makeGameSuite = () => {
     return g;
   };
 
+	const onTick = tick => {
+		if(tick % 30 === 0) {
+			pingPlayers(gameSuite);
+		}
+		if(tick > 30000)  {
+			tick = 0;
+		}
+		tick++;
+		return tick;
+	};
+
   gameSuite.startGameClock = () => {
     gameSuite.clock = setInterval(() => {
       if(gameSuite.gameList.length < 1) {
@@ -288,6 +282,7 @@ export const makeGameSuite = () => {
           gameState: g
         }));
       }
+			gsTick = onTick(gsTick);
     }, 1000);
   };
 
@@ -299,6 +294,7 @@ export const makeGameSuite = () => {
         clearInterval(gameSuite.clock);
         gameSuite.startGameClock(gameSuite);
       }
+			gsTick = onTick(gsTick);
     }, 3000);
   };
 
@@ -307,7 +303,7 @@ export const makeGameSuite = () => {
     const newImposter = gameSuite.makeGame();
     gameSuite.updatePlayer(msg.socketId, {
       gameId: newImposter.gameId,
-      name: msg.hostName || 'Dingus'
+      name: msg.playerName || 'Dingus'
     });
     const hostPlayer = gameSuite.getPlayer(msg.socketId);
     newImposter.host = hostPlayer.socketId;
@@ -373,12 +369,15 @@ export const makeGameSuite = () => {
 	//Message handler 
 	gameSuite.handleSocketMsg = (wss, ws, raw) => {
 		const msg = wss.gs.parseRes(raw);
-		if(msg.command !== 'ping') {
+		if(msg.command !== 'ping' && msg.command !== 'pong') {
 			logInfo(`${msg.socketId ? `Socket ${msg.socketId}` : `New player`} says ${msg.command}"`);
 		}
 		let result, playerId;
 		switch(msg.command) {
 			//General
+			case SOCKET_COMMANDS.PONG:
+				handlePong(msg.socketId);
+				break;
 			case SOCKET_COMMANDS.SOCKET_DISONNECT:
 				wss.gs.removePlayer(msg.socketId, true);
 				break;
@@ -618,7 +617,6 @@ export const makeGameSuite = () => {
     gameSuite.updatePlayer(msg.socketId, {
       isReady: msg.readyValue
     });
-    //To-do: all ready
     if(game.players.filter(p => p.isReady).length === game.players.length) {
       gameSuite.updateGame(game.gameId, {
         remainingTime: 0

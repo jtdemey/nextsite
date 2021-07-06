@@ -8,7 +8,7 @@ export function* submitHostSaga(action) {
 		yield put(emitSocketMsg({
 			command: 'submitHostGame',
 			socketId: action.payload.socketId,
-			...action
+			...action.payload
 		}));
   } catch(err) {
     console.error(err);

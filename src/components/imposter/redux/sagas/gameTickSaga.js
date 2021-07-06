@@ -21,7 +21,7 @@ const detectPlayersDelta = (ogPlayers, newPlayers) => {
 
 export function* gameTickSaga(action) {
   try {
-		const gs = action.gameState;
+		const gs = action.payload;
 		const deltas = yield select(state => ({
 			phase: state.game.phase !== gs.phase,
 			players: detectPlayersDelta(state.game.players, gs.players),

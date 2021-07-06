@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { animated } from '@react-spring/web';
 import styled from 'styled-components';
 
-const Input = styled.input`
+const Input = styled(animated.input)`
 	margin: 1.25rem auto;
 	padding: 0.25rem;
 	border: none;
@@ -21,6 +22,7 @@ const FormInput = props => {
       type="text"
 			onChange={e => props.setValue(e.target.value)}
       placeholder={props.placeholder}
+			style={{ ...props.spring }}
 			value={props.value}
     />
   );
@@ -29,6 +31,7 @@ const FormInput = props => {
 FormInput.propTypes = {
   placeholder: PropTypes.string,
 	setValue: PropTypes.func,
+	spring: PropTypes.object,
 	value: PropTypes.string
 };
 

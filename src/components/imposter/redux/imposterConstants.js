@@ -52,6 +52,7 @@ export const SOCKET_COMMANDS = {
 	INIT_GAME: 'initGame',
 	LAUNCHED_IMPOSTER: 'launchedImposter',
 	PING: 'ping',
+	PONG: 'pong',
 	RETURN_TO_LOBBY: 'returnToLobby',
 	SOCKET_DISONNECT: 'socketDisconnect',
 	SUBMIT_HOST_GAME: 'submitHostGame',

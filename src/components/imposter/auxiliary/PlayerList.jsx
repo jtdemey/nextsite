@@ -7,14 +7,20 @@ import { getTheme } from '../ImposterUtils';
 
 const List = styled.ul`
 	margin-top: 3rem;
+	padding: 0;
 `;
 
 const Item = styled.li`
 	width: 14rem;
 	height: 2rem;
-	margin: 4px auto;
 	border-radius: 4px;	
 	color: #fff;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-size: 1.25rem;
+	list-style-type: none;
+	line-height: 2rem;
+	margin: 4px auto;
+	padding: 0.5rem 0;
 `;
 
 const PlayerList = props => {

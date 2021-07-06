@@ -28,7 +28,7 @@ const BtnArea = styled.div`
 `;
 
 const HostGameForm = () => {
-  const [hostName, setHostName] = React.useState('');
+  const [playerName, setPlayerName] = React.useState('');
   const socketId = useSelector(state => state.game.socketId);
   const dispatch = useDispatch();
   const [spring, api] = useSpring(() => ({ opacity: 0, y: 20 }));
@@ -39,12 +39,12 @@ const HostGameForm = () => {
       <Form style={spring}>
         <FormInput
           placeholder="Your name"
-          setValue={setHostName}
-          value={hostName}
+          setValue={setPlayerName}
+          value={playerName}
         />
         <BtnArea>
           <SubmitButton
-            clickFunc={() => dispatch(submitHostGame({ hostName, socketId }))}
+            clickFunc={() => dispatch(submitHostGame({ playerName, socketId }))}
             text="Play"
           />
           <BackToMainButton />

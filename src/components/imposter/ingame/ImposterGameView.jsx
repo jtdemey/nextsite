@@ -14,7 +14,6 @@ const View = styled.div`
 	width: 100%;
 	height: 100%;
 	text-align: center;
-	font-family: 'Source Sans Pro', sans-serif;
 `;
 
 const ImposterGameView = () => {

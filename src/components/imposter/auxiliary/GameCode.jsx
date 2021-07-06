@@ -17,11 +17,11 @@ const Code = styled.h5`
 `;
 
 const GameCode = () => {
-	const gameCode = useSelector(state => state.game.gameCode);
+	const gameId = useSelector(state => state.game.gameId);
 	return (
 		<Container>
 			<Title>Game Code</Title>
-			<Code>{gameCode}</Code>
+			<Code>{gameId}</Code>
 		</Container>
 	);
 };

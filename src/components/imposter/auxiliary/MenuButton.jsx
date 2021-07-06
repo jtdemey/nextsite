@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import { animated } from '@react-spring/web';
 import styled from 'styled-components';
 import { getTheme } from '../ImposterUtils';
 
-const Button = styled.div`
+const Button = styled(animated.div)`
   width: 60%;
   max-width: 320px;
   margin: 0.5rem;
@@ -28,7 +29,7 @@ const MenuButton = props => {
   return (
     <Button
       onClick={() => props.clickFunc()}
-      style={{ background: theme.secondary }}
+      style={{ background: theme.secondary, ...props.spring }}
     >
       <Text>{props.text}</Text>
     </Button>
@@ -37,6 +38,7 @@ const MenuButton = props => {
 
 MenuButton.propTypes = {
   clickFunc: PropTypes.func,
+	spring: PropTypes.object,
   text: PropTypes.string
 };
 
