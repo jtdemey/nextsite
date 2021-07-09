@@ -6,7 +6,7 @@ import { accusePlayer } from '../redux/imposterSlice';
 import { getTheme } from '../ImposterUtils';
 
 const List = styled.ul`
-	margin-top: 3rem;
+	margin-top: 2rem;
 	padding: 0;
 `;
 
@@ -20,7 +20,7 @@ const Item = styled.li`
 	list-style-type: none;
 	line-height: 2rem;
 	margin: 4px auto;
-	padding: 0.5rem 0;
+	padding: 0.25rem 0;
 `;
 
 const PlayerList = props => {

@@ -8,7 +8,7 @@ import { getTheme } from '../ImposterUtils';
 const Button = styled(animated.div)`
   width: 60%;
   max-width: 320px;
-  margin: 0.5rem;
+  margin: 0.5rem auto;
   padding: 1rem;
   color: #edf6f9;
   font-family: 'Source Sans Pro', sans-serif;

@@ -1,27 +1,38 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { getTheme } from '../ImposterUtils';
 
 const Container = styled.div`
-	padding: 0.5rem;
+	width: 9rem;
+	margin: 2rem auto 0;
+	padding: 0.25rem;
+	border-radius: 1rem;
 	color: #fff;
+	font-family: 'Source Sans Pro', sans-serif;
 	text-align: center;
 `;
 
 const Title = styled.h6`
 	font-size: 1rem;
+	margin: 0.25rem;
 `;
 
 const Code = styled.h5`
-	font-size: 1.5rem;
+	font-size: 1.75rem;
+	margin: 0.25rem;
 `;
 
 const GameCode = () => {
-	const gameId = useSelector(state => state.game.gameId);
+	const state = useSelector(state => ({
+		gameId: state.game.gameId,
+		theme: state.game.theme,
+	}));
+	const theme = getTheme(state.theme);
 	return (
-		<Container>
+		<Container style={{ background: theme.secondary }}>
 			<Title>Game Code</Title>
-			<Code>{gameId}</Code>
+			<Code>{state.gameId}</Code>
 		</Container>
 	);
 };
