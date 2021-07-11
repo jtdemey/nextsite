@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import { animated, useSpring, useSprings } from '@react-spring/web';
+import { useDispatch, useSelector } from 'react-redux';
+import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
+import NavItem from './NavItem';
 import { getButterySpring, getTheme } from '../ImposterUtils';
+import { showModal } from '../redux/imposterSlice';
+import { MODAL_VIEWS } from '../redux/imposterConstants';
 
 const Bar = styled(animated.div)`
 	display: grid;
@@ -11,31 +14,34 @@ const Bar = styled(animated.div)`
 	height: 100%;
 `;
 
-const Item = styled(animated.div)`
-	color: #fff;
-	display: flex;
-	padding: 0.25rem;
-	font-family: 'Source Sans Pro', sans-serif;
-	font-size: 1.1rem;
-	justify-content: center;
-	align-items: center;
-`;
-
 const NavBar = props => {
+	const dispatch = useDispatch();
 	const theme = getTheme(useSelector(state => state.game.theme));
-	const [spring, barApi] = useSpring(() => getButterySpring({ yScale: 0.5 }));
-	React.useEffect(() => {
-		barApi.start({ yScale: props.visible ? 1.0 : 0.0 });
-	}, [props.visible]);
+	const [spring, api] = useSpring(() => getButterySpring({ yScale: 0.5 }));
+	React.useEffect(() => api.start({ yScale: props.visible ? 1.0 : 0.0 }));
 	return (
 		<Bar style={{
 			background: theme.secondary,
 			display: props.visible ? 'grid' : 'none',
 			transform: spring.yScale.to(y => `scaleY(${y})`)
 		}}>
-			<Item>Home</Item>
-			<Item>Settings</Item>
-			<Item>Quit</Item>
+			<NavItem
+				clickFunc={() => dispatch(showModal(MODAL_VIEWS.RULES))}
+				text="Rules"
+				visible={props.visible}
+			/>
+			<NavItem
+				clickFunc={() => dispatch(showModal(MODAL_VIEWS.SETTINGS))}
+				delay={250}
+				text="Settings"
+				visible={props.visible}
+			/>
+			<NavItem
+				clickFunc={() => false}
+				delay={500}
+				text="Quit"
+				visible={props.visible}
+			/>
 		</Bar>
 	);
 };

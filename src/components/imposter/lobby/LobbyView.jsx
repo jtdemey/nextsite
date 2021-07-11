@@ -11,6 +11,12 @@ const View = styled.div`
 	width: 100%;
 	height: 100%;
 	text-align: center;
+	overflow-y: scroll;
+`;
+
+const GameInfoArea = styled.div`
+	display: grid;
+	grid-template-columns: 1fr 1fr;
 `;
 
 const LobbyView = () => {
@@ -18,8 +24,10 @@ const LobbyView = () => {
 	return (
 		<View>
 			<PlayerList players={players} />
-			<GameCode	/>
-			<GameTimer title="Starting in:" />
+			<GameInfoArea>
+				<GameCode	/>
+				<GameTimer title="Starting in:" />
+			</GameInfoArea>
 			<NotificationArea />
 			<LobbyBtns />
 		</View>

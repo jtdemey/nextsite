@@ -229,7 +229,8 @@ export const makeGameSuite = () => {
     }
     switch(g.phase) {
       case PHASES.LOBBY:
-        if(g.players.length < 3) {
+				//Todo: < 3
+        if(g.players.length < 1) {
           g.remainingTime = 30;
           gameSuite.emitToGame(g.gameId, gameSuite.makeCommand('imposterError', {
             text: `At least 3 players are required to play`
@@ -455,7 +456,7 @@ export const makeGameSuite = () => {
         scene.roles = scene.roles.filter(r => r !== role);
       }
     });
-    logInfo(`Applied scenario ${scene.scenario} to ${state.gameId}`);
+    logInfo(`Applied scenario ${scene.scenario} but ${scene.condition}.`, state.gameId);
     return result;
   };
 

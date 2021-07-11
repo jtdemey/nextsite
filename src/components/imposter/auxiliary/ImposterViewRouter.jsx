@@ -11,7 +11,6 @@ import LoadingView from './LoadingView';
 
 const Container = styled.div`
 	width: 100%;
-	height: 100%;
 `;
 
 const getView = viewIndex => {

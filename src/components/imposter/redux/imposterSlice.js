@@ -71,6 +71,13 @@ export const imposterSlice = createSlice({
 		extendTimer: (state, action) => {
 			if(state.extendTimerCt > 0) {
 				state.extendTimerCt -= 1;
+				state.remainingTime += 10;
+				const command = SOCKET_COMMANDS.EXTEND_TIMER;
+				socket.send(JSON.stringify({
+					command,
+					...action.payload
+				}));
+				state.lastSocketCommand = command;
 			} else {
 				if(!action.payload.notifications.some(
 					n => n.type === NOTIFICATIONS.EXTEND_TIMER_EXCEEDED
@@ -86,9 +93,16 @@ export const imposterSlice = createSlice({
 		hideModal: state => {
 			state.modal = MODAL_VIEWS.NONE;
 		},
-		hurryUp: state => {
+		hurryUp: (state, action) => {
 			if(state.hurryUpCt > 0) {
 				state.hurryUpCt -= 1;
+				state.remainingTime -= 1;
+				const command = SOCKET_COMMANDS.HURRY_UP;
+				socket.send(JSON.stringify({
+					command,
+					...action.payload
+				}));
+				state.lastSocketCommand = command;
 			} else {
 				if(!action.payload.notifications.some(
 					n => n.type === NOTIFICATIONS.HURRY_UP_EXCEEDED

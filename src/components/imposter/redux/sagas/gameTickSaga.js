@@ -1,6 +1,5 @@
-import { delay, put, select } from 'redux-saga/effects';
-import { IMPOSTER_VIEWS } from '../imposterConstants';
-import { changeGameView, clearTempPhaseData, emitSocketMsg, syncGameState, updatePlayers } from '../imposterSlice';
+import { put, select } from 'redux-saga/effects';
+import { assignScenario, changeGameView, clearTempPhaseData, syncGameState, updatePlayers } from '../imposterSlice';
 
 const detectPlayersDelta = (ogPlayers, newPlayers) => {
   if(ogPlayers.length !== newPlayers.length) {
@@ -28,13 +27,6 @@ export function* gameTickSaga(action) {
 			scenario: state.game.scenario !== gs.scenario
 		}));
 		yield put(syncGameState(gs));
-		if(deltas.phase) {
-			yield put(clearTempPhaseData());
-			yield put(changeGameView(gs.phase));
-		}
-		if(deltas.players) {
-			yield put(updatePlayers(gs.players));
-		}
 		if(deltas.scenario) {
 			yield put(assignScenario({
 				condition: gs.condition,
@@ -43,6 +35,13 @@ export function* gameTickSaga(action) {
 				scenario: gs.scenario,
 				scenarioList: gs.scenarioList
 			}));
+		}
+		if(deltas.players) {
+			yield put(updatePlayers(gs.players));
+		}
+		if(deltas.phase) {
+			yield put(clearTempPhaseData());
+			yield put(changeGameView(gs.phase));
 		}
   } catch(err) {
     console.error(err);

@@ -2,15 +2,22 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Prompt = styled.div`
+	color: #fff;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-size: 1.1rem;
 	text-align: center;
+`;
+
+const PromptLine = styled.div`
+	margin: 0.25rem 0;
 `;
 
 const ImposterPrompt = () => {
 	return (
 		<Prompt>
-			<h3>You are the Imposter.</h3>
-			<h3>Try to deduce the scenario</h3>
-			<h3>and blend in until time runs out.</h3>
+			<PromptLine>You are the Imposter.</PromptLine>
+			<PromptLine>Try to deduce the scenario</PromptLine>
+			<PromptLine>and blend in until time runs out.</PromptLine>
 		</Prompt>
 	);
 };

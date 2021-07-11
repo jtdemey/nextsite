@@ -16,20 +16,27 @@ const View = styled.div`
 	text-align: center;
 `;
 
+const GameInfoArea = styled.div`
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+`;
+
 const ImposterGameView = () => {
 	const state = useSelector(state => ({
 		gameId: state.game.gameId,
     imposterId: state.game.imposterId,
     socketId: state.game.socketId,
     players: state.game.players,
-    isAccusing: state.ui.isAccusing,
+    isAccusing: state.game.isAccusing
 	}));
 	const isImposter = state.socketId === state.imposterId;
 	return (
 		<View>
 			<PlayerList players={state.players} />
-			<GameCode	/>
-			<GameTimer title="Time left:" />
+			<GameInfoArea>
+				<GameCode	/>
+				<GameTimer title="Time left:" />
+			</GameInfoArea>
 			<VoteArea />
 			<NotificationArea />
 			{isImposter

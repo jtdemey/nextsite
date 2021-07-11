@@ -5,7 +5,14 @@ import styled from 'styled-components';
 import { addAOrAn } from '../ImposterUtils';
 
 const Prompt = styled.div`
+	color: #fff;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-size: 1.1rem;
 	text-align: center;
+`;
+
+const PromptLine = styled.div`
+	margin: 0.25rem 0;
 `;
 
 const getPlayerRole = (sockId, roles) => {
@@ -33,9 +40,9 @@ const ScenarioPrompt = props => {
 	}));
 	return (
 		<Prompt>
-			<h3>{parseRole(getPlayerRole(props.socketId, state.roles))}</h3>
-      <h3>in {addAOrAn(state.scenario.toLowerCase())},</h3>
-      <h3>but {state.condition.toLowerCase()}.</h3>
+			<PromptLine>{parseRole(getPlayerRole(props.socketId, state.roles))}</PromptLine>
+      <PromptLine>in {addAOrAn(state.scenario.toLowerCase())},</PromptLine>
+      <PromptLine>but {state.condition.toLowerCase()}.</PromptLine>
 		</Prompt>
 	);
 };

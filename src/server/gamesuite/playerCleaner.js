@@ -19,7 +19,7 @@ export const pingPlayers = gameSuite => {
       logger.info(`[GS] Player ${player.socketId} removed due to inactivity.`);
       return;
     }
-		logger.info(`[GS] No ping response from ${player.socketId} (Attempts: ${pinged[0].tries + 1}).`);
+		logger.info(`[GS] No pong from ${player.socketId} (Attempts: ${pinged[0].tries + 1}).`);
     pinged[0].tries += 1;
   });
 };

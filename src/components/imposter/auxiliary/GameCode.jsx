@@ -4,10 +4,7 @@ import styled from 'styled-components';
 import { getTheme } from '../ImposterUtils';
 
 const Container = styled.div`
-	width: 9rem;
-	margin: 2rem auto 0;
-	padding: 0.25rem;
-	border-radius: 1rem;
+	margin: 0.25rem 0;
 	color: #fff;
 	font-family: 'Source Sans Pro', sans-serif;
 	text-align: center;
@@ -30,9 +27,9 @@ const GameCode = () => {
 	}));
 	const theme = getTheme(state.theme);
 	return (
-		<Container style={{ background: theme.secondary }}>
+		<Container style={{ borderRight: `2px solid ${theme.secondary}` }}>
 			<Title>Game Code</Title>
-			<Code>{state.gameId}</Code>
+			<Code style={{ color: theme.highlight }}>{state.gameId}</Code>
 		</Container>
 	);
 };
