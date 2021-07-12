@@ -4,6 +4,7 @@ import { nanoid } from 'nanoid';
 import { ENDGAME_REASONS, PHASES, SOCKET_COMMANDS } from '../../components/imposter/redux/imposterConstants';
 import { genGameId } from '../../components/imposter/ImposterUtils';
 import { handlePong, pingPlayers } from './playerCleaner';
+import { handleImposterMsg } from './ImposterController';
 
 export const makeGameSuite = () => {
   const gameSuite = {};
@@ -299,12 +300,16 @@ export const makeGameSuite = () => {
     }, 3000);
   };
 
+	const truncateName = raw => raw.length > 24
+			? raw.substring(0, 24)
+			: raw;
+
   //Form Handlers
   gameSuite.handleSubmitHostGame = msg => {
     const newImposter = gameSuite.makeGame();
     gameSuite.updatePlayer(msg.socketId, {
       gameId: newImposter.gameId,
-      name: msg.playerName || 'Dingus'
+      name: truncateName(msg.playerName) || 'Dingus'
     });
     const hostPlayer = gameSuite.getPlayer(msg.socketId);
     newImposter.host = hostPlayer.socketId;
@@ -349,7 +354,7 @@ export const makeGameSuite = () => {
       }));
       return;
 		}
-    let rawName = msg.playerName || 'Dingus';
+    let rawName = truncateName(msg.playerName) || 'Dingus';
     const playerName = getOriginalName(rawName.trim(), prospImposter.players);
     gameSuite.updatePlayer(msg.socketId, {
       gameId: msg.gameId.toUpperCase(),
@@ -373,59 +378,22 @@ export const makeGameSuite = () => {
 		if(msg.command !== 'ping' && msg.command !== 'pong') {
 			logInfo(`${msg.socketId ? `Socket ${msg.socketId}` : `New player`} says ${msg.command}"`);
 		}
-		let result, playerId;
+		let recognizedByModule = ['core', 'imposter'];
+		//General handling
 		switch(msg.command) {
-			//General
 			case SOCKET_COMMANDS.PONG:
 				handlePong(msg.socketId);
 				break;
 			case SOCKET_COMMANDS.SOCKET_DISONNECT:
 				wss.gs.removePlayer(msg.socketId, true);
 				break;
-			//Imposter
-			case SOCKET_COMMANDS.LAUNCHED_IMPOSTER:
-				playerId = nanoid();
-				wss.gs.addPlayer(wss.gs.makePlayer(ws, playerId), true);
-				ws.send(wss.gs.makeCommand(SOCKET_COMMANDS.ACCEPT_IMPOSTER_LAUNCH, {
-					socketId: playerId
-				}));
-				break;
-			case SOCKET_COMMANDS.SUBMIT_HOST_GAME:
-				result = wss.gs.handleSubmitHostGame(msg);
-				if(result) {
-					ws.send(wss.gs.makeCommand(SOCKET_COMMANDS.INIT_GAME, { gameState: result }));
-				}
-				break;
-			case SOCKET_COMMANDS.SUBMIT_JOIN_GAME:
-				result = wss.gs.handleSubmitJoinGame(msg);
-				if(result) {
-					ws.send(wss.gs.makeCommand(SOCKET_COMMANDS.INIT_GAME, { gameState: result }));
-				}
-				break;
-			case SOCKET_COMMANDS.EXTEND_TIMER:
-				wss.gs.extendTimer(msg.socketId, msg.gameId);
-				break;
-			case SOCKET_COMMANDS.HURRY_UP:
-				wss.gs.hurryUp(msg.socketId, msg.gameId);
-				break;
-			case SOCKET_COMMANDS.TOGGLE_READY_STATE:
-				wss.gs.toggleReadyState(msg);
-				break;
-			case SOCKET_COMMANDS.ACCUSE_PLAYER:
-				wss.gs.handleAccusePlayer(msg);
-				break;
-			case SOCKET_COMMANDS.RETURN_TO_LOBBY:
-				wss.gs.handleLobbyReturnVote(msg);
-				break;
-			case SOCKET_COMMANDS.CAST_VOTE:
-				wss.gs.castVote(msg);
-				break;
-			case SOCKET_COMMANDS.IDENTIFY_SCENARIO:
-				wss.gs.identifyScenario(msg);
-				break;
 			default:
-				logError(`Socket command '${msg.command}' not recognized`);
+				recognizedByModule = recognizedByModule.filter(x => x !== 'core');
 				break;
+		}
+		handleImposterMsg(wss, ws, msg, recognizedByModule);
+		if(recognizedByModule.length < 1) {
+			logError(`Socket command '${msg.command}' not recognized.`);
 		}
 	};
 

@@ -11,6 +11,7 @@ const Container = styled(animated.div)`
 `;
 
 const Header = styled(animated.h1)`
+	color: #fff;
 	width: 100%;
 	font-family: 'Oleo Script', cursive;
 	font-size: 4rem;
@@ -36,8 +37,8 @@ const ImposterHeader = () => {
 	return (
 		<Container>
 			<Header style={{
-				color: theme.highlight,
-				transform: spring.yScale.to(y => `scaleY(${y})`),
+				textShadow: `-0.25rem 0.25rem ${theme.secondary}`,
+				transform: spring.yScale.to(y => `scaleY(${y}) rotate(-3deg) skew(-3deg, -3deg)`),
 				...spring
 			}}>Imposter!</Header>
 			<NavBar visible={showNav} />

@@ -63,6 +63,8 @@ export const imposterSlice = createSlice({
 			state.hurryUpCt = 6;
 			state.isAccusing = false;
 			state.isReady = false;
+			state.notifications = [];
+			state.votes = [];
 		},
 		emitSocketMsg: (state, action) => {
 			socket.send(JSON.stringify(action.payload));
@@ -79,7 +81,7 @@ export const imposterSlice = createSlice({
 				}));
 				state.lastSocketCommand = command;
 			} else {
-				if(!action.payload.notifications.some(
+				if(!state.notifications.some(
 					n => n.type === NOTIFICATIONS.EXTEND_TIMER_EXCEEDED
 				)) {
 					state.notifications = state.notifications.concat([{
@@ -104,7 +106,7 @@ export const imposterSlice = createSlice({
 				}));
 				state.lastSocketCommand = command;
 			} else {
-				if(!action.payload.notifications.some(
+				if(!state.notifications.some(
 					n => n.type === NOTIFICATIONS.HURRY_UP_EXCEEDED
 				)) {
 					state.notifications = state.notifications.concat([{
@@ -130,7 +132,7 @@ export const imposterSlice = createSlice({
 			const command = SOCKET_COMMANDS.RETURN_TO_LOBBY;
 			socket.send(JSON.stringify({
 				command,
-				socketId: action.payload.socketId
+				...action.payload
 			}));
 			state.lastSocketCommand = command;
 		},
@@ -161,7 +163,7 @@ export const imposterSlice = createSlice({
 			state.tick = gs.tick;
 			state.votes = gs.votes;
 		},
-		toggleAccusing: state => {
+		toggleAccusing: (state, action) => {
 			state.isAccusing = !action.payload;
 		},
 		updatePlayers: (state, action) => {

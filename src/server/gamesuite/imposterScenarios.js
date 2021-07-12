@@ -18,46 +18,46 @@ export const rollScenario = () => {
     {
       title: 'Bank Robbery',
       roles: [
-        'Mastermind',
-        'Demolitionist',
-        'Getaway Driver',
-        'Weapon Specialist',
-        'Technology Specialist',
-        'Vault-driller',
-        'The Distraction',
-        'Recon Specialist',
-        'Hostage Taker',
+        'The mastermind',
+        'The demolitionist',
+        'The getaway driver',
+        'The weapon specialist',
+        'The technology specialist',
+        'The vault-driller',
+        'The distraction',
+        'The recon specialist',
+        'The hostage-taker',
         'Money Bagger'
       ]
     },
     {
       title: 'CIA Headquarters',
       roles: [
-        'Mastermind',
-        'Demolitionist',
-        'Getaway Driver',
-        'Weapon Specialist',
-        'Technology Specialist',
-        'Vault-driller',
-        'The Distraction',
-        'Recon Specialist',
-        'Hostage Taker',
-        'Money Bagger'
+        'The director',
+        'War-planner',
+        'Loan maker',
+        'Tech support agent',
+        'Intelligence gatherer',
+        'Undercover agent',
+        'Internal affairs officer',
+        'H/R agent',
+        'Analyst',
+        'Mole'
       ]
     },
     {
       title: 'Diamond Mine',
       roles: [
-        'Mine Administrator',
+        'The mine Administrator',
         'Geologist',
-        'Elevator Specialist',
+        'Elevator Engineer',
         'Surveyor',
         'Miner',
         'Miner',
-        'Miner',
+        'Documentary filmer',
         'Geologist',
         'Geologist',
-        'Miner'
+        'Researcher'
       ]
     },
     {
@@ -78,7 +78,7 @@ export const rollScenario = () => {
     {
       title: 'Polar Expedition',
       roles: [
-        'Head Researcher',
+        'The head Researcher',
         'Assistant Researcher',
         'Meteorologist',
         'Surveyor',
@@ -158,7 +158,7 @@ export const rollScenario = () => {
         'Producer',
         'Makeup Artist',
         'Costume Designer',
-        'Cameraman',
+        'Camera operator',
         'The Celebrity Cameo',
         'Boom Operator',
         'Intern',
@@ -191,7 +191,7 @@ export const rollScenario = () => {
         'Laborer',
         'Operator',
         'Laborer',
-        'Foreman',
+        'Lost kid',
         'Laborer'
       ]
     },
@@ -241,7 +241,7 @@ export const rollScenario = () => {
       ]
     },
     {
-      title: 'Medical Dispensary',
+      title: 'Cannabis Dispensary',
       roles: [
         'Bud tender',
         'Old person',
@@ -249,7 +249,7 @@ export const rollScenario = () => {
         'Stoner',
         'Employee',
         'Patient',
-        'Patient',
+        'ATM mechanic',
         'Marijuana enthusiast',
         'Patient',
         'Cashier'
@@ -273,7 +273,7 @@ export const rollScenario = () => {
     {
       title: 'Fight Club',
       roles: [
-        'Director',
+        'The boss',
         'Brawler',
         'Kickboxer',
         'Worker',
@@ -294,7 +294,7 @@ export const rollScenario = () => {
         'Singer',
         'Lighting tech',
         'Audio tech',
-        'Band manager',
+        'The band manager',
         'Fan',
         'Mosher',
         'Raving fan'
@@ -309,8 +309,8 @@ export const rollScenario = () => {
         'Avid Christian',
         'Acolyte',
         'Choir singer',
-        'Choir director',
-        'Organist',
+        'The choir director',
+        'The organist',
         'Usher',
         'Bored kid'
       ]

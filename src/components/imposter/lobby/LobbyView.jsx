@@ -2,8 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import PlayerList from '../auxiliary/PlayerList';
-import GameCode from '../auxiliary/GameCode';
-import GameTimer from '../auxiliary/GameTimer';
+import GameInfoArea from '../auxiliary/GameInfoArea';
 import NotificationArea from '../auxiliary/NotificationArea';
 import LobbyBtns from './LobbyBtns';
 
@@ -14,20 +13,12 @@ const View = styled.div`
 	overflow-y: scroll;
 `;
 
-const GameInfoArea = styled.div`
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-`;
-
 const LobbyView = () => {
 	const players = useSelector(state => state.game.players);
 	return (
 		<View>
 			<PlayerList players={players} />
-			<GameInfoArea>
-				<GameCode	/>
-				<GameTimer title="Starting in:" />
-			</GameInfoArea>
+			<GameInfoArea />
 			<NotificationArea />
 			<LobbyBtns />
 		</View>

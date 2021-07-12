@@ -14,11 +14,14 @@ const GameBtns = props => {
 	return (
 		<Container>
 			<MenuButton
-				clickFunc={() => dispatch(toggleAccusing())}
+				clickFunc={() => dispatch(toggleAccusing(props.isAccusing))}
 				text={props.isAccusing ? 'Select Imposter' : 'Accuse'}
 			/>
 			<MenuButton
-				clickFunc={() => dispatch((returnToLobby({ socketId: props.socketId })))}
+				clickFunc={() => dispatch((returnToLobby({
+					gameId: props.gameId,
+					socketId: props.socketId
+				})))}
 				text="Return to Lobby"
 			/>
 		</Container>

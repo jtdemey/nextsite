@@ -38,7 +38,7 @@ const PlayerList = props => {
 			{props.players.map(player => (
 				<Item
 					key={player.socketId}
-					onClick={state.isAccusing
+					onClick={state.isAccusing && player.socketId !== state.socketId
 						? () => dispatch(accusePlayer({
 								accusedId: player.socketId,
 								accuserId: state.socketId,

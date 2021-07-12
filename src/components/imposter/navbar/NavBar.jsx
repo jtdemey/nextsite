@@ -9,10 +9,19 @@ import { showModal } from '../redux/imposterSlice';
 import { MODAL_VIEWS } from '../redux/imposterConstants';
 
 const Bar = styled(animated.div)`
+	box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	height: 100%;
 `;
+
+const exitToMainMenu = () => {
+	const r = window.confirm('This will leave the game - you sure?');
+	if(r) {
+		location.reload();
+	}
+	return false;
+};
 
 const NavBar = props => {
 	const dispatch = useDispatch();
@@ -37,7 +46,7 @@ const NavBar = props => {
 				visible={props.visible}
 			/>
 			<NavItem
-				clickFunc={() => false}
+				clickFunc={() => exitToMainMenu()}
 				delay={500}
 				text="Quit"
 				visible={props.visible}
