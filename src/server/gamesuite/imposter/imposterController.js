@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { SOCKET_COMMANDS } from '../../components/imposter/redux/imposterConstants';
+import { SOCKET_COMMANDS } from '../../../components/imposter/redux/imposterConstants';
 
 export const handleImposterMsg = (wss, ws, msg, recognizedByModule) => {
 	let result, playerId;
@@ -24,25 +24,25 @@ export const handleImposterMsg = (wss, ws, msg, recognizedByModule) => {
 			}
 			break;
 		case SOCKET_COMMANDS.EXTEND_TIMER:
-			wss.gs.extendTimer(msg.socketId, msg.gameId);
+			wss.gs.imposter.extendTimer(msg.socketId, msg.gameId);
 			break;
 		case SOCKET_COMMANDS.HURRY_UP:
-			wss.gs.hurryUp(msg.socketId, msg.gameId);
+			wss.gs.imposter.hurryUp(msg.socketId, msg.gameId);
 			break;
 		case SOCKET_COMMANDS.TOGGLE_READY_STATE:
-			wss.gs.toggleReadyState(msg);
+			wss.gs.imposter.toggleReadyState(msg);
 			break;
 		case SOCKET_COMMANDS.ACCUSE_PLAYER:
-			wss.gs.handleAccusePlayer(msg);
+			wss.gs.imposter.handleAccusePlayer(msg);
 			break;
 		case SOCKET_COMMANDS.RETURN_TO_LOBBY:
-			wss.gs.handleLobbyReturnVote(msg);
+			wss.gs.imposter.handleLobbyReturnVote(msg);
 			break;
 		case SOCKET_COMMANDS.CAST_VOTE:
-			wss.gs.castVote(msg);
+			wss.gs.imposter.castVote(msg);
 			break;
 		case SOCKET_COMMANDS.IDENTIFY_SCENARIO:
-			wss.gs.identifyScenario(msg);
+			wss.gs.imposter.identifyScenario(msg);
 			break;
 		default:
 			recognizedByModule.imposter = false;

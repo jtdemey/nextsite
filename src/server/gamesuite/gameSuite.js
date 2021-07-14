@@ -1,10 +1,10 @@
 import logger from '../logger';
-import { rollScenario } from './imposterScenarios';
 import { nanoid } from 'nanoid';
 import { ENDGAME_REASONS, PHASES, SOCKET_COMMANDS } from '../../components/imposter/redux/imposterConstants';
 import { genGameId } from '../../components/imposter/ImposterUtils';
 import { handlePong, pingPlayers } from './playerCleaner';
-import { handleImposterMsg } from './ImposterController';
+import { handleImposterMsg } from './imposter/imposterController';
+import createImposterDomain from './imposter/imposterDomain';
 
 export const makeGameSuite = () => {
   const gameSuite = {};
@@ -15,14 +15,23 @@ export const makeGameSuite = () => {
   gameSuite.gameList = [];
   gameSuite.playerList = [];
 
+	//Games
+	gameSuite.imposter = createImposterDomain(gameSuite);
+
 	//Private
 	let gsTick = 0;
 
   //Logs
-  const logInfo = (msg, gameId = null) =>
+	const getLogText = (txt, gameId) =>
+		`[GS] ${gameId ? `[${gameId}] ` : ''}${txt}`;
+
+  gameSuite.logDebug = (err, gameId = null) =>
+    logger.debug(getLogText(err, gameId));
+
+  gameSuite.logInfo = (msg, gameId = null) =>
     logger.info(`[GS] ${gameId ? `[${gameId}] ` : ''}${msg}`);
 
-  const logError = (err, gameId = null) =>
+  gameSuite.logError = (err, gameId = null) =>
     logger.error(`[GS] ${gameId ? `[${gameId}] ` : ''}${err}`);
 
   //Creators
@@ -86,7 +95,7 @@ export const makeGameSuite = () => {
     const gamePlayers = gameSuite.playerList.filter(p => p.gameId && p.gameId === gameId);
     for(let j = 0; j < gamePlayers.length; j++) {
       if(debug) {
-        logInfo(`Sending ${JSON.parse(command).command} to ${gamePlayers[j].socketId}`);
+        gameSuite.logInfo(`Sending ${JSON.parse(command).command} to ${gamePlayers[j].socketId}`);
       }
       gamePlayers[j].socket.send(command);
     }
@@ -95,10 +104,10 @@ export const makeGameSuite = () => {
   gameSuite.emitToPlayer = (socketId, command, debug = false) => {
     const player = gameSuite.playerList.filter(p => p.socketId === socketId)[0];
     if(!player) {
-      logError(`Could not emit to player ${socketId}`);
+      gameSuite.logError(`Could not emit to player ${socketId}`);
     }
     if(debug) {
-      logInfo(`Sending ${JSON.parse(command).command} to ${socketId}`);
+      gameSuite.logInfo(`Sending ${JSON.parse(command).command} to ${socketId}`);
     }
     player.socket.send(command);
   };
@@ -108,7 +117,7 @@ export const makeGameSuite = () => {
       const r = JSON.parse(msg);
       return r;
     } catch {
-      logError(`Unable to parse client message ${msg}`);
+      gameSuite.logError(`Unable to parse client message ${msg}`);
     }
   };
 
@@ -116,7 +125,7 @@ export const makeGameSuite = () => {
   gameSuite.getGame = gameId => {
     const r = gameSuite.gameList.filter(g => g.gameId === gameId)[0];
     if(!r) {
-      logError(`Could not get game ${gameId}`);
+      gameSuite.logError(`Could not get game ${gameId}`);
       return false;
     }
     return r;
@@ -125,7 +134,7 @@ export const makeGameSuite = () => {
   gameSuite.getPlayer = socketId => {
     const r = gameSuite.playerList.filter(p => p.socketId === socketId)[0];
     if(!r) {
-      logError(`Could not get player ${socketId}`);
+      gameSuite.logError(`Could not get player ${socketId}`);
       return false;
     }
     return r;
@@ -135,7 +144,7 @@ export const makeGameSuite = () => {
   gameSuite.updateGame = (gameId, gameData) => {
     let g = gameSuite.getGame(gameId.toUpperCase());
     if(!g) {
-      logError(`Could not update game ${gameId}`);
+      gameSuite.logError(`Could not update game ${gameId}`);
     }
     g = {
       ...g,
@@ -148,7 +157,7 @@ export const makeGameSuite = () => {
   gameSuite.updatePlayer = (socketId, playerData) => {
     let p = gameSuite.getPlayer(socketId);
     if(!p) {
-      logError(`Could not update player ${socketId}`);
+      gameSuite.logError(`Could not update player ${socketId}`);
     }
     p = {
       ...p,
@@ -162,14 +171,14 @@ export const makeGameSuite = () => {
   gameSuite.addGame = (game, debug = false) => {
     gameSuite.gameList = gameSuite.gameList.concat([game]);
     if(debug) {
-      logInfo(`Added game ${game.gameId} (Total: ${gameSuite.gameList.length})`);
+      gameSuite.logInfo(`Added game ${game.gameId} (Total: ${gameSuite.gameList.length})`);
     }
   };
 
   gameSuite.addPlayer = (player, debug = false) => {
     gameSuite.playerList = gameSuite.playerList.concat([player]);
     if(debug) {
-      logInfo(`Added player ${player.socketId} (Total: ${gameSuite.playerList.length})`);
+      gameSuite.logInfo(`Added player ${player.socketId} (Total: ${gameSuite.playerList.length})`);
     }
   };
 
@@ -178,7 +187,7 @@ export const makeGameSuite = () => {
     const r = gameSuite.gameList.filter(g => g.gameId !== gameId);
     gameSuite.gameList = r;
     if(debug) {
-      logInfo(`Removed game ${gameId} (Total: ${gameSuite.gameList.length})`);
+      gameSuite.logInfo(`Removed game ${gameId} (Total: ${gameSuite.gameList.length})`);
     }
   };
 
@@ -187,7 +196,7 @@ export const makeGameSuite = () => {
     if(activeGame && activeGame.players) {
       if(activeGame.players.length <= 1) {
         gameSuite.removeGame(activeGame.gameId);
-        logInfo(`Removed empty game ${activeGame.gameId} (Total: ${gameSuite.gameList.length})`);
+        gameSuite.logInfo(`Removed empty game ${activeGame.gameId} (Total: ${gameSuite.gameList.length})`);
       } else if(socketId === activeGame.imposterId) {
         gameSuite.updateGame(activeGame.gameId, {
           gameOverReason: getEndgameMessage(ENDGAME_REASONS.IMPOSTER_QUIT),
@@ -203,7 +212,7 @@ export const makeGameSuite = () => {
     }
     gameSuite.playerList = gameSuite.playerList.filter(p => p.socketId !== socketId);
     if(debug) {
-      logInfo(`Removed player ${socketId} (Total: ${gameSuite.playerList.length})`);
+      gameSuite.logInfo(`Removed player ${socketId} (Total: ${gameSuite.playerList.length})`);
     }
   };
 
@@ -228,33 +237,11 @@ export const makeGameSuite = () => {
     for(let i = 0; i < g.players.length; i++) {
       game.players[i].isReady = false;
     }
-    switch(g.phase) {
-      case PHASES.LOBBY:
-				//Todo: < 3
-        if(g.players.length < 1) {
-          g.remainingTime = 30;
-          gameSuite.emitToGame(g.gameId, gameSuite.makeCommand('imposterError', {
-            text: `At least 3 players are required to play`
-          }));
-        } else {
-          g.phase = PHASES.IN_GAME;
-          g.remainingTime = 240;
-          g = gameSuite.applyScenario(g, rollScenario());
-        }
-        break;
-      case PHASES.IN_GAME:
-        g.phase = PHASES.IMPOSTER_VICTORY;
-        g.remainingTime = 20;
-        break;
-      case PHASES.BYSTANDER_VICTORY:
-      case PHASES.IMPOSTER_VICTORY:
-        g.phase = PHASES.LOBBY;
-        g.remainingTime = 60;
-        break;
-      default:
-        logInfo(`Unrecognized game phase ${g.phase}`);
-        break;
-    }
+		switch(g.gameTitle) {
+			case 'imposter':
+				g = gameSuite.imposter.iteratePhase(g);
+				break;
+		}
     return g;
   };
 
@@ -272,7 +259,7 @@ export const makeGameSuite = () => {
   gameSuite.startGameClock = () => {
     gameSuite.clock = setInterval(() => {
       if(gameSuite.gameList.length < 1) {
-        logInfo('Going idle...');
+        gameSuite.logInfo('Going idle...');
         gameSuite.startIdleClock(gameSuite);
       }
       const activeGames = gameSuite.gameList.filter(g => g.isPaused === false && g.players.length > 0);
@@ -292,7 +279,7 @@ export const makeGameSuite = () => {
 		clearInterval(gameSuite.clock);
     gameSuite.clock = setInterval(() => {
       if(gameSuite.gameList.length > 0) {
-        logInfo(`Bootin' up!`);
+        gameSuite.logInfo(`Bootin' up!`);
         clearInterval(gameSuite.clock);
         gameSuite.startGameClock(gameSuite);
       }
@@ -306,17 +293,17 @@ export const makeGameSuite = () => {
 
   //Form Handlers
   gameSuite.handleSubmitHostGame = msg => {
-    const newImposter = gameSuite.makeGame();
+    const newGame = gameSuite.makeGame();
     gameSuite.updatePlayer(msg.socketId, {
-      gameId: newImposter.gameId,
+      gameId: newGame.gameId,
       name: truncateName(msg.playerName) || 'Dingus'
     });
     const hostPlayer = gameSuite.getPlayer(msg.socketId);
-    newImposter.host = hostPlayer.socketId;
-    newImposter.players = newImposter.players.concat([hostPlayer]);
-    gameSuite.addGame(newImposter, true);
-    logInfo(`Host game submitted by ${msg.socketId}`);
-    return newImposter;
+    newGame.host = hostPlayer.socketId;
+    newGame.players = newGame.players.concat([hostPlayer]);
+    gameSuite.addGame(newGame, true);
+    gameSuite.logInfo(`Host game submitted by ${msg.socketId}`);
+    return newGame;
   };
 
   const getOriginalName = (name, players) => {
@@ -365,7 +352,7 @@ export const makeGameSuite = () => {
     gameSuite.updateGame(msg.gameId, {
       players: newPlayers
     });
-    logInfo(`Join game submitted by ${msg.socketId}`);
+    gameSuite.logInfo(`Join game submitted by ${msg.socketId}`);
     return {
       ...prospImposter,
       players: newPlayers
@@ -376,7 +363,7 @@ export const makeGameSuite = () => {
 	gameSuite.handleSocketMsg = (wss, ws, raw) => {
 		const msg = wss.gs.parseRes(raw);
 		if(msg.command !== 'ping' && msg.command !== 'pong') {
-			logInfo(`${msg.socketId ? `Socket ${msg.socketId}` : `New player`} says ${msg.command}"`);
+			gameSuite.logInfo(`${msg.socketId ? `Socket ${msg.socketId}` : `New player`} says ${msg.command}"`);
 		}
 		let recognizedByModule = ['core', 'imposter'];
 		//General handling
@@ -393,206 +380,9 @@ export const makeGameSuite = () => {
 		}
 		handleImposterMsg(wss, ws, msg, recognizedByModule);
 		if(recognizedByModule.length < 1) {
-			logError(`Socket command '${msg.command}' not recognized.`);
+			gameSuite.logError(`Socket command '${msg.command}' not recognized.`);
 		}
 	};
-
-  //Events
-  gameSuite.applyScenario = (state, scene) => {
-    const result = {
-      ...state,
-      imposterId: null,
-      scenario: scene.scenario,
-      scenarioList: scene.scenarioList,
-      condition: scene.condition,
-      roles: []
-    };
-    const randomId = state.players[Math.floor(Math.random() * state.players.length)].socketId;
-    logInfo(`Assigned imposter to ` + randomId, state.gameId);
-    result.imposterId = randomId;
-    result.roles.push({
-      socketId: randomId,
-      role: 'the imposter'
-    });
-    state.players.forEach(p => {
-      if(p.socketId !== randomId) {
-        const role = scene.roles[Math.floor(Math.random() * scene.roles.length)];
-        result.roles.push({
-          socketId: p.socketId,
-          role
-        });
-        scene.roles = scene.roles.filter(r => r !== role);
-      }
-    });
-    logInfo(`Applied scenario ${scene.scenario} but ${scene.condition}.`, state.gameId);
-    return result;
-  };
-
-  const getEndgameMessage = ind => {
-    const gameOverReasons = [
-      `Anyone home? Nobody wins. Bad ending.`,
-      `Bag em and tag em, fellas. The Imposter was apprehended.`,
-      `Real subtle, bystanders. The Imposter figured out the scenario.`,
-      `The Imposter goofed and picked the wrong scenario.`,
-      `The Imposter ragequit.`,
-      `You accused and convicted an innocent bystander!`
-    ];
-    if(!gameOverReasons[ind]) {
-      logError(`Could not get endgame message for index ${ind}`);
-    }
-    return gameOverReasons[ind];
-  };
-
-  gameSuite.castVote = msg => {
-    const currGame = gameSuite.getGame(msg.gameId);
-    const currVotes = currGame.votes;
-    const vote = currVotes.filter(v => v.voteId === msg.voteId)[0];
-    if(!vote) {
-      logError(`Cast vote: Unable to find vote ${msg.voteId} in ${msg.gameId}`);
-    }
-    if(msg.isYay) {
-      vote.yay += 1;
-    } else {
-      vote.nay += 1;
-    }
-    if(vote.yay >= vote.threshold) {
-      if(vote.voteType === 'lobby') {
-        gameSuite.updateGame(msg.gameId, {
-          phase: PHASES.LOBBY,
-          remainingTime: 60,
-          votes: []
-        });
-      } else if(vote.voteType === 'accusation') {
-        if(vote.accusedId === currGame.imposterId) {
-          gameSuite.updateGame(msg.gameId, {
-            phase: PHASES.BYSTANDER_VICTORY,
-            gameOverReason: getEndgameMessage(ENDGAME_REASONS.IMPOSTER_ACCUSED),
-            remainingTime: 15,
-            votes: []
-          });
-        } else {
-          gameSuite.updateGame(msg.gameId, {
-            phase: PHASES.IMPOSTER_VICTORY,
-            gameOverReason: getEndgameMessage(ENDGAME_REASONS.WRONG_ACCUSATION),
-            remainingTime: 15,
-            votes: []
-          });
-        }
-      }
-    } else {
-      gameSuite.updateGame(msg.gameId, {
-        votes: currVotes.filter(v => v.voteId !== msg.voteId).concat([vote]) 
-      });
-    }
-    logInfo(`${msg.gameId}: ${msg.socketId} voted ${msg.isYay ? 'yay' : 'nay'} on vote ${msg.voteId} (${vote.voteType})`);
-  };
-
-  gameSuite.handleAccusePlayer = msg => {
-    const currGame = gameSuite.getGame(msg.gameId);
-    if(msg.accuserId === msg.accusedId || currGame.votes.some(v => v.callerId === msg.accuserId)) {
-      return;
-    }
-    const callerName = currGame.players.filter(p => p.socketId === msg.accuserId)[0].name;
-    if(!callerName) {
-      logError(`Accuse player: Unable to find player name for accuser ${msg.accuserId}`);
-    }
-    const accusedName = currGame.players.filter(p => p.socketId === msg.accusedId)[0].name;
-    if(!accusedName) {
-      logError(`Accuse player: Unable to find player name for accused ${msg.accuserId}`);
-    }
-    const thresh = currGame.players.length < 3 ? 1 : currGame.players.length - 2;
-    const accusation = gameSuite.makeVote('accusation', msg.accuserId, callerName, thresh, msg.accusedId, accusedName);
-    const newVotes = currGame.votes.concat([accusation]);
-    gameSuite.updateGame(msg.gameId, {
-      votes: newVotes
-    });
-    gameSuite.emitToGame(currGame.gameId, gameSuite.makeCommand('refreshVotes', {
-      votes: newVotes
-    }));
-    logInfo(`${msg.gameId}: ${msg.accuserId} accuses ${msg.accusedId}`);
-  };
-
-  gameSuite.handleLobbyReturnVote = msg => {
-    const currGame = gameSuite.getGame(msg.gameId);
-    if(currGame.votes.some(v => v.callerId === msg.socketId)) {
-      return;
-    }
-    if(currGame.players.length === 1) {
-      gameSuite.updateGame(msg.gameId, {
-        phase: PHASES.LOBBY,
-        remainingTime: 60,
-        votes: []
-      });
-    }
-    const callerName = currGame.players.filter(p => p.socketId === msg.socketId)[0].name;
-    if(!callerName) {
-      logError(`Return to lobby: Unable to find player name for ${msg.socketId}`);
-    }
-    const thresh = currGame.players.length - 1 < 1 ? 1 : currGame.players.length - 1;
-    const vote = gameSuite.makeVote('lobby', msg.socketId, callerName, thresh);
-    const newVotes = currGame.votes.concat([vote]);
-    gameSuite.updateGame(msg.gameId, {
-      votes: newVotes
-    });
-    gameSuite.emitToGame(currGame.gameId, gameSuite.makeCommand('refreshVotes', {
-      votes: newVotes
-    }));
-    logInfo(`${msg.gameId}: ${msg.socketId} votes to return to the lobby`);
-  };
-
-  gameSuite.extendTimer = (sockId, gameId) => {
-    const game = gameSuite.getGame(gameId);
-    game.remainingTime += 10;
-    logInfo(`${sockId} extended timer for ${gameId}`);
-  };
-
-  gameSuite.hurryUp = (sockId, gameId) => {
-    const game = gameSuite.getGame(gameId);
-    game.remainingTime -= 1;
-    logInfo(`${sockId} depleted timer for ${gameId}`);
-  };
-
-  gameSuite.identifyScenario = msg => {
-    const game = gameSuite.getGame(msg.gameId);
-    const imposter = game.players.filter(p => p.socketId === msg.imposterId);
-    if(imposter.length < 1) {
-      logError(`Identify scenario: unable to find imposter with ID ${msg.imposterId}`);
-    }
-    if(game.scenario.toUpperCase() === msg.scenario.toUpperCase()) {
-      gameSuite.updateGame(msg.gameId, {
-        gameOverReason: getEndgameMessage(ENDGAME_REASONS.IMPOSTER_CORRECT),
-        phase: PHASES.IMPOSTER_VICTORY,
-        remainingTime: 15
-      });
-      logInfo(`Imposter for ${msg.gameId} guessed correct scenario`);
-    } else {
-      gameSuite.updateGame(msg.gameId, {
-        gameOverReason: getEndgameMessage(ENDGAME_REASONS.IMPOSTER_WRONG),
-        phase: PHASES.BYSTANDER_VICTORY,
-        remainingTime: 15
-      });
-      logInfo(`Imposter for ${msg.gameId} guessed the wrong scenario`);
-    }
-  };
-
-  gameSuite.toggleReadyState = msg => {
-    const game = gameSuite.getGame(msg.gameId);
-    const player = game.players.filter(p => p.socketId === msg.socketId)[0];
-    if(!player) {
-      logError(`Toggle ready state: unable to find player ${msg.socketId} in game ${msg.gameId}`);
-      return;
-    }
-    player.isReady = !player.isReady;
-    gameSuite.updatePlayer(msg.socketId, {
-      isReady: msg.readyValue
-    });
-    if(game.players.filter(p => p.isReady).length === game.players.length) {
-      gameSuite.updateGame(game.gameId, {
-        remainingTime: 0
-      });
-    }
-    logInfo(`${msg.socketId} toggled ready state`, msg.gameId);
-  };
 
   return gameSuite;
 };
