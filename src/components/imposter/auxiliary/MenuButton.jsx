@@ -29,7 +29,11 @@ const MenuButton = props => {
   return (
     <Button
       onClick={() => props.clickFunc()}
-      style={{ background: theme.secondary, ...props.spring }}
+      style={{
+				background: theme.secondary,
+				...props.styles,
+				...props.spring
+			}}
     >
       <Text>{props.text}</Text>
     </Button>
@@ -39,6 +43,7 @@ const MenuButton = props => {
 MenuButton.propTypes = {
   clickFunc: PropTypes.func,
 	spring: PropTypes.object,
+	styles: PropTypes.object,
   text: PropTypes.string
 };
 

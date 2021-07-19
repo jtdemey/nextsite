@@ -37,6 +37,15 @@ export const getSyrupySpring = props => ({
 	}
 });
 
+export const getRunnySpring = props => ({
+	...props,
+	config: {
+		mass: 1,
+		tension: 500,
+		friction: 40 
+	}
+});
+
 export const getTheme = themeIndex => IMPOSTER_THEMES[themeIndex];
 
 export const parseDateStr = isoStr => {

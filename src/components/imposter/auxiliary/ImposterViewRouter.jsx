@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import BystanderWinView from '../endgame/BystanderWinView';
 import ImposterGameView from '../ingame/ImposterGameView';
 import LobbyView from '../lobby/LobbyView';
 import HostGameForm from '../mainmenu/HostGameForm';
@@ -25,6 +26,8 @@ const getView = viewIndex => {
 			return <LobbyView />;
 		case IMPOSTER_VIEWS.IN_GAME:
 			return <ImposterGameView />;
+		case IMPOSTER_VIEWS.BYSTANDER_VICTORY:
+			return <BystanderWinView />;
 		case IMPOSTER_VIEWS.LOADING:
 			return <LoadingView />;
 		default:

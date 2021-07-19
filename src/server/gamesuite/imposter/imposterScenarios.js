@@ -317,18 +317,18 @@ export const rollScenario = () => {
     },
   ];
   const conditions = [
-    `Everyone's injured`,
-    `Everyone's old`,
-    `Everyone has an indiscernable accent`,
-    `Everyone's sick`,
-    `It's way too hot`,
-    `It's way too cold`,
-    `You forgot to do something important`,
-    `It smells like shit`,
-    `You're nearly deaf`,
-    `Everyone's tripping balls`,
-    `There's a persistent, annoying humming sound`,
-    `There's a roach infestation`
+    `everyone's injured`,
+    `everyone's old`,
+    `everyone has an indiscernable accent`,
+    `everyone's sick`,
+    `it's way too hot`,
+    `it's way too cold`,
+    `you forgot to do something important`,
+    `it smells like shit`,
+    `you're nearly deaf`,
+    `everyone's tripping balls`,
+    `there's a persistent, annoying humming sound`,
+    `there's a roach infestation`
   ];
   const scenarioRes = scenarios[Math.floor(Math.random() * scenarios.length)];
   const conditionRes = conditions[Math.floor(Math.random() * conditions.length)];

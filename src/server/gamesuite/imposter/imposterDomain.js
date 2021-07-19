@@ -1,4 +1,4 @@
-import { ENDGAME_REASONS, PHASES } from "../../../components/imposter/redux/imposterConstants";
+import { ENDGAME_REASONS, PHASES, VOTE_TYPES } from "../../../components/imposter/redux/imposterConstants";
 import { rollScenario } from "./imposterScenarios";
 
 const createImposterDomain = gameSuite => {
@@ -113,7 +113,10 @@ const createImposterDomain = gameSuite => {
       gameSuite.logError(`Accuse player: Unable to find player name for accused ${msg.accuserId}`);
     }
     const thresh = currGame.players.length < 3 ? 1 : currGame.players.length - 2;
-    const accusation = gameSuite.makeVote('accusation', msg.accuserId, callerName, thresh, msg.accusedId, accusedName);
+    const accusation = gameSuite.makeVote(VOTE_TYPES.ACCUSATION, msg.accuserId, callerName, thresh, {
+			accusedId: msg.accusedId,
+			accusedName
+		});
     const newVotes = currGame.votes.concat([accusation]);
     gameSuite.updateGame(msg.gameId, {
       votes: newVotes
@@ -141,7 +144,7 @@ const createImposterDomain = gameSuite => {
       gameSuite.logError(`Return to lobby: Unable to find player name for ${msg.socketId}`);
     }
     const thresh = currGame.players.length - 1 < 1 ? 1 : currGame.players.length - 1;
-    const vote = gameSuite.makeVote('lobby', msg.socketId, callerName, thresh);
+    const vote = gameSuite.makeVote(VOTE_TYPES.LOBBY, msg.socketId, callerName, thresh);
     const newVotes = currGame.votes.concat([vote]);
     gameSuite.updateGame(msg.gameId, {
       votes: newVotes

@@ -50,7 +50,6 @@ export const makeGameSuite = () => {
   gameSuite.makeGame = () => ({
 		gameId: genGameId(),
 		gameTitle: 'imposter',
-		gameOverReason: null,
 		host: null,
 		imposterId: null,
 		isPaused: false,
@@ -77,17 +76,16 @@ export const makeGameSuite = () => {
 		socketId: sockId
   });
 
-  gameSuite.makeVote = (type, callerId, callerName, threshold, accusedId = null, accusedName = null) => ({
+  gameSuite.makeVote = (type, callerId, callerName, threshold, voteData = {}) => ({
 		voteId: nanoid(),
 		voteType: type,
 		callerId: callerId,
 		callerName,
-		accusedId: accusedId,
-		accusedName,
 		tick: 15,
 		threshold,
 		yay: 0,
-		nay: 0
+		nay: 0,
+		...voteData
   });
 
   //Utilities
@@ -199,7 +197,6 @@ export const makeGameSuite = () => {
         gameSuite.logInfo(`Removed empty game ${activeGame.gameId} (Total: ${gameSuite.gameList.length})`);
       } else if(socketId === activeGame.imposterId) {
         gameSuite.updateGame(activeGame.gameId, {
-          gameOverReason: getEndgameMessage(ENDGAME_REASONS.IMPOSTER_QUIT),
           phase: PHASES.BYSTANDER_VICTORY,
           players: activeGame.players.filter(p => p.socketId !== socketId),
           remainingTime: 15
@@ -233,7 +230,7 @@ export const makeGameSuite = () => {
   };
 
   gameSuite.iteratePhase = game => {
-    let g = { ...game };
+    let g = { ...game, votes: [] };
     for(let i = 0; i < g.players.length; i++) {
       game.players[i].isReady = false;
     }
@@ -246,7 +243,7 @@ export const makeGameSuite = () => {
   };
 
 	const onTick = tick => {
-		if(tick % 30 === 0) {
+		if(tick % 15 === 0) {
 			pingPlayers(gameSuite);
 		}
 		if(tick > 30000)  {
@@ -363,7 +360,7 @@ export const makeGameSuite = () => {
 	gameSuite.handleSocketMsg = (wss, ws, raw) => {
 		const msg = wss.gs.parseRes(raw);
 		if(msg.command !== 'ping' && msg.command !== 'pong') {
-			gameSuite.logInfo(`${msg.socketId ? `Socket ${msg.socketId}` : `New player`} says ${msg.command}"`);
+			gameSuite.logInfo(`${msg.socketId ? `Socket ${msg.socketId}` : `New player`} says ${msg.command}`);
 		}
 		let recognizedByModule = ['core', 'imposter'];
 		//General handling

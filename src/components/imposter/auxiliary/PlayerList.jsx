@@ -2,15 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
+import { animated, useSpring } from '@react-spring/web';
 import { accusePlayer } from '../redux/imposterSlice';
-import { getTheme } from '../ImposterUtils';
+import { getRunnySpring, getTheme } from '../ImposterUtils';
 
 const List = styled.ul`
 	margin-top: 2rem;
 	padding: 0;
 `;
 
-const Item = styled.li`
+const Item = styled(animated.li)`
 	width: 14rem;
 	height: 2rem;
 	border-radius: 4px;	
@@ -23,6 +24,17 @@ const Item = styled.li`
 	padding: 0.25rem 0;
 `;
 
+const getLiStyle = (socketId, playerId, spring, theme) => {
+	const res = { background: theme.secondary };
+	if(socketId === playerId) {
+		return res;
+	}
+	return {
+		...res,
+		border: spring.bWidth.to(w => `${w}px solid ${theme.highlight}`)
+	};
+};
+
 const PlayerList = props => {
 	const state = useSelector(state => ({
 		gameId: state.game.gameId,
@@ -33,6 +45,8 @@ const PlayerList = props => {
 	}));
 	const theme = getTheme(state.theme);
 	const dispatch = useDispatch();
+  const [spring, api] = useSpring(() => getRunnySpring({ bWidth: 0 }));
+  React.useEffect(() => api.start({ bWidth: state.isAccusing ? 3 : 0 }));
 	return (
 		<List>
 			{props.players.map(player => (
@@ -45,9 +59,7 @@ const PlayerList = props => {
 								gameId: state.gameId
 							}))
 						: () => false}
-					style={{
-						background: theme.secondary
-					}}
+					style={getLiStyle(state.socketId, player.socketId, spring, theme)}
 				>
 					{player.name}
 				</Item>

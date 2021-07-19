@@ -6,7 +6,6 @@ export const imposterSlice = createSlice({
   name: 'game',
   initialState: {
 		//Game
-    castedVotes: [],
     condition: null,
     gameId: null,
     host: null,
