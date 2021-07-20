@@ -4,9 +4,9 @@ import { assignScenario, changeGameView, clearTempPhaseData, syncGameState, upda
 const PHASE_TO_VIEW = [
 	3, //Lobby
 	4, //Ingame
-	6, //Bystander win
-	8, //Time expired
-	9  //Wrong accusation
+	5, //Bystander win
+	6, //Time expired
+	7  //Wrong accusation
 ]
 
 const detectPlayersDelta = (ogPlayers, newPlayers) => {

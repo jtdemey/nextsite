@@ -1,5 +1,5 @@
-import { SOCKET_COMMANDS } from '../redux/imposterConstants';
-import { alertMessage, gameTick, initGame, setSocketId, updateVotes } from '../redux/imposterSlice';
+import { IMPOSTER_VIEWS, SOCKET_COMMANDS } from '../redux/imposterConstants';
+import { alertMessage, changeGameView, gameTick, initGame, setSocketId, updateVotes } from '../redux/imposterSlice';
 
 export let socket = null;
 
@@ -61,6 +61,7 @@ const initImposter = dispatch => {
       case SOCKET_COMMANDS.IMPOSTER_ERROR:
         console.error(msg.text);
         dispatch(alertMessage(msg.text));
+        dispatch(changeGameView(IMPOSTER_VIEWS.MAIN_MENU));
         break;
       case SOCKET_COMMANDS.UPDATE_VOTES:
         dispatch(updateVotes(msg.votes));
@@ -71,9 +72,7 @@ const initImposter = dispatch => {
     }
   };
 
-  socket.onclose = () => {
-    dispatch(alertMessage('Lost connection; try refreshing.', 999999));
-  };
+  socket.onclose = () => dispatch(alertMessage('Lost connection; try refreshing.', 999999));
 
   window.onbeforeunload = () => {
     socket.send(JSON.stringify({

@@ -9,11 +9,11 @@ export const ENDGAME_REASONS = {
 
 const makeTheme = (title, primary, secondary, highlight) => ({ title, primary, secondary, highlight });
 export const IMPOSTER_THEMES = [
-	makeTheme('Synth', '#3b3c3b', '#468387', '#74ba9f'),
-	makeTheme('Remnant', '#41413e', '#88a26f', '#899264'),
-	makeTheme('Crystal', '#39141e', '#a62639', '#db324d'),
+	makeTheme('Crystal', '#39141e', '#a62639', '#817EA0'),
+	makeTheme('Remnant', '#41413e', '#6F8958', '#C2850A'),
 	makeTheme('Seascape', '#1b2c39', '#2d6a68', '#b4ad72'),
-	makeTheme('Slate', '#2a3c3c', '#6e7b6d', '#849c8a')
+	makeTheme('Slate', '#2a3c3c', '#6e7b6d', '#849c8a'),
+	makeTheme('Synth', '#3b3c3b', '#468387', '#5BAE8E')
 ];
 
 export const IMPOSTER_VIEWS = {
@@ -22,11 +22,10 @@ export const IMPOSTER_VIEWS = {
 	JOIN_GAME_FORM: 2,
   LOBBY: 3,
   IN_GAME: 4,
-  IMPOSTER_VICTORY: 5,
-  BYSTANDER_VICTORY: 6,
-  LOADING: 7,
-  TIME_EXPIRED: 8,
-	WRONG_ACCUSATION: 9
+  BYSTANDER_VICTORY: 5,
+  TIME_EXPIRED: 6,
+	WRONG_ACCUSATION: 7,
+  LOADING: 8
 };
 
 export const NOTIFICATIONS = {
@@ -55,6 +54,7 @@ export const SOCKET_COMMANDS = {
 	LAUNCHED_IMPOSTER: 'launchedImposter',
 	PING: 'ping',
 	PONG: 'pong',
+	REFRESH_VOTES: 'refreshVotes',
 	RETURN_TO_LOBBY: 'returnToLobby',
 	SOCKET_DISONNECT: 'socketDisconnect',
 	SUBMIT_HOST_GAME: 'submitHostGame',

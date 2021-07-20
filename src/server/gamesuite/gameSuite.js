@@ -81,7 +81,7 @@ export const makeGameSuite = () => {
 		voteType: type,
 		callerId: callerId,
 		callerName,
-		tick: 15,
+		tick: 20,
 		threshold,
 		yay: 0,
 		nay: 0,
@@ -264,7 +264,7 @@ export const makeGameSuite = () => {
         let g = activeGames[i];
         g = gameSuite.doGameTick(g);
         gameSuite.updateGame(g.gameId, { ...g });
-        gameSuite.emitToGame(g.gameId, gameSuite.makeCommand('gameTick', {
+        gameSuite.emitToGame(g.gameId, gameSuite.makeCommand(SOCKET_COMMANDS.GAME_TICK, {
           gameState: g
         }));
       }
@@ -321,19 +321,19 @@ export const makeGameSuite = () => {
   gameSuite.handleSubmitJoinGame = msg => {
     const prospImposter = gameSuite.getGame(msg.gameId.toUpperCase());
     if(!prospImposter) {
-      gameSuite.emitToPlayer(msg.socketId, gameSuite.makeCommand('imposterError', {
+      gameSuite.emitToPlayer(msg.socketId, gameSuite.makeCommand(SOCKET_COMMANDS.IMPOSTER_ERROR, {
         text: `Could not find game ${msg.gameId}.`
       }));
       return;
     }
     if(prospImposter.players.length > 11) {
-      gameSuite.emitToPlayer(msg.socketId, gameSuite.makeCommand('imposterError', {
+      gameSuite.emitToPlayer(msg.socketId, gameSuite.makeCommand(SOCKET_COMMANDS.IMPOSTER_ERROR, {
         text: `Game ${msg.gameId.toUpperCase()} is full.`
       }));
       return;
     }
 		if(prospImposter.phase === PHASES.IN_GAME) {
-      gameSuite.emitToPlayer(msg.socketId, gameSuite.makeCommand('imposterError', {
+      gameSuite.emitToPlayer(msg.socketId, gameSuite.makeCommand(SOCKET_COMMANDS.IMPOSTER_ERROR, {
         text: `Game ${msg.gameId.toUpperCase()} is in session; you can join when the game completes.`
       }));
       return;

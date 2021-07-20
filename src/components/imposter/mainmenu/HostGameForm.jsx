@@ -1,11 +1,12 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { animated, useSpring } from '@react-spring/web';
+import { animated, useSprings } from '@react-spring/web';
 import styled from 'styled-components';
 import SubmitButton from '../auxiliary/SubmitButton';
 import { submitHostGame } from '../redux/imposterSlice';
 import BackToMainButton from './BackToMainButton';
 import FormInput from './FormInput';
+import { getButterySpring } from '../ImposterUtils';
 
 const Header = styled.h2`
   margin: 4rem 0 1rem;
@@ -31,15 +32,16 @@ const HostGameForm = () => {
   const [playerName, setPlayerName] = React.useState('');
   const socketId = useSelector(state => state.game.socketId);
   const dispatch = useDispatch();
-  const [spring, api] = useSpring(() => ({ opacity: 0, y: 20 }));
+  const [springs, api] = useSprings(2, i => getButterySpring({ opacity: 0, y: i * 100 + 100 }));
   React.useEffect(() => api.start({ opacity: 1, y: 0 }));
   return (
     <>
       <Header>Host Game</Header>
-      <Form style={spring}>
+      <Form style={springs[0]}>
         <FormInput
           placeholder="Your name"
           setValue={setPlayerName}
+					spring={springs[1]}
           value={playerName}
         />
         <BtnArea>

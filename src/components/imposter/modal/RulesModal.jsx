@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
-import { getTheme } from '../ImposterUtils';
+import { getButterySpring, getTheme } from '../ImposterUtils';
 import ModalCloseButton from './ModalCloseButton';
 
-const Body = styled.div`
+const Body = styled(animated.div)`
 	width: 80%;
 	height: 80%;
 	margin: auto;
@@ -40,8 +41,10 @@ const RulesModal = props => {
 	const theme = getTheme(useSelector(state => state.game.theme));
 	const dark = { color: theme.secondary };
 	const light = { color: theme.highlight };
+	const [spring, api] = useSpring(() => getButterySpring({ y: 300 }));
+	React.useEffect(() => api.start({ y: 0 }));
 	return (
-		<Body onClick={e => nullListener(e)}>
+		<Body onClick={e => nullListener(e)} style={spring}>
 			<ModalCloseButton hideModal={props.hideModal} />
 			<TextContainer className="rules-content-area">
         <RulesHeader>How to Play</RulesHeader>

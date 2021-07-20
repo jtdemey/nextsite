@@ -54,6 +54,14 @@ export const imposterSlice = createSlice({
 			state.scenario = action.payload.scenario;
 			state.scenarioList = action.payload.scenarioList;
 		},
+		castVote: (state, action) => {
+			const command = SOCKET_COMMANDS.CAST_VOTE;
+			socket.send(JSON.stringify({
+				command,
+				...action.payload
+			}));
+			state.lastSocketCommand = command;
+		},
 		changeGameView: (state, action) => {
 			state.view = action.payload;
 		},
@@ -177,10 +185,10 @@ export const imposterSlice = createSlice({
 
 export const {
 	accusePlayer, alertMessage, appendNotification,
-	assignScenario, changeGameView, clearTempPhaseData,
-	emitSocketMsg, extendTimer, gameTick, hideModal,
-	hurryUp, initGame, returnToLobby,
-	setSocketId, setTheme, showModal,
+	assignScenario, castVote, changeGameView,
+	clearTempPhaseData, emitSocketMsg, extendTimer,
+	gameTick, hideModal, hurryUp, initGame,
+	returnToLobby, setSocketId, setTheme, showModal,
 	submitHostGame, submitJoinGame, syncGameState,
 	toggleAccusing, updatePlayers, updateVotes
 } = imposterSlice.actions;

@@ -16,8 +16,28 @@ const App = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
+	margin: 0;
+	padding: 0;
 	overflow-x: hidden;
   overflow-y: scroll;
+		
+	::-webkit-scrollbar {
+		width: 0.25rem;
+	}
+
+	::-webkit-scrollbar-track {
+		display: none;
+		background: #777;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: #444;
+		border-radius: 4px;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: #555;
+	}
 `;
 
 const ImposterApp = props => {

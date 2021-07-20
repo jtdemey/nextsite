@@ -1,4 +1,4 @@
-import { ENDGAME_REASONS, PHASES, VOTE_TYPES } from "../../../components/imposter/redux/imposterConstants";
+import { ENDGAME_REASONS, PHASES, SOCKET_COMMANDS, VOTE_TYPES } from "../../../components/imposter/redux/imposterConstants";
 import { rollScenario } from "./imposterScenarios";
 
 const createImposterDomain = gameSuite => {
@@ -90,7 +90,7 @@ const createImposterDomain = gameSuite => {
         votes: currVotes.filter(v => v.voteId !== msg.voteId).concat([vote]) 
       });
     }
-    gameSuite.logInfo(`${msg.gameId}: ${msg.socketId} voted ${msg.isYay ? 'yay' : 'nay'} on vote ${msg.voteId} (${vote.voteType})`);
+    gameSuite.logInfo(`${msg.gameId}: ${msg.socketId} voted ${msg.isYay ? 'yay' : 'nay'} on vote ${msg.voteId}`);
   };
 
   domain.extendTimer = (sockId, gameId) => {
@@ -121,7 +121,7 @@ const createImposterDomain = gameSuite => {
     gameSuite.updateGame(msg.gameId, {
       votes: newVotes
     });
-    gameSuite.emitToGame(currGame.gameId, gameSuite.makeCommand('refreshVotes', {
+    gameSuite.emitToGame(currGame.gameId, gameSuite.makeCommand(SOCKET_COMMANDS.REFRESH_VOTES, {
       votes: newVotes
     }));
     gameSuite.logInfo(`${msg.gameId}: ${msg.accuserId} accuses ${msg.accusedId}`);
@@ -149,7 +149,7 @@ const createImposterDomain = gameSuite => {
     gameSuite.updateGame(msg.gameId, {
       votes: newVotes
     });
-    gameSuite.emitToGame(currGame.gameId, gameSuite.makeCommand('refreshVotes', {
+    gameSuite.emitToGame(currGame.gameId, gameSuite.makeCommand(SOCKET_COMMANDS.REFRESH_VOTES, {
       votes: newVotes
     }));
     gameSuite.logInfo(`${msg.gameId}: ${msg.socketId} votes to return to the lobby`);
@@ -190,7 +190,7 @@ const createImposterDomain = gameSuite => {
 				//Todo: < 3
         if(game.players.length < 1) {
           game.remainingTime = 30;
-          gameSuite.emitToGame(game.gameId, gameSuite.makeCommand('imposterError', {
+          gameSuite.emitToGame(game.gameId, gameSuite.makeCommand(SOCKET_COMMANDS.IMPOSTER_ERROR, {
             text: `At least 3 players are required to play`
           }));
         } else {

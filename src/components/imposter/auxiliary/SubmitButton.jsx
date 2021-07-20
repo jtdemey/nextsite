@@ -19,7 +19,8 @@ const SubmitButton = props => {
 	const theme = getTheme(useSelector(state => state.game.theme));
 	return (
 		<Button onClick={() => props.clickFunc()} style={{
-			background: theme.secondary
+			background: theme.secondary,
+			...props.spring
 		}}>
 		 {props.text}	
 		</Button>
@@ -28,6 +29,7 @@ const SubmitButton = props => {
 
 SubmitButton.propTypes = {
 	clickFunc: PropTypes.func,
+	spring: PropTypes.object,
 	text: PropTypes.string
 };
 
