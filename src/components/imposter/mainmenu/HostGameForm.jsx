@@ -28,16 +28,24 @@ const BtnArea = styled.div`
   width: 100%;
 `;
 
+const handleKeyDown = (e, clickFunc) => {
+	if(e.keyCode === 13) {
+		e.preventDefault();
+		clickFunc();
+	}
+};
+
 const HostGameForm = () => {
   const [playerName, setPlayerName] = React.useState('');
   const socketId = useSelector(state => state.game.socketId);
   const dispatch = useDispatch();
+	const clickFunc = () => dispatch(submitHostGame({ playerName, socketId }));
   const [springs, api] = useSprings(2, i => getButterySpring({ opacity: 0, y: i * 100 + 100 }));
   React.useEffect(() => api.start({ opacity: 1, y: 0 }));
   return (
     <>
       <Header>Host Game</Header>
-      <Form style={springs[0]}>
+      <Form onKeyDown={e => handleKeyDown(e, clickFunc)} style={springs[0]}>
         <FormInput
           placeholder="Your name"
           setValue={setPlayerName}
@@ -46,7 +54,7 @@ const HostGameForm = () => {
         />
         <BtnArea>
           <SubmitButton
-            clickFunc={() => dispatch(submitHostGame({ playerName, socketId }))}
+            clickFunc={clickFunc}
             text="Play"
           />
           <BackToMainButton />

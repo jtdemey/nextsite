@@ -28,7 +28,7 @@ export const imposterSlice = createSlice({
 		isReady: false,
     socketId: null,
     socket: null,
-		theme: 0,
+		theme: 4,
     lastSocketCommand: null,
 		view: IMPOSTER_VIEWS.MAIN_MENU
   },

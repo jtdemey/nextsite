@@ -15,7 +15,7 @@ const VoteBox = styled.div`
 	font-family: 'Source Sans Pro', sans-serif;
 	font-size: 1.1rem;
 	max-width: 80%;
-  margin: auto;
+  margin: 0 auto 0.25rem;
   text-align: center;
 	& > p {
 		margin: 0;
@@ -45,6 +45,7 @@ const VoteArea = () => {
 					border: `4px solid ${theme.highlight}`
 				}}>
 					<p>{getVoteText(vote)}</p>
+					<p>Yays needed: {vote.threshold}</p>
 					<VoteBtns
 						callerId={vote.callerId}
 						gameId={state.gameId}

@@ -1,320 +1,258 @@
 export const rollScenario = () => {
+	const gen = (title, roles) => ({ title, roles });
   const scenarios = [
-    {
-      title: 'Animal Hospital',
-      roles: [
-        'Veterinarian',
-        'Anesthesiologist',
-        'Janitor',
-        'Surgeon',
-        'Front Desk Secretary',
-        'Biologist',
-        'Medical Intern',
-        'Medical Engineer',
-        'Pharmacologist',
-        'Nurse'
-      ]
-    },
-    {
-      title: 'Bank Robbery',
-      roles: [
-        'The mastermind',
-        'The demolitionist',
-        'The getaway driver',
-        'The weapon specialist',
-        'The technology specialist',
-        'The vault-driller',
-        'The distraction',
-        'The recon specialist',
-        'The hostage-taker',
-        'Money Bagger'
-      ]
-    },
-    {
-      title: 'CIA Headquarters',
-      roles: [
-        'The director',
-        'War-planner',
-        'Loan maker',
-        'Tech support agent',
-        'Intelligence gatherer',
-        'Undercover agent',
-        'Internal affairs officer',
-        'H/R agent',
-        'Analyst',
-        'Mole'
-      ]
-    },
-    {
-      title: 'Diamond Mine',
-      roles: [
-        'The mine Administrator',
-        'Geologist',
-        'Elevator Engineer',
-        'Surveyor',
-        'Miner',
-        'Miner',
-        'Documentary filmer',
-        'Geologist',
-        'Geologist',
-        'Researcher'
-      ]
-    },
-    {
-      title: 'Jungle Safari',
-      roles: [
-        'Expeditionist',
-        'Biologist',
-        'Survivalist',
-        'Botanist',
-        'Hunter',
-        'Journalist',
-        'Explorer',
-        'Translator',
-        'Biologist',
-        'Photographer'
-      ]
-    },
-    {
-      title: 'Polar Expedition',
-      roles: [
-        'The head Researcher',
-        'Assistant Researcher',
-        'Meteorologist',
-        'Surveyor',
-        'Biologist',
-        'Journalist',
-        'Explorer',
-        'Researcher',
-        'Survivalist',
-        'Photographer'
-      ]
-    },
-    {
-      title: 'Rich House Party',
-      roles: [
-        'Governor',
-        'Aristocrat',
-        'Snob',
-        'Entrepreneur',
-        'Duke',
-        'Duchess',
-        'The Monopoly Guy',
-        'Overseer',
-        'Senator',
-        'Baron'
-      ]
-    },
-    {
-      title: 'Forest Hobo Camp',
-      roles: [
-        'Hobo King',
-        'Drifter',
-        'Beggar',
-        'Hippie',
-        'Hobo',
-        'Drifter',
-        'Beggar',
-        'Hobo',
-        'Hobo',
-        'Hobo'
-      ]
-    },
-    {
-      title: 'Bandit Camp',
-      roles: [
-        'Interrogator',
-        'Executioner',
-        'Captain',
-        'Demolitionist',
-        'Mercenary',
-        'Thief',
-        'Bruiser',
-        'Prisoner of War',
-        'Captured Journalist',
-        'Deserter'
-      ]
-    },
-    {
-      title: 'Art Museum',
-      roles: [
-        'Art Snob',
-        'Artist',
-        'Art Admirer',
-        'Security Guard',
-        'Curator',
-        'Art Critic',
-        'Art Collector',
-        'Tourist',
-        'Art Enthusiast',
-        'Artist'
-      ]
-    },
-    {
-      title: 'Movie Set',
-      roles: [
-        'Director',
-        'Actor',
-        'Producer',
-        'Makeup Artist',
-        'Costume Designer',
-        'Camera operator',
-        'The Celebrity Cameo',
-        'Boom Operator',
-        'Intern',
-        'Stunt Double'
-      ]
-    },
-    {
-      title: 'Psychiatric Hospital',
-      roles: [
-        'Doctor',
-        'Nurse',
-        'Nurse',
-        'Schizophrenic',
-        'Patient',
-        'Criminal',
-        'Psychiatrist',
-        'Guard',
-        'Guard',
-        'Patient'
-      ]
-    },
-    {
-      title: 'Construction Site',
-      roles: [
-        'Foreman',
-        'Laborer',
-        'Operator',
-        'Inspector',
-        'Superintendent',
-        'Laborer',
-        'Operator',
-        'Laborer',
-        'Lost kid',
-        'Laborer'
-      ]
-    },
-    {
-      title: 'High Security Prison',
-      roles: [
-        'Serial killer',
-        'Guard',
-        'Guard',
-        'Robber',
-        'Jewel thief',
-        'Laborer',
-        'Overseer',
-        'Cook',
-        'Contraband trader',
-        'Hustler'
-      ]
-    },
-    {
-      title: 'College Lecture Hall',
-      roles: [
-        'Professor',
-        'Student',
-        'Student',
-        'Student',
-        'Delinquent',
-        'Sleepy student',
-        'Slacker',
-        'Gamer',
-        'Weeb',
-        `Teacher's pet`
-      ]
-    },
-    {
-      title: 'Public Hanging',
-      roles: [
-        'Executioner',
-        'Accused',
-        'Accuser',
-        'Jeering peasant',
-        'Town crier',
-        'Priest',
-        'King',
-        'Queen',
-        'Jester',
-        'Knight'
-      ]
-    },
-    {
-      title: 'Cannabis Dispensary',
-      roles: [
-        'Bud tender',
-        'Old person',
-        'Stoner',
-        'Stoner',
-        'Employee',
-        'Patient',
-        'ATM mechanic',
-        'Marijuana enthusiast',
-        'Patient',
-        'Cashier'
-      ]
-    },
-    {
-      title: 'Open Heart Surgery',
-      roles: [
-        'Surgeon',
-        'Nurse',
-        'Surgeon',
-        'Anesthesiologist',
-        'Medical student',
-        'Medical student',
-        'Nurse',
-        'Surgical tech',
-        'Medical aid',
-        'Physician assistant'
-      ]
-    },
-    {
-      title: 'Fight Club',
-      roles: [
-        'The boss',
-        'Brawler',
-        'Kickboxer',
-        'Worker',
-        'Bouncer',
-        'Boxer',
-        'Martial artist',
-        'Veteran',
-        'Fighter',
-        'Fighter'
-      ]
-    },
-    {
-      title: 'Rock Concert',
-      roles: [
-        'Guitarist',
-        'Drummer',
-        'Bassist',
-        'Singer',
-        'Lighting tech',
-        'Audio tech',
-        'The band manager',
-        'Fan',
-        'Mosher',
-        'Raving fan'
-      ]
-    },
-    {
-      title: 'Baptist Church',
-      roles: [
-        'Preacher',
-        'Old lady',
-        'Old man',
-        'Avid Christian',
-        'Acolyte',
-        'Choir singer',
-        'The choir director',
-        'The organist',
-        'Usher',
-        'Bored kid'
-      ]
-    },
+		gen('Animal Hospital', [
+			'veterinarian',
+			'anesthesiologist',
+			'janitor',
+			'surgeon',
+			'receptionist',
+			'biologist',
+			'medical intern',
+			'medical engineer',
+			'pharmacologist',
+			'nurse'
+		]),
+    gen('Bank Robbery', [
+			'the mastermind',
+			'the demolitionist',
+			'the getaway driver',
+			'the weapon specialist',
+			'the technology specialist',
+			'the vault-driller',
+			'the distraction',
+			'the recon specialist',
+			'the hostage-taker',
+			'the money bagger'
+		]),
+    gen('CIA Headquarters', [
+			'the director',
+			'war-planner',
+			'loan maker',
+			'tech support agent',
+			'intelligence gatherer',
+			'undercover agent',
+			'internal affairs officer',
+			'human resource agent',
+			'analyst',
+			'mole'
+		]),
+    gen('Diamond Mine', [
+			'the mine Administrator',
+			'geologist',
+			'elevator engineer',
+			'surveyor',
+			'inspector',
+			'miner',
+			'documentary filmer',
+			'geologist',
+			'geologist',
+			'researcher'
+		]),
+    gen('Jungle Safari', [
+			'expeditionist',
+			'biologist',
+			'survivalist',
+			'botanist',
+			'hunter',
+			'journalist',
+			'explorer',
+			'translator',
+			'biologist',
+			'photographer'
+		]),
+    gen('Polar Expedition', [
+			'the head Researcher',
+			'assistant Researcher',
+			'meteorologist',
+			'surveyor',
+			'biologist',
+			'journalist',
+			'explorer',
+			'researcher',
+			'survivalist',
+			'photographer'
+		]),
+    gen('Rich House Party', [
+			'governor',
+			'aristocrat',
+			'snob',
+			'entrepreneur',
+			'duke',
+			'duchess',
+			'the monopoly guy',
+			'overseer',
+			'senator',
+			'baron'
+		]),
+    gen('Forest Hobo Camp', [
+			'hobo king',
+			'drifter',
+			'beggar',
+			'hippie',
+			'hobo',
+			'drifter',
+			'beggar',
+			'homesteader',
+			'farmer',
+			'hobo'
+		]),
+    gen('Bandit Camp', [
+			'interrogator',
+			'executioner',
+			'captain',
+			'demolitionist',
+			'mercenary',
+			'thief',
+			'bruiser',
+			'prisoner of war',
+			'captured journalist',
+			'deserter'
+		]),
+    gen('Art Museum', [
+			'art snob',
+			'artist',
+			'art admirer',
+			'security guard',
+			'curator',
+			'art critic',
+			'art collector',
+			'tourist',
+			'art enthusiast',
+			'artist'
+		]),
+    gen('Movie Set', [
+			'director',
+			'actor',
+			'producer',
+			'makeup artist',
+			'costume designer',
+			'camera operator',
+			'the celebrity cameo',
+			'boom operator',
+			'intern',
+			'stunt double'
+		]),
+    gen('Psychiatric Hospital', [
+			'doctor',
+			'nurse',
+			'nurse',
+			'schizophrenic',
+			'patient',
+			'criminal',
+			'psychiatrist',
+			'guard',
+			'guard',
+			'patient'
+		]),
+    gen('Construction Site', [
+			'foreman',
+			'laborer',
+			'operator',
+			'inspector',
+			'superintendent',
+			'laborer',
+			'operator',
+			'laborer',
+			'lost kid',
+			'worker'
+		]),
+    gen('High Security Prison', [
+			'serial killer',
+			'guard',
+			'guard',
+			'robber',
+			'jewel thief',
+			'laborer',
+			'overseer',
+			'cook',
+			'contraband trader',
+			'hustler'
+		]),
+    gen('College Lecture Hall', [
+			'professor',
+			'student',
+			'student',
+			'student',
+			'delinquent',
+			'sleepy student',
+			'slacker',
+			'gamer',
+			'weeb',
+			`professor's pet`
+		]),
+    gen('Public Hanging', [
+			'executioner',
+			'accused',
+			'accuser',
+			'jeering peasant',
+			'town crier',
+			'priest',
+			'king',
+			'queen',
+			'jester',
+			'knight'
+		]),
+    gen('Cannabis Dispensary', [
+			'bud tender',
+			'old person',
+			'stoner',
+			'stoner',
+			'employee',
+			'patient',
+			'ATM mechanic',
+			'cannabis enthusiast',
+			'patient',
+			'cashier'
+		]),
+    gen('Open Heart Surgery', [
+			'surgeon',
+			'nurse',
+			'surgeon',
+			'anesthesiologist',
+			'medical student',
+			'medical student',
+			'nurse',
+			'surgical tech',
+			'medical aid',
+			'physician assistant'
+		]),
+    gen('Fight Club', [
+			'the boss',
+			'brawler',
+			'kickboxer',
+			'worker',
+			'bouncer',
+			'boxer',
+			'martial artist',
+			'veteran',
+			'fighter',
+			'grappler'
+		]),
+    gen('Rock Concert', [
+			'guitarist',
+			'drummer',
+			'bassist',
+			'singer',
+			'lighting tech',
+			'audio tech',
+			'the band manager',
+			'fan',
+			'mosher',
+			'raving fan'
+		]),
+    gen('Baptist Church', [
+			'preacher',
+			'old lady',
+			'old man',
+			'avid Christian',
+			'acolyte',
+			'choir singer',
+			'the choir director',
+			'the organist',
+			'usher',
+			'bored kid'
+		])
   ];
   const conditions = [
     `everyone's injured`,

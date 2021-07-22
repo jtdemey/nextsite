@@ -28,7 +28,10 @@ const GameTimer = props => {
 	}));
 	const theme = getTheme(state.theme);
 	return (
-		<Container style={{ borderLeft: `2px solid ${theme.secondary}` }}>
+		<Container style={{ borderLeft: props.showBorder
+			? `2px solid ${theme.secondary}`
+			: 'none'
+		}}>
 			<Title>{props.title}</Title>
 			<Time>{state.remainingTime}</Time>
 		</Container>
@@ -36,6 +39,7 @@ const GameTimer = props => {
 };
 
 GameTimer.propTypes = {
+	showBorder: PropTypes.bool,
 	title: PropTypes.string
 };
 

@@ -55,7 +55,7 @@ export const makeGameSuite = () => {
 		isPaused: false,
 		players: [],
 		phase: PHASES.LOBBY,
-		remainingTime: 10, //To-do: change this
+		remainingTime: 45,
 		scenario: null,
 		scenarioList: [],
 		condition: null,
@@ -79,6 +79,7 @@ export const makeGameSuite = () => {
   gameSuite.makeVote = (type, callerId, callerName, threshold, voteData = {}) => ({
 		voteId: nanoid(),
 		voteType: type,
+		voters: [],
 		callerId: callerId,
 		callerName,
 		tick: 20,

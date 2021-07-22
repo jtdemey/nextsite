@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { animated, useSprings } from '@react-spring/web';
 import styled from 'styled-components';
 import SubmitButton from '../auxiliary/SubmitButton';
-import { submitHostGame, submitJoinGame } from '../redux/imposterSlice';
+import { submitJoinGame } from '../redux/imposterSlice';
 import BackToMainButton from './BackToMainButton';
 import FormInput from './FormInput';
 import { getButterySpring } from '../ImposterUtils';
@@ -28,17 +28,25 @@ const BtnArea = styled.div`
   width: 100%;
 `;
 
+const handleKeyDown = (e, clickFunc) => {
+	if(e.keyCode === 13) {
+		e.preventDefault();
+		clickFunc();
+	}
+};
+
 const JoinGameForm = () => {
   const [playerName, setPlayerName] = React.useState('');
   const [gameId, setGameId] = React.useState('');
   const socketId = useSelector(state => state.game.socketId);
   const dispatch = useDispatch();
+	const clickFunc = () => dispatch(submitJoinGame({ playerName, gameId, socketId }));
   const [springs, api] = useSprings(3, i => getButterySpring({ opacity: 0, y: i * 100 + 100 }));
   React.useEffect(() => api.start({ opacity: 1, y: 0 }));
   return (
     <>
       <Header>Join Game</Header>
-      <Form style={springs[0]}>
+      <Form onKeyDown={e => handleKeyDown(e, clickFunc)} style={springs[0]}>
         <FormInput
           placeholder="Your name"
           setValue={setPlayerName}
@@ -53,7 +61,7 @@ const JoinGameForm = () => {
         />
         <BtnArea>
           <SubmitButton
-            clickFunc={() => dispatch(submitJoinGame({ playerName, gameId, socketId }))}
+            clickFunc={clickFunc}
             text="Play"
           />
           <BackToMainButton />

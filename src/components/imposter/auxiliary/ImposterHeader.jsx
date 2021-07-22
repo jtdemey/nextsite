@@ -15,7 +15,7 @@ const Header = styled(animated.h1)`
 	width: 100%;
 	font-family: 'Oleo Script', cursive;
 	font-size: 4rem;
-	margin: 1rem 0;
+	margin: 0.5rem 0 1rem;
 	text-align: center;
 `;
 

@@ -17,7 +17,7 @@ const LobbyView = () => {
 	return (
 		<View>
 			<PlayerList players={players} />
-			<GameInfoArea />
+			<GameInfoArea timeTitle="Starting in:" />
 			<NotificationArea />
 			<LobbyBtns />
 		</View>

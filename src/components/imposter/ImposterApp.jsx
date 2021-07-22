@@ -14,7 +14,7 @@ const App = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 101%;
   height: 100%;
 	margin: 0;
 	padding: 0;

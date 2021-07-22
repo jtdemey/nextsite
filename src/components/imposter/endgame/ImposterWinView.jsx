@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import GameTimer from '../auxiliary/GameTimer';
 import { PHASES } from '../redux/imposterConstants';
 
 const View = styled.div`
@@ -18,30 +19,36 @@ const Header = styled.h1`
 const Text = styled.p`
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 1.4rem;
+	padding: 0 0.25rem;
 `;
 
 const getHeader = isImposter => isImposter ? 'Victory!' : 'Defeat';
 
-const getText = (isImposter, phase) => {
+const getText = (isImposter, imposterId, phase, players) => {
 	if(phase === PHASES.TIME_EXPIRED) {
+		const imposterName = players.filter(p => p.socketId === imposterId)[0].name;
 		return isImposter
 			? 'Well done! They were none the wiser.'
-			: 'The Imposter has infiltrated your ranks!';
+			: `${imposterName} was the Imposter!`;
 	}
-	return 'You goofed and accused an innocent Actor!';
+	return isImposter
+		? 'You framed an innocent Actor!'
+		: 'You goofed and accused an innocent Actor!';
 };
 
 const ImposterWinView = () => {
 	const state = useSelector(state => ({
 		imposterId: state.game.imposterId,
 		phase: state.game.phase,
+		players: state.game.players,
 		socketId: state.game.socketId
 	}));
 	const isImposter = state.imposterId === state.socketId;
 	return (
 		<View>
 			<Header>{getHeader(isImposter)}</Header>
-			<Text>{getText(isImposter)}</Text>
+			<Text>{getText(isImposter, state.imposterId, state.phase, state.players)}</Text>
+			<GameTimer title="Ending in:" />
 		</View>
 	);
 };

@@ -3,21 +3,6 @@ import { rollScenario } from "./imposterScenarios";
 
 const createImposterDomain = gameSuite => {
 	const domain = {};
-	
-  const getEndgameMessage = ind => {
-    const gameOverReasons = [
-      `Anyone home? Nobody wins. Bad ending.`,
-      `Bag em and tag em, fellas. The Imposter was apprehended.`,
-      `Real subtle, bystanders. The Imposter figured out the scenario.`,
-      `The Imposter goofed and picked the wrong scenario.`,
-      `The Imposter ragequit.`,
-      `You accused and convicted an innocent bystander!`
-    ];
-    if(!gameOverReasons[ind]) {
-      gameSuite.logError(`Could not get endgame message for index ${ind}`);
-    }
-    return gameOverReasons[ind];
-  };
 
   domain.applyScenario = (state, scene) => {
     const result = {
@@ -29,7 +14,7 @@ const createImposterDomain = gameSuite => {
       roles: []
     };
     const randomId = state.players[Math.floor(Math.random() * state.players.length)].socketId;
-    gameSuite.logInfo(`Assigned imposter to ` + randomId, state.gameId);
+    gameSuite.logInfo(`Assigned imposter to ${randomId}`, state.gameId);
     result.imposterId = randomId;
     result.roles.push({
       socketId: randomId,
@@ -56,30 +41,33 @@ const createImposterDomain = gameSuite => {
     if(!vote) {
       gameSuite.logError(`Cast vote: Unable to find vote ${msg.voteId} in ${msg.gameId}`);
     }
+		if(vote.callerId === msg.socketId || vote.voters.some(v => v === msg.socketId)) {
+			return;
+		}
     if(msg.isYay) {
       vote.yay += 1;
     } else {
       vote.nay += 1;
     }
+		vote.voters = vote.voters.concat([msg.socketId]);
+		console.log(vote);
     if(vote.yay >= vote.threshold) {
-      if(vote.voteType === 'lobby') {
+      if(vote.voteType === VOTE_TYPES.LOBBY) {
         gameSuite.updateGame(msg.gameId, {
           phase: PHASES.LOBBY,
           remainingTime: 60,
           votes: []
         });
-      } else if(vote.voteType === 'accusation') {
+      } else if(vote.voteType === VOTE_TYPES.ACCUSATION) {
         if(vote.accusedId === currGame.imposterId) {
           gameSuite.updateGame(msg.gameId, {
             phase: PHASES.BYSTANDER_VICTORY,
-            gameOverReason: getEndgameMessage(ENDGAME_REASONS.IMPOSTER_ACCUSED),
             remainingTime: 15,
             votes: []
           });
         } else {
           gameSuite.updateGame(msg.gameId, {
-            phase: PHASES.IMPOSTER_VICTORY,
-            gameOverReason: getEndgameMessage(ENDGAME_REASONS.WRONG_ACCUSATION),
+            phase: PHASES.WRONG_ACCUSATION,
             remainingTime: 15,
             votes: []
           });
@@ -101,7 +89,8 @@ const createImposterDomain = gameSuite => {
 
   domain.handleAccusePlayer = msg => {
     const currGame = gameSuite.getGame(msg.gameId);
-    if(msg.accuserId === msg.accusedId || currGame.votes.some(v => v.callerId === msg.accuserId)) {
+    if(msg.accuserId === msg.accusedId
+			|| currGame.votes.some(v => v.callerId === msg.accuserId)) {
       return;
     }
     const callerName = currGame.players.filter(p => p.socketId === msg.accuserId)[0].name;
@@ -158,7 +147,6 @@ const createImposterDomain = gameSuite => {
   domain.hurryUp = (sockId, gameId) => {
     const game = gameSuite.getGame(gameId);
     game.remainingTime -= 1;
-    gameSuite.logInfo(`${sockId} depleted timer for ${gameId}`);
   };
 
   domain.identifyScenario = msg => {
@@ -169,14 +157,12 @@ const createImposterDomain = gameSuite => {
     }
     if(game.scenario.toUpperCase() === msg.scenario.toUpperCase()) {
       gameSuite.updateGame(msg.gameId, {
-        gameOverReason: getEndgameMessage(ENDGAME_REASONS.IMPOSTER_CORRECT),
         phase: PHASES.IMPOSTER_VICTORY,
         remainingTime: 15
       });
       gameSuite.logInfo(`Imposter for ${msg.gameId} guessed correct scenario`);
     } else {
       gameSuite.updateGame(msg.gameId, {
-        gameOverReason: getEndgameMessage(ENDGAME_REASONS.IMPOSTER_WRONG),
         phase: PHASES.BYSTANDER_VICTORY,
         remainingTime: 15
       });
@@ -187,8 +173,7 @@ const createImposterDomain = gameSuite => {
 	domain.iteratePhase = game => {
     switch(game.phase) {
       case PHASES.LOBBY:
-				//Todo: < 3
-        if(game.players.length < 1) {
+        if(game.players.length < 3) {
           game.remainingTime = 30;
           gameSuite.emitToGame(game.gameId, gameSuite.makeCommand(SOCKET_COMMANDS.IMPOSTER_ERROR, {
             text: `At least 3 players are required to play`
@@ -200,11 +185,12 @@ const createImposterDomain = gameSuite => {
         }
         break;
       case PHASES.IN_GAME:
-        game.phase = PHASES.IMPOSTER_VICTORY;
+        game.phase = PHASES.TIME_EXPIRED;
         game.remainingTime = 20;
         break;
       case PHASES.BYSTANDER_VICTORY:
-      case PHASES.IMPOSTER_VICTORY:
+      case PHASES.TIME_EXPIRED:
+      case PHASES.WRONG_ACCUSATION:
         game.phase = PHASES.LOBBY;
         game.remainingTime = 60;
         break;
