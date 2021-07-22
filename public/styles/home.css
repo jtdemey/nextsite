@@ -815,7 +815,14 @@ strong {
 }
 
 .project-content {
-  padding-top: 15vh;
+	background: rgba(1, 1, 1, 0.25);
+	border: 0.25rem solid rgba(1, 1, 1, 0.1);
+	margin: 15vh 2rem 0;
+	padding: 2rem 0;
+}
+
+.last-content {
+	margin: 15vh 2rem 2rem;
 }
 
 .content-header {
@@ -840,7 +847,7 @@ strong {
   display: inline-block;
   width: 140px;
   height: 2em;
-  margin: 0 12px;
+  margin: 0 12px 1rem;
   background: rgba(87, 103, 100, 0.75);
   box-shadow: 8px 8px #1a1a1a;
   cursor: grab;

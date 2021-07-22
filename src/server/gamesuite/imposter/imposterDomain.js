@@ -176,6 +176,7 @@ const createImposterDomain = gameSuite => {
         if(game.players.length < 3) {
           game.remainingTime = 30;
           gameSuite.emitToGame(game.gameId, gameSuite.makeCommand(SOCKET_COMMANDS.IMPOSTER_ERROR, {
+						returnToMain: false,
             text: `At least 3 players are required to play`
           }));
         } else {

@@ -323,18 +323,21 @@ export const makeGameSuite = () => {
     const prospImposter = gameSuite.getGame(msg.gameId.toUpperCase());
     if(!prospImposter) {
       gameSuite.emitToPlayer(msg.socketId, gameSuite.makeCommand(SOCKET_COMMANDS.IMPOSTER_ERROR, {
+				returnToMain: true,
         text: `Could not find game ${msg.gameId}.`
       }));
       return;
     }
     if(prospImposter.players.length > 11) {
       gameSuite.emitToPlayer(msg.socketId, gameSuite.makeCommand(SOCKET_COMMANDS.IMPOSTER_ERROR, {
+				returnToMain: true,
         text: `Game ${msg.gameId.toUpperCase()} is full.`
       }));
       return;
     }
 		if(prospImposter.phase === PHASES.IN_GAME) {
       gameSuite.emitToPlayer(msg.socketId, gameSuite.makeCommand(SOCKET_COMMANDS.IMPOSTER_ERROR, {
+				returnToMain: true,
         text: `Game ${msg.gameId.toUpperCase()} is in session; you can join when the game completes.`
       }));
       return;

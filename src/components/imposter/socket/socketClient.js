@@ -61,7 +61,9 @@ const initImposter = dispatch => {
       case SOCKET_COMMANDS.IMPOSTER_ERROR:
         console.error(msg.text);
         dispatch(alertMessage(msg.text));
-        dispatch(changeGameView(IMPOSTER_VIEWS.MAIN_MENU));
+				if(msg.returnToMain === true) {
+					dispatch(changeGameView(IMPOSTER_VIEWS.MAIN_MENU));
+				}
         break;
       case SOCKET_COMMANDS.UPDATE_VOTES:
         dispatch(updateVotes(msg.votes));
