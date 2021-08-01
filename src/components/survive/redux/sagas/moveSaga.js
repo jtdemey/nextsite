@@ -1,4 +1,5 @@
-import { delay, put, select } from 'redux-saga/effects';
+import { call, delay, put, select } from 'redux-saga/effects';
+import { EVENT_TRIGGERS, executeWorldEvents } from '../../world/WorldEvents';
 import { appendLine } from '../gameSlice';
 import { changeLocale } from '../playerSlice';
 
@@ -6,7 +7,6 @@ export function* moveSaga(action) {
   try {
     const localeName = yield select(state => state.player.locale);
     const locale = yield select(state => state.world[localeName]);
-    console.log(action, locale.exits[0].direction);
     const validExits = locale.exits.filter(e => e.direction && e.direction === action.payload.exitDirection);
     if(validExits.length < 1) {
       yield put(appendLine({ text: `You can't go that way.` }));
@@ -18,6 +18,7 @@ export function* moveSaga(action) {
     yield put(changeLocale(exit.destination));
     const destination = yield select(state => state.world[exit.destination])
     yield put(appendLine({ text: destination.enterPhrase || `You enter the location.` }));
+		yield call(executeWorldEvents, destination.name, EVENT_TRIGGERS.ON_ENTER);
   } catch(err) {
     console.error(err);
   }

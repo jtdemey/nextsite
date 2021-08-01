@@ -17,14 +17,19 @@ const List = styled.ul`
 const InventoryItemList = () => {
   const items = useSelector(state => state.player.items);
   return (
-    <React.Fragment>
+    <>
       <InventoryHeader text="Inventory" />
       <List>
-        {items.length < 1 ? <ListButtonItem rgb="50, 50, 50" text="(nothing)" /> : items.map(item => (
-          <ListButtonItem key={item.itemId} subText={getItemAmountSpan(item.amount)} text={item.display} />
+        {items.length < 1
+					? <ListButtonItem rgb="50, 50, 50" text="(nothing)" />
+					: items.map(item => (
+						<ListButtonItem
+							key={item.itemId}
+							subText={getItemAmountSpan(item.amount)}
+							text={item.display} />
         ))}
       </List>
-    </React.Fragment>
+    </>
   );
 };
 

@@ -30,7 +30,10 @@ export const worldSlice = createSlice({
           container.containerState = CONTAINER_STATES.OPEN;
           return;
       }
-    }
+    },
+		setEnterPhrase: (state, action) => {
+      state[action.payload.localeName].enterPhrase = action.payload.enterPhrase;
+		}
   },
   extraReducers: {
     'game/saveGame': state => {
@@ -48,6 +51,6 @@ export const worldSlice = createSlice({
   }
 });
 
-export const { openContainer } = worldSlice.actions;
+export const { openContainer, setEnterPhrase } = worldSlice.actions;
 
 export default worldSlice.reducer;

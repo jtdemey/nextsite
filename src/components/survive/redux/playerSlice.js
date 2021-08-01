@@ -34,7 +34,6 @@ export const playerSlice = createSlice({
       if(action.payload.item.stackable && state.items.some(item => item.name === action.payload.item.name)) {
         state.items.forEach(item => {
           if(item.name === action.payload.item.name) {
-            console.log('match');
             item.amount += 1;
           }
           return;

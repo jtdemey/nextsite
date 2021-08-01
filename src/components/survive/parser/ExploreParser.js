@@ -25,7 +25,6 @@ const isAlias = (aliasCollection, input, command) => aliasCollection[command] &&
 const parseGo = (input, actions) => {
   Object.keys(GO_DIRECTIONS).forEach(dir => {
     if(isAlias(GO_DIRECTIONS, input[0], dir) || isAlias(GO_DIRECTIONS, input[1], dir)) {
-      console.log(dir);
       actions.push(handleExitLocale({
         exitDirection: DIRECTIONS[dir.toUpperCase()]
       }));
@@ -34,8 +33,8 @@ const parseGo = (input, actions) => {
 };
 
 export const exploreParse = raw => {
-  const input = raw.trim().split(' ').map(str => str.toLowerCase());
   const actions = [];
+  const input = raw.trim().split(' ').map(str => str.toLowerCase());
   const keyword = input[0].toLowerCase();
   Object.keys(ALIASES).forEach(commandName => {
     if(isAlias(ALIASES, keyword, commandName)) {

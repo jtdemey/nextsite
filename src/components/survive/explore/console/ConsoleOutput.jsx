@@ -15,11 +15,13 @@ const Container = styled(animated.article)`
 `;
 
 const Line = styled.pre`
-  height: 26px;
+  min-height: 26px;
   margin: 0;
-  padding: 0 0.5rem;
+  padding: 0.1rem 0.5rem 0;
   font-family: 'Newsreader', serif;
   font-size: 1rem;
+	line-height: 1.25rem;
+	white-space: inherit;
 `;
 
 const ConsoleOutput = props => {

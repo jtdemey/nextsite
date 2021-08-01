@@ -1,4 +1,4 @@
-import { all, call, put } from 'redux-saga/effects';
+import { all, put } from 'redux-saga/effects';
 import { exploreParse } from '../../parser/ExploreParser';
 
 export function* inputSubmitSaga(action) {

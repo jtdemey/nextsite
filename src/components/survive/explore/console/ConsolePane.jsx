@@ -16,11 +16,10 @@ const Pane = styled(animated.div)`
 
 const ConsolePane = () => {
   const consoleRef = React.useRef(null);
-  const consoleIndex = useSelector(state => state.game.consoleLineIndex);
   const consoleLines = useSelector(state => state.game.consoleText);
   React.useEffect(() => {
     if(consoleRef.current) {
-      consoleRef.current.scrollTop = 26 * consoleIndex;
+			consoleRef.current.scrollTo(0, consoleRef.current.scrollHeight);
     }
   }, [consoleLines]);
   return (
