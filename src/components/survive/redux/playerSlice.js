@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import * as Factory from '../world/LocaleFactory';
+import { REGIONS } from '../world/LocaleConstants';
 
 export const playerSlice = createSlice({
   name: 'player',
@@ -23,7 +24,8 @@ export const playerSlice = createSlice({
     lastCombat: 0,
     currentEnemy: undefined,
     items: [ Factory.createItem('handwarmers', 1) ],
-    equipped: []
+    equipped: [],
+    region: REGIONS.FOREST 
   },
   reducers: {
     handleExitLocale: () => {},

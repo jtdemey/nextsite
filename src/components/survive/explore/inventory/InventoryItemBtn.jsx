@@ -1,31 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
 import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
-import ItemActions from '../../world/ItemActions';
 import { getTheme } from '../../ui/themes';
 
-const Container = styled.li`
+const Container = styled(animated.div)`
+	height: 0.1rem;
   font-family: 'DM Sans', sans-serif;
-  color: #fff;
+	color: #fff;
 `;
 
-const TextArea = styled(animated.div)`
+const TextArea = styled.div`
 	width: 100%;
 	min-height: 2rem;
   font-family: 'Newsreader', serif;
-  font-size: 1rem;
-  margin: 0;
-	padding: 0.5rem 0.25rem;
+	font-size: 1rem;
+	padding: 0.25rem 0.25rem 0.5rem;
 	text-align: left;
 `;
 
-const BtnContainer = styled(animated.div)`
+const BtnContainer = styled.li`
 	width: 100%;
 	display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  padding-bottom: 0.5rem;
 `;
 
 const Btn = styled.div`
@@ -43,6 +40,7 @@ const getBtns = (item, dispatch) => {
 			result.push(genBtn(text, () => dispatch(clickFunc())))
 		}
 	};
+	console.log(item)
 	const itemActions = ItemActions[item.name];
 	addBtn('Consume', itemActions.onConsume);
 	addBtn('Equip', itemActions.onEquip);
@@ -55,17 +53,15 @@ const InventoryItemBtns = props => {
   const theme = getTheme(useSelector(state => state.player.region));
 	const dispatch = useDispatch();
 	const btns = getBtns(props.item, dispatch);
-  const [spring, api] = useSpring(() => ({ opacity: 0, y: -8 }));
-  React.useEffect(() => api.start({ opacity: 1, y: 0 }));
+  const [spring, api] = useSpring(() => ({ height: '0.1rem' }));
+  React.useEffect(() => api.start({ height: '4rem' }));
   return (
-		<Container>
-			<TextArea style={{ background: theme.base3, ...spring }}>
+		<Container style={spring}>
+			<TextArea>
 				{props.item.description}
 			</TextArea>
-      <BtnContainer style={{
-        background: theme.base3,
-        gridTemplateColumns: `repeat(${btns.length < 3 ? 3 : btns.length}, 1fr)`,
-        ...spring
+			<BtnContainer style={{
+        gridTemplateColumns: `repeat(${btns.length < 3 ? 3 : btns.length}, 1fr)`
 			}}>
 				{btns.map((btn, i) => (
           <Btn

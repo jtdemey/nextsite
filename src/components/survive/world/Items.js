@@ -1,10 +1,10 @@
-const gm = (display, description, stackable = false, events = []) =>
-	({ display, description, stackable, events });
+const gm = (display, description, stackable = false) =>
+	({ display, description, stackable });
 
 const itemMetadata = {
   //Consumables
   handwarmers: gm('Handwarmers',
-		'Small packets that disperse a modests amount of heat when activated',
+		'Small packets that disperse a modest amount of heat when activated',
 		true),
 
   //Tools

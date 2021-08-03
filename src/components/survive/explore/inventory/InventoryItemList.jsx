@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import ListButtonItem from './ListButtonItem';
 import InventoryHeader from './InventoryHeader';
 import { getItemAmountSpan } from '../../SurviveUtils';
+import InventoryItemBtns from './InventoryItemBtns';
 
 const List = styled.ul`
   position: relative;
@@ -14,20 +15,38 @@ const List = styled.ul`
   list-style-type: none;
 `;
 
+const getInventoryItemLbi = (item, index, selectedItem, setSelectedItem) => {
+	const clickFunc = selectedItem === index
+		? () => setSelectedItem(false)
+		: () => setSelectedItem(index);
+	const lbi = <ListButtonItem
+								key={item.itemId}
+								clickFunc={clickFunc}
+								subText={getItemAmountSpan(item.amount)}
+								text={item.display} />;
+	if(selectedItem === index) {
+		return (
+			<div key={`${item.itemId}btns`}>
+				{lbi}
+				<InventoryItemBtns item={item} />
+			</div>
+		);
+	}
+	return lbi;
+};
+
 const InventoryItemList = () => {
+	const [selectedItem, setSelectedItem] = React.useState(false);
   const items = useSelector(state => state.player.items);
+	console.log(items)
   return (
     <>
       <InventoryHeader text="Inventory" />
       <List>
         {items.length < 1
 					? <ListButtonItem rgb="50, 50, 50" text="(nothing)" />
-					: items.map(item => (
-						<ListButtonItem
-							key={item.itemId}
-							subText={getItemAmountSpan(item.amount)}
-							text={item.display} />
-        ))}
+					: items.map((item, i) =>
+						getInventoryItemLbi(item, i, selectedItem, setSelectedItem))}
       </List>
     </>
   );

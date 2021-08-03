@@ -51,6 +51,7 @@ export const createFeature = (name, visibilityThreshold, description) => ({
 });
 
 export const createItem = (name, amount) => {
+	//Todo
   const meta = ItemData[name];
   return {
     itemId: nanoid(),
@@ -58,9 +59,7 @@ export const createItem = (name, amount) => {
     name,
     display: meta.display,
     description: meta.description,
-    stackable: meta.stackable,
-    consumable: meta.consumable,
-    equipable: meta.equipable
+    stackable: meta.stackable
   };
 };
 

@@ -1,8 +1,9 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { gameTick } from './redux/gameSlice';
 import ViewRouter from './ViewRouter';
+import { getTheme } from './ui/themes';
 
 /*
 $black-bean: #460c0cff;
@@ -20,16 +21,16 @@ const App = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #151313;
 `;
 
 const SurviveApp = () => {
+  const theme = getTheme(useSelector(state => state.player.region));
   const dispatch = useDispatch();
   React.useEffect(() => setInterval(() => {
     dispatch(gameTick());
   }, 500), []);
   return (
-    <App>
+    <App style={{background: theme.base1}}>
       <ViewRouter />
     </App>
   );
