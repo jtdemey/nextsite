@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
+import { dropItem } from '../../redux/playerSlice';
 import ItemActions from '../../world/ItemActions';
 import { getTheme } from '../../ui/themes';
 
@@ -35,12 +36,15 @@ const Btn = styled.div`
   text-align: center;
 `;
 
-const getBtns = (item, dispatch) => {
+const getBtns = (item, localeName, dispatch) => {
 	const result = [];
 	const genBtn = (text, clickFunc) => ({ text, clickFunc });
 	const addBtn = (text, clickFunc) => {
 		if(clickFunc !== undefined) {
-			result.push(genBtn(text, () => dispatch(clickFunc())))
+      result.push(genBtn(text, e => {
+        e.stopPropagation();
+        dispatch(clickFunc());
+      }));
 		}
 	};
 	const itemActions = ItemActions[item.name];
@@ -48,17 +52,22 @@ const getBtns = (item, dispatch) => {
 	addBtn('Equip', itemActions.onEquip);
 	addBtn('Unequip', itemActions.onUnequip);
 	addBtn('Use', itemActions.onUse);
+  addBtn('Drop', () => dropItem({ item, localeName }));
 	return result;
 };
 
 const InventoryItemBtns = props => {
-  const theme = getTheme(useSelector(state => state.player.region));
+  const state = useSelector(state => ({
+    locale: state.player.locale,
+    region: state.player.region
+  }));
+  const theme = getTheme(state.region);
 	const dispatch = useDispatch();
-	const btns = getBtns(props.item, dispatch);
+	const btns = getBtns(props.item, state.locale, dispatch);
   const [spring, api] = useSpring(() => ({ opacity: 0, y: -8 }));
   React.useEffect(() => api.start({ opacity: 1, y: 0 }));
   return (
-		<Container>
+    <Container onClick={e => e.stopPropagation()}>
 			<TextArea style={{ background: theme.base3, ...spring }}>
 				{props.item.description}
 			</TextArea>
@@ -70,7 +79,7 @@ const InventoryItemBtns = props => {
 				{btns.map((btn, i) => (
           <Btn
             key={i}
-            onClick={() => btn.clickFunc()}
+            onClick={e => btn.clickFunc(e)}
             style={{
               background: theme.primary,
               border: `2px solid ${theme.secondary}`

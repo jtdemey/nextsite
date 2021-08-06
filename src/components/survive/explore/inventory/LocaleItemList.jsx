@@ -50,7 +50,7 @@ const LocaleItemList = () => {
                               itemClickFunc={item => itemClickFunc(localeName, item)} />
         ))}
         {items.length < 1 && containers.length < 1 ? <ListButtonItem clickFunc={() => false} rgb="50, 50, 50" text="(nothing here)" /> : items.map(item => (
-          <ListButtonItem key={item.itemId} clickFunc={() => itemClickFunc(localeName, item)} subText={getItemAmountSpan(item.amount)} text={item.display} />
+          <ListButtonItem key={item.entityId} clickFunc={() => itemClickFunc(localeName, item)} subText={getItemAmountSpan(item.amount)} text={item.display} />
         ))}
       </List>
     </React.Fragment>

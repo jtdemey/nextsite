@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import ListButtonItem from './ListButtonItem';
@@ -15,18 +16,21 @@ const List = styled.ul`
   list-style-type: none;
 `;
 
-const getInventoryItemLbi = (item, index, selectedItem, setSelectedItem) => {
-	const clickFunc = selectedItem === index
-		? () => setSelectedItem(false)
-		: () => setSelectedItem(index);
+const getInventoryItemLbi = (item, selectedItem, setSelectedItem) => {
+	const clickFunc = selectedItem === item.entityId 
+    ? () => false 
+    : e => {
+      e.stopPropagation();
+      setSelectedItem(item.entityId);
+    };
 	const lbi = <ListButtonItem
-								key={item.itemId}
+								key={item.entityId}
 								clickFunc={clickFunc}
 								subText={getItemAmountSpan(item.amount)}
 								text={item.display} />;
-	if(selectedItem === index) {
+	if(selectedItem === item.entityId) {
 		return (
-			<div key={`${item.itemId}btns`}>
+			<div key={`${item.entityId}btns`}>
 				{lbi}
 				<InventoryItemBtns item={item} />
 			</div>
@@ -35,21 +39,24 @@ const getInventoryItemLbi = (item, index, selectedItem, setSelectedItem) => {
 	return lbi;
 };
 
-const InventoryItemList = () => {
-	const [selectedItem, setSelectedItem] = React.useState(false);
+const InventoryItemList = props => {
   const items = useSelector(state => state.player.items);
-	console.log(items)
   return (
     <>
       <InventoryHeader text="Inventory" />
       <List>
         {items.length < 1
-					? <ListButtonItem rgb="50, 50, 50" text="(nothing)" />
-					: items.map((item, i) =>
-						getInventoryItemLbi(item, i, selectedItem, setSelectedItem))}
+          ? <ListButtonItem clickFunc={() => false} rgb="50, 50, 50" text="(nothing)" />
+					: items.map(item =>
+						getInventoryItemLbi(item, props.selectedItem, props.setSelectedItem))}
       </List>
     </>
   );
+};
+
+InventoryItemBtns.propTypes = {
+  selectedItem: PropTypes.string,
+  setSelectedItem: PropTypes.func
 };
 
 export default InventoryItemList;

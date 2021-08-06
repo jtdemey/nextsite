@@ -16,10 +16,10 @@ const View = styled(animated.div)`
 
 const CinematicView = props => {
   const cinematicId = useSelector(state => state.game.cinematicId);
-  const [spring, api] = useSpring(() => ({ display: 'none', opacity: 0, y: 10 }));
-  React.useEffect(() => api.start({ display: props.active ? 'block' : 'none', opacity: props.active ? 1 : 0, y: props.active ? 0 : 10 }));
+  const [spring, api] = useSpring(() => ({ opacity: 0, y: 10 }));
+  React.useEffect(() => api.start({ opacity: props.active ? 1 : 0, y: props.active ? 0 : 10 }));
   return (
-    <View style={spring}>
+    <View style={{ display: props.active ? 'block' : 'none', ...spring }}>
       <IntroCinematic active={cinematicId === CINEMATICS.INTRO} />
     </View>
   );

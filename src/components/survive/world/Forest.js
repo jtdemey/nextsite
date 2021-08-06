@@ -19,7 +19,7 @@ const forestLocales = [
   }),
   F.createLocale('mailbox', 'Roadside', 7, 0, 7, {
     enterPhrase: `The cold, still air bites at your face. You stand in
-			the center of a twisting, neglected road twisting through dark trees
+			the center of a jagged, neglected road twisting through dark trees
 			and heavy undergrowth. There is a mailbox here at the mouth of a driveway.`,
     containers: [
       F.createContainer('Mailbox', `There's a simple, dark green mailbox here at the cusp of a driveway.`, [

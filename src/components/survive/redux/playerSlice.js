@@ -19,7 +19,6 @@ export const playerSlice = createSlice({
     isExiting: false,
     locale: 'car',
     lastLocale: undefined,
-    visited: [],
     inCombat: false,
     lastCombat: 0,
     currentEnemy: undefined,
@@ -32,13 +31,24 @@ export const playerSlice = createSlice({
     changeLocale: (state, action) => {
       state.locale = action.payload;
     },
+    dropItem: (state, action) => {
+      if(action.payload.item.amount > 1) {
+        state.items.forEach(item => {
+          if(item.entityId === action.payload.item.entityId) {
+            item.amount -= 1;
+          }
+        });
+        return;
+      }
+      state.items = state.items.filter(item => item.entityId !== action.payload.item.entityId);
+    },
     takeItem: (state, action) => {
       if(action.payload.item.stackable && state.items.some(item => item.name === action.payload.item.name)) {
         state.items.forEach(item => {
           if(item.name === action.payload.item.name) {
-            item.amount += 1;
+            item.amount += action.payload.item.amount;
+            return;
           }
-          return;
         });
         return;
       }
@@ -46,9 +56,6 @@ export const playerSlice = createSlice({
     }
   },
   extraReducers: {
-    'game/initGame': (state, action) => {
-
-    },
     'game/saveGame': state => {
       const clone = {};
       Object.keys(state).forEach(k => clone[k] = state[k]);
@@ -57,6 +64,6 @@ export const playerSlice = createSlice({
   }
 });
 
-export const { changeLocale, handleExitLocale, takeItem } = playerSlice.actions;
+export const { changeLocale, dropItem, handleExitLocale, takeItem } = playerSlice.actions;
 
 export default playerSlice.reducer;

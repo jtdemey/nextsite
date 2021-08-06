@@ -32,7 +32,7 @@ const ListButtonItem = props => {
   const [spring, api] = useSpring(() => ({ opacity: 0, x: 10 }));
   React.useEffect(() => api.start({opacity: 1, x: 0 }));
   return (
-    <ListItem onClick={() => props.clickFunc()} style={{
+    <ListItem onClick={e => props.clickFunc(e)} style={{
       ...spring,
       background: getLinearGradientCss(props.rgb),
       marginLeft: props.indentationLevel ? `${props.indentationLevel / 2}rem` : '0rem'

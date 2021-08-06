@@ -13,7 +13,7 @@ const Header = styled(animated.h3)`
 
 const InventoryHeader = props => {
   const [spring, api] = useSpring(() => ({ opacity: 0, y: 20 }));
-  React.useEffect(() => api.start({opacity: 1, y: 0 }));
+  React.useEffect(() => api.start({ opacity: 1, y: 0 }));
   return (
     <Header style={spring}>{capitalize(props.text)}</Header>
   );

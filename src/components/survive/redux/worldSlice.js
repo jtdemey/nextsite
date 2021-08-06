@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import world, { rollLoot } from '../world/World';
+import world, { addItemToLocale, removeItemFromLocale, rollLoot } from '../world/World';
 import { CONTAINER_STATES } from './gameConstants';
 
 export const worldSlice = createSlice({
@@ -41,11 +41,17 @@ export const worldSlice = createSlice({
       Object.keys(state).forEach(k => clone[k] = state[k]);
       window.localStorage['JTD_SURVIVE_WS_SAVE'] = clone;
     },
+    'player/dropItem': (state, action) => {
+      addItemToLocale(state, action.payload.localeName, {
+        ...action.payload.item,
+        amount: 1
+      });
+    },
     'player/takeItem': (state, action) => {
       const locale = state[action.payload.localeName];
-      locale.items = locale.items.filter(item => item.itemId !== action.payload.item.itemId);
+      locale.items = locale.items.filter(item => item.entityId !== action.payload.item.entityId);
       locale.containers.forEach(container => {
-        container.items = container.items.filter(item => item.itemId !== action.payload.item.itemId);
+        container.items = container.items.filter(item => item.entityId !== action.payload.item.entityId);
       });
     }
   }

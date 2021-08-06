@@ -14,12 +14,15 @@ const View = styled(animated.div)`
 `;
 
 const InventoryView = props => {
-  const [spring, api] = useSpring(() => ({ display: 'none', opacity: 0, y: 10 }));
-  React.useEffect(() => api.start({ display: props.active ? 'block' : 'none', opacity: props.active ? 1 : 0, y: props.active ? 0 : 10 }));
+	const [selectedItem, setSelectedItem] = React.useState(false);
+  const [spring, api] = useSpring(() => ({ opacity: 0, y: 10 }));
+  React.useEffect(() => api.start({ opacity: props.active ? 1 : 0, y: props.active ? 0 : 10 }));
   return (
-    <View style={spring}>
+    <View
+      onClick={() => setSelectedItem(false)}
+      style={{ display: props.active ? 'block' : 'none', ...spring }}>
       <LocaleItemList />
-      <InventoryItemList />
+      <InventoryItemList selectedItem={selectedItem} setSelectedItem={x => setSelectedItem(x)} />
     </View>
   );
 };

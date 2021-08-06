@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
+import PlayerStatuses from './PlayerStatuses';
 
 const View = styled(animated.div)`
   position: relative;
@@ -12,11 +13,11 @@ const View = styled(animated.div)`
 `;
 
 const InfoView = props => {
-  const [spring, api] = useSpring(() => ({ display: 'none', opacity: 0, y: 10 }));
-  React.useEffect(() => api.start({ display: props.active ? 'block' : 'none', opacity: props.active ? 1 : 0, y: props.active ? 0 : 10 }));
+  const [spring, api] = useSpring(() => ({ opacity: 0, y: 10 }));
+  React.useEffect(() => api.start({ opacity: props.active ? 1 : 0, y: props.active ? 0 : 10 }));
   return (
-    <View style={spring}>
-
+    <View style={{ display: props.active ? 'block' : 'none', ...spring }}>
+      <PlayerStatuses />
     </View>
   );
 };

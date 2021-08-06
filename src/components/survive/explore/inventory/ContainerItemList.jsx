@@ -44,7 +44,7 @@ const ContainerItemList = props => {
                       text={props.container.name} />
       <animated.div style={{ ...spring }}>
         {isOpen && props.container.items ? props.container.items.map(item => (
-          <ListButtonItem key={item.itemId} clickFunc={() => props.itemClickFunc(item)} indentationLevel={2} subText={getItemAmountSpan(item.amount)} text={item.display} />
+          <ListButtonItem key={item.entityId} clickFunc={() => props.itemClickFunc(item)} indentationLevel={2} subText={getItemAmountSpan(item.amount)} text={item.display} />
         )) : null}
       </animated.div>
     </List>

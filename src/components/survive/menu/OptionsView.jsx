@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import MenuHeader from './MenuHeader';
 import ExitMenuButton from './ExitMenuButton';
 import OptionsList from './OptionsList';
+import { GAME_STATES } from '../redux/gameConstants';
 
 const LIST_ITEMS = [
   { text: 'Save Game' },
@@ -21,11 +22,11 @@ const View = styled(animated.div)`
 `;
 
 const OptionsView = props => {
-  const [spring, api] = useSpring(() => ({ display: 'none', opacity: 0, y: 10 }));
-  React.useEffect(() => api.start({ display: props.active ? 'block' : 'none', opacity: props.active ? 1 : 0, y: props.active ? 0 : 10 }));
+  const [spring, api] = useSpring(() => ({ opacity: 0, y: 10 }));
+  React.useEffect(() => api.start({ opacity: props.active ? 1 : 0, y: props.active ? 0 : 10 }));
   return (
-    <View style={spring}>
-      <ExitMenuButton />
+    <View style={{ display: props.active ? 'block' : 'none', ...spring }}>
+      <ExitMenuButton originState={props.inGame ? GAME_STATES.EXPLORE : GAME_STATES.MAIN_MENU} />
       <MenuHeader text="Options" />
       <OptionsList listItems={LIST_ITEMS} />
     </View>
@@ -33,7 +34,8 @@ const OptionsView = props => {
 };
 
 OptionsView.propTypes = {
-  active: PropTypes.bool
+  active: PropTypes.bool,
+  inGame: PropTypes.bool
 };
 
 export default OptionsView;

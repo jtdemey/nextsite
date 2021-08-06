@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { resumeGame } from '../redux/gameSlice';
+import { exitMenu } from '../redux/gameSlice';
 
 const Button = styled.div`
   display: flex;
@@ -22,7 +22,7 @@ const ExitMenuButton = () => {
   const dispatch = useDispatch();
   return (
     <Button>
-      <Image src="survive/x.svg" onClick={() => dispatch(resumeGame())} />
+      <Image src="survive/x.svg" onClick={() => dispatch(exitMenu())} />
     </Button>
   );
 };
