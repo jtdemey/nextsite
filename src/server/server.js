@@ -20,7 +20,7 @@ const port = process.env.SERVER_PORT || 3000;
 		process.on('SIGINT', () => process.exit());
     const httpServer = expressApp.listen(port, (err) => {
       if (err) throw err;
-      logger.info(`> Ready on localhost:${port} - env ${process.env.NODE_ENV}`);
+      logger.info(`> Ready on localhost:${port} - env ${dev ? 'development' : 'production'}`);
     });
 		const wsServer = createWebSocketServer(expressApp);
 		httpServer.on('upgrade', (req, socket, head) => {

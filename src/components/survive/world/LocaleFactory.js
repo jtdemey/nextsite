@@ -11,6 +11,7 @@ export const createLocale = (name, display, x, y, z, overrides) => Object.assign
   coordinates: [x, y, z],
   enemies: [],
   enterPhrase: 'You have entered a default locale.',
+  examinePhrase: 'Looks like a default locale here.',
   exitPhrase: 'You have exited a default locale.',
   exits: [],
   features: [],

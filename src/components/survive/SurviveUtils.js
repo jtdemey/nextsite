@@ -1,3 +1,11 @@
+export const addAOrAn = str => {
+  const vowels = [ ...'aeiou' ];
+  if(vowels.some(v => v === str.charAt(0))) {
+    return 'an ' + str;
+  }
+  return 'a ' + str;
+};
+
 //Adds items to collection of items, accounting for stackability
 const addItemToCollection = (items, item) => {
   if(item.stackable && items.some(i => i.name === item.name)) {

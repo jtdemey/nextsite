@@ -5,7 +5,7 @@ export let socket = null;
 
 const initImposter = dispatch => {
   //Socket client
-  const socketUrl = process.env.NEXT_PUBLIC_WEBSOCKET_URI || 3000;
+  const socketUrl = process.env.NEXT_PUBLIC_WEBSOCKET_URI || 'ws://localhost:3000/';
   socket = new WebSocket(socketUrl);
   let socketId;
 

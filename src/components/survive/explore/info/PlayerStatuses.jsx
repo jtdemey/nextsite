@@ -18,11 +18,20 @@ const StatusArea = styled.div`
   box-shadow: 2px 2px 6px #000;
 `;
 
+const Amount = styled.p`
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 2rem;
+  margin: 0;
+  text-align: center;
+  text-shadow: 2px 3px 5px rgba(0,0,0,0.5);
+`;
+
 const StatusText = styled.p`
   color: #fff;
   font-family: 'Newsreader', serif;
   font-size: 1.1rem;
-  margin: 0.5rem;
+  margin: 0.25rem;
   text-align: center;
 `;
 
@@ -58,6 +67,17 @@ const getStatusText = (stat, amount) => {
   return statusText.text;
 };
 
+const getAmountColor = stat => {
+  switch(stat) {
+    case 'health':
+      return '#800000';
+    case 'sanity':
+      return '#602040';
+    case 'energy':
+      return '#2d5986';
+  }
+};
+
 const PlayerStatuses = () => {
   const stats = useSelector(state => getPlayerStats(state));
   const theme = getTheme(useSelector(state => state.player.region));
@@ -65,6 +85,7 @@ const PlayerStatuses = () => {
     <Container>
       {Object.keys(stats).map((stat, i) => (
         <StatusArea key={i} style={{ background: theme.base3, border: `1px solid ${theme.base2}` }}>
+          <Amount style={{ color: getAmountColor(stat) }}>{stats[stat]}</Amount>
           <StatusText>{getStatusText(stat, stats[stat])}</StatusText>
         </StatusArea>
       ))}

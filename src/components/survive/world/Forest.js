@@ -1,10 +1,11 @@
 import * as F from './LocaleFactory';
 import { DIRECTIONS, TEMPERATURES, VISIBILITIES } from './LocaleConstants';
-import { setEnterPhrase } from '../redux/worldSlice';
 
 const forestLocales = [
+
   F.createLocale('car', 'Car', 7, 0, 7, {
     enterPhrase: `You sit in the driver's seat.`,
+    examinePhrase: 'Your typically reliable Audi 5000CS Turbo Quattro provides meager solace from the bitter cold.',
     containers: [
       F.createContainer('Glovebox', `It's modest glovebox; it seems unlocked.`, [
         F.createLoot(1, 'handwarmers', 1)
@@ -17,6 +18,7 @@ const forestLocales = [
       F.createItem('handwarmers', 1)
     ]
   }),
+
   F.createLocale('mailbox', 'Roadside', 7, 0, 7, {
     enterPhrase: `The cold, still air bites at your face. You stand in
 			the center of a jagged, neglected road twisting through dark trees
@@ -27,7 +29,7 @@ const forestLocales = [
       ])
     ],
     exits: [
-      F.createExit(DIRECTIONS.SOUTH, 'farm_front_driveway', 1000, 'You march through the decrepit entrance to the driveway'),
+      F.createExit(DIRECTIONS.SOUTH, 'farm_front_driveway', 1000, 'You march through the decrepit entrance to the driveway.'),
       F.createExit(DIRECTIONS.INSIDE, 'car', 1500, 'You open the car door, duck, and step inside.')
     ],
     items: [
@@ -35,6 +37,7 @@ const forestLocales = [
     ],
     temperature: TEMPERATURES.COLD
   }),
+
   F.createLocale('farm_front_driveway', 'Front Driveway', 7, 0, 6, {
     exits: [
       F.createExit(DIRECTIONS.NORTH, 'mailbox', 1000, 'You exit the mouth of the driveway, arriving back at the main road.')
