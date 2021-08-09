@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import * as Factory from '../world/LocaleFactory';
 import { REGIONS } from '../world/LocaleConstants';
+import { isStackable } from '../world/Items';
 
 export const playerSlice = createSlice({
   name: 'player',
@@ -43,8 +44,11 @@ export const playerSlice = createSlice({
       }
       state.items = state.items.filter(item => item.entityId !== action.payload.item.entityId);
     },
+    equipItem: (state, action) => {
+      state.equipped = state.equipped.concat([action.payload.entityId]);
+    },
     takeItem: (state, action) => {
-      if(action.payload.item.stackable && state.items.some(item => item.name === action.payload.item.name)) {
+      if(isStackable(action.payload.item.name) && state.items.some(item => item.name === action.payload.item.name)) {
         state.items.forEach(item => {
           if(item.name === action.payload.item.name) {
             item.amount += action.payload.item.amount;
@@ -65,6 +69,7 @@ export const playerSlice = createSlice({
   }
 });
 
-export const { changeLocale, dropItem, handleExamineLocale, handleExitLocale, takeItem } = playerSlice.actions;
+export const { changeLocale, dropItem, equipItem, handleExamineLocale,
+  handleExitLocale, takeItem } = playerSlice.actions;
 
 export default playerSlice.reducer;

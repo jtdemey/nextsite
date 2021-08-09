@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { dropItem } from '../../redux/playerSlice';
 import ItemActions from '../../world/ItemActions';
 import { getTheme } from '../../ui/themes';
+import { getItemDescription } from '../../world/Items';
 
 const Container = styled.li`
   font-family: 'DM Sans', sans-serif;
@@ -36,6 +37,7 @@ const Btn = styled.div`
   text-align: center;
 `;
 
+//Todo: better actions, like 'read' for note
 const getBtns = (item, localeName, dispatch) => {
 	const result = [];
 	const genBtn = (text, clickFunc) => ({ text, clickFunc });
@@ -47,11 +49,13 @@ const getBtns = (item, localeName, dispatch) => {
       }));
 		}
 	};
-	const itemActions = ItemActions[item.name];
-	addBtn('Consume', itemActions.onConsume);
-	addBtn('Equip', itemActions.onEquip);
-	addBtn('Unequip', itemActions.onUnequip);
-	addBtn('Use', itemActions.onUse);
+  const itemActions = ItemActions[item.name];
+  if(itemActions) {
+    addBtn('Consume', itemActions.onConsume);
+    addBtn('Equip', itemActions.onEquip);
+    addBtn('Unequip', itemActions.onUnequip);
+    addBtn('Use', itemActions.onUse);
+  }
   addBtn('Drop', () => dropItem({ item, localeName }));
 	return result;
 };
@@ -69,7 +73,7 @@ const InventoryItemBtns = props => {
   return (
     <Container onClick={e => e.stopPropagation()}>
 			<TextArea style={{ background: theme.base3, ...spring }}>
-				{props.item.description}
+				{getItemDescription(props.item.name)}
 			</TextArea>
       <BtnContainer style={{
         background: theme.base3,

@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ListButtonItem from './ListButtonItem';
 import { getItemAmountSpan } from '../../SurviveUtils';
 import { CONTAINER_STATES } from '../../redux/gameConstants';
+import { getItemDisplayName } from '../../world/Items';
 
 const getContainerSvgIcon = containerState => {
   switch(containerState) {
@@ -44,7 +45,7 @@ const ContainerItemList = props => {
                       text={props.container.name} />
       <animated.div style={{ ...spring }}>
         {isOpen && props.container.items ? props.container.items.map(item => (
-          <ListButtonItem key={item.entityId} clickFunc={() => props.itemClickFunc(item)} indentationLevel={2} subText={getItemAmountSpan(item.amount)} text={item.display} />
+          <ListButtonItem key={item.entityId} clickFunc={() => props.itemClickFunc(item)} indentationLevel={2} subText={getItemAmountSpan(item.amount)} text={getItemDisplayName(item.name)} />
         )) : null}
       </animated.div>
     </List>

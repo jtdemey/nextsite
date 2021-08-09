@@ -1,5 +1,6 @@
 import * as Factory from './LocaleFactory';
 import forest from './Forest';
+import { isStackable } from '../world/Items';
 import { between, isArray } from '../SurviveUtils';
 
 const world = forest;
@@ -16,7 +17,7 @@ const getLocale = (state, localeName) => {
 export const addItemToLocale = (state, localeName, item) => {
   const locale = getLocale(state, localeName);
   const matchingItems = locale.items.filter(x => x.name === item.name);
-  if(matchingItems.length > 0 && item.stackable) {
+  if(matchingItems.length > 0 && isStackable(item.name)) {
     matchingItems[0].amount += 1;
     return;
   }
@@ -26,7 +27,7 @@ export const addItemToLocale = (state, localeName, item) => {
 export const removeItemFromLocale = (state, localeName, item) => {
   const locale = getLocale(state, localeName);
   const matchingItems = locale.items.filter(x => x.entityId === item.entityId);
-  if(matchingItems.length > 0 && item.stackable) {
+  if(matchingItems.length > 0 && isStackable(item.name)) {
     matchingItems[0].amount += 1;
     return;
   }

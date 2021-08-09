@@ -9,6 +9,7 @@ import { openContainer } from '../../redux/worldSlice';
 import { getItemAmountSpan } from '../../SurviveUtils';
 import ContainerItemList from './ContainerItemList';
 import { CONTAINER_STATES } from '../../redux/gameConstants';
+import { getItemDisplayName } from '../../world/Items';
 
 const getContainerSvgIcon = containerState => {
   switch(containerState) {
@@ -50,7 +51,7 @@ const LocaleItemList = () => {
                               itemClickFunc={item => itemClickFunc(localeName, item)} />
         ))}
         {items.length < 1 && containers.length < 1 ? <ListButtonItem clickFunc={() => false} rgb="50, 50, 50" text="(nothing here)" /> : items.map(item => (
-          <ListButtonItem key={item.entityId} clickFunc={() => itemClickFunc(localeName, item)} subText={getItemAmountSpan(item.amount)} text={item.display} />
+          <ListButtonItem key={item.entityId} clickFunc={() => itemClickFunc(localeName, item)} subText={getItemAmountSpan(item.amount)} text={getItemDisplayName(item.name)} />
         ))}
       </List>
     </React.Fragment>

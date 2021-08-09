@@ -6,6 +6,7 @@ import ListButtonItem from './ListButtonItem';
 import InventoryHeader from './InventoryHeader';
 import { getItemAmountSpan } from '../../SurviveUtils';
 import InventoryItemBtns from './InventoryItemBtns';
+import { getItemDisplayName } from '../../world/Items';
 
 const List = styled.ul`
   position: relative;
@@ -27,7 +28,7 @@ const getInventoryItemLbi = (item, selectedItem, setSelectedItem) => {
 								key={item.entityId}
 								clickFunc={clickFunc}
 								subText={getItemAmountSpan(item.amount)}
-								text={item.display} />;
+								text={getItemDisplayName(item.name)} />;
 	if(selectedItem === item.entityId) {
 		return (
 			<div key={`${item.entityId}btns`}>

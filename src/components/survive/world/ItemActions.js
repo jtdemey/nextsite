@@ -4,7 +4,10 @@ const itemActions = {
 		onConsume: () => console.log('oi')
 	}
 	//Tools
-	//Weapons
+  //Weapons
+  crowbar: {
+    onUse: () => console.log('nothin yet')
+  },
 	//Writing
 };
 

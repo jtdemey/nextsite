@@ -56,10 +56,7 @@ export const createItem = (name, amount) => {
   return {
     entityId: nanoid(),
     amount,
-    name,
-    display: meta.display,
-    description: meta.description,
-    stackable: meta.stackable
+    name
   };
 };
 

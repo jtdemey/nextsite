@@ -1,3 +1,5 @@
+import { isStackable } from './world/Items';
+
 export const addAOrAn = str => {
   const vowels = [ ...'aeiou' ];
   if(vowels.some(v => v === str.charAt(0))) {
@@ -8,7 +10,7 @@ export const addAOrAn = str => {
 
 //Adds items to collection of items, accounting for stackability
 const addItemToCollection = (items, item) => {
-  if(item.stackable && items.some(i => i.name === item.name)) {
+  if(isStackable(item.name) && items.some(i => i.name === item.name)) {
     items.forEach(thing => {
       if(thing.name === item.name) {
         thing.amount += 1;

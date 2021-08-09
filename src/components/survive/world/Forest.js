@@ -8,7 +8,8 @@ const forestLocales = [
     examinePhrase: 'Your typically reliable Audi 5000CS Turbo Quattro provides meager solace from the bitter cold.',
     containers: [
       F.createContainer('Glovebox', `It's modest glovebox; it seems unlocked.`, [
-        F.createLoot(1, 'handwarmers', 1)
+        F.createLoot(1, 'handwarmers', 1),
+        F.createLoot(1, 'flashlight', 1)
       ])
     ],
     exits: [
@@ -24,6 +25,9 @@ const forestLocales = [
 			the center of a jagged, neglected road twisting through dark trees
 			and heavy undergrowth. There is a mailbox here at the mouth of a driveway.`,
     containers: [
+      F.createContainer('Car trunk', `The trunk to your sedan.`, [
+        F.createLoot(1, 'crowbar', 1)
+      ]),
       F.createContainer('Mailbox', `There's a simple, dark green mailbox here at the cusp of a driveway.`, [
         F.createLoot(1, 'welcome_note', 1)
       ])
