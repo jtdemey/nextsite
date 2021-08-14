@@ -37,15 +37,21 @@ const ContainerItemList = props => {
   React.useEffect(() => api.start({ opacity: isOpen ? 1 : 0, scaleY: isOpen ? 1 : 0 }));
   return (
     <List>
-      <ListButtonItem key={props.container.containerId}
-                      clickFunc={() => props.containerClickFunc(props.container)}
-                      rgb="60, 60, 60"
-                      subSvg={<FontAwesomeIcon icon={getContainerSvgIcon(props.container.containerState)} size="2x" />}
-                      subText={props.container.containerState !== CONTAINER_STATES.UNKNOWN && props.container.items.length < 1 ? '(empty)' : ''}
-                      text={props.container.name} />
+      <ListButtonItem
+        key={props.container.containerId}
+        clickFunc={() => props.containerClickFunc(props.container)}
+        rgb="60, 60, 60"
+        subSvg={<FontAwesomeIcon icon={getContainerSvgIcon(props.container.containerState)} size="2x" />}
+        subText={props.container.containerState !== CONTAINER_STATES.UNKNOWN && props.container.items.length < 1 ? '(empty)' : ''}
+        text={props.container.name} />
       <animated.div style={{ ...spring }}>
         {isOpen && props.container.items ? props.container.items.map(item => (
-          <ListButtonItem key={item.entityId} clickFunc={() => props.itemClickFunc(item)} indentationLevel={2} subText={getItemAmountSpan(item.amount)} text={getItemDisplayName(item.name)} />
+          <ListButtonItem
+            key={item.entityId}
+            clickFunc={() => props.itemClickFunc(item)}
+            indentationLevel={2}
+            subText={getItemAmountSpan(item.amount)}
+            text={getItemDisplayName(item.name)} />
         )) : null}
       </animated.div>
     </List>

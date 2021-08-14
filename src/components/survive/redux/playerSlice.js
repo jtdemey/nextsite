@@ -58,6 +58,9 @@ export const playerSlice = createSlice({
         return;
       }
       state.items = state.items.concat([action.payload.item]);
+    },
+    unequipItem: (state, action) => {
+      state.equipped = state.equipped.filter(e => e !== action.payload.entityId);
     }
   },
   extraReducers: {
@@ -70,6 +73,6 @@ export const playerSlice = createSlice({
 });
 
 export const { changeLocale, dropItem, equipItem, handleExamineLocale,
-  handleExitLocale, takeItem } = playerSlice.actions;
+  handleExitLocale, takeItem, unequipItem } = playerSlice.actions;
 
 export default playerSlice.reducer;

@@ -1,13 +1,15 @@
+const g = (name, action) => ({ name, action });
+
 const itemActions = {
 	//Consumables
-	handwarmers: {
-		onConsume: () => console.log('oi')
-	}
+  handwarmers: [
+    g('Consume', () => console.log('oi'))
+  ],
 	//Tools
   //Weapons
-  crowbar: {
-    onUse: () => console.log('nothin yet')
-  },
+  crowbar: [
+    g('Use', () => console.log('oi'))
+  ]
 	//Writing
 };
 

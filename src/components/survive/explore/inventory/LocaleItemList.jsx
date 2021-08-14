@@ -1,28 +1,13 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { faChevronDown, faLock, faQuestionCircle, faUnlock } from '@fortawesome/free-solid-svg-icons';
 import ListButtonItem from './ListButtonItem';
 import InventoryHeader from './InventoryHeader';
 import { takeItem } from '../../redux/playerSlice';
 import { openContainer } from '../../redux/worldSlice';
 import { getItemAmountSpan } from '../../SurviveUtils';
 import ContainerItemList from './ContainerItemList';
-import { CONTAINER_STATES } from '../../redux/gameConstants';
 import { getItemDisplayName } from '../../world/Items';
-
-const getContainerSvgIcon = containerState => {
-  switch(containerState) {
-    case CONTAINER_STATES.UNKNOWN:
-      return faQuestionCircle;
-    case CONTAINER_STATES.LOCKED:
-      return faLock;
-    case CONTAINER_STATES.UNLOCKED:
-      return faUnlock;
-    case CONTAINER_STATES.OPEN:
-      return faChevronDown;
-  }
-};
 
 const List = styled.ul`
   position: relative;
@@ -35,24 +20,34 @@ const List = styled.ul`
 
 const LocaleItemList = () => {
   const dispatch = useDispatch();
-  const localeName = useSelector(state => state.player.locale);
-  const containers = useSelector(state => state.world[localeName].containers);
-  const items = useSelector(state => state.world[localeName].items);
-  const containerClickFunc = container => dispatch(openContainer({ localeName, container }));
-  const itemClickFunc = (localeName, item) => dispatch(takeItem({ localeName, item }));
+  const playerData = useSelector(state => ({
+    equipped: state.player.equipped,
+    localeName: state.player.locale
+  }));
+  const containers = useSelector(state => state.world[playerData.localeName].containers);
+  const items = useSelector(state => state.world[playerData.localeName].items);
+  const containerClickFunc = container => dispatch(openContainer({ localeName: playerData.localeName, container }));
+  const itemClickFunc = (localeName, item) => dispatch(takeItem({ localeName: playerData.localeName, item }));
   return (
     <React.Fragment>
-      <InventoryHeader text={localeName} />
+      <InventoryHeader text={playerData.localeName} />
       <List>
         {containers.length < 1 ? null : containers.map(container => (
-          <ContainerItemList  key={`${container.containerId}_list`}
-                              container={container}
-                              containerClickFunc={containerClickFunc}
-                              itemClickFunc={item => itemClickFunc(localeName, item)} />
+          <ContainerItemList
+            key={`${container.containerId}_list`}
+            container={container}
+            containerClickFunc={containerClickFunc}
+            itemClickFunc={item => itemClickFunc(playerData.localeName, item)} />
         ))}
-        {items.length < 1 && containers.length < 1 ? <ListButtonItem clickFunc={() => false} rgb="50, 50, 50" text="(nothing here)" /> : items.map(item => (
-          <ListButtonItem key={item.entityId} clickFunc={() => itemClickFunc(localeName, item)} subText={getItemAmountSpan(item.amount)} text={getItemDisplayName(item.name)} />
-        ))}
+        {items.length < 1 && containers.length < 1
+          ? <ListButtonItem clickFunc={() => false} rgb="50, 50, 50" text="(nothing here)" />
+          : items.map(item => (
+            <ListButtonItem
+              key={item.entityId}
+              clickFunc={() => itemClickFunc(playerData.localeName, item)}
+              subText={getItemAmountSpan(item.amount)}
+              text={getItemDisplayName(item.name)} />
+          ))}
       </List>
     </React.Fragment>
   );

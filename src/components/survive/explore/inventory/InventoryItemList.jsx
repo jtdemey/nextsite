@@ -17,17 +17,21 @@ const List = styled.ul`
   list-style-type: none;
 `;
 
-const getInventoryItemLbi = (item, selectedItem, setSelectedItem) => {
+const getInventoryItemLbi = (item, selectedItem, setSelectedItem, equipped) => {
 	const clickFunc = selectedItem === item.entityId 
     ? () => false 
     : e => {
       e.stopPropagation();
       setSelectedItem(item.entityId);
     };
+  let spanText = getItemAmountSpan(item.amount);
+  if(equipped.some(e => e === item.entityId)) {
+    spanText += ' (equipped)';
+  }
 	const lbi = <ListButtonItem
 								key={item.entityId}
 								clickFunc={clickFunc}
-								subText={getItemAmountSpan(item.amount)}
+                subText={spanText}
 								text={getItemDisplayName(item.name)} />;
 	if(selectedItem === item.entityId) {
 		return (
@@ -41,6 +45,7 @@ const getInventoryItemLbi = (item, selectedItem, setSelectedItem) => {
 };
 
 const InventoryItemList = props => {
+  const equipped = useSelector(state => state.player.equipped);
   const items = useSelector(state => state.player.items);
   return (
     <>
@@ -48,8 +53,7 @@ const InventoryItemList = props => {
       <List>
         {items.length < 1
           ? <ListButtonItem clickFunc={() => false} rgb="50, 50, 50" text="(nothing)" />
-					: items.map(item =>
-						getInventoryItemLbi(item, props.selectedItem, props.setSelectedItem))}
+					: items.map(item => getInventoryItemLbi(item, props.selectedItem, props.setSelectedItem, equipped))}
       </List>
     </>
   );

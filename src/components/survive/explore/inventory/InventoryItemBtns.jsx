@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
-import { dropItem } from '../../redux/playerSlice';
+import { dropItem, equipItem, unequipItem } from '../../redux/playerSlice';
 import ItemActions from '../../world/ItemActions';
 import { getTheme } from '../../ui/themes';
-import { getItemDescription } from '../../world/Items';
+import { getItemDescription, isEquipable } from '../../world/Items';
 
 const Container = styled.li`
   font-family: 'DM Sans', sans-serif;
@@ -37,7 +37,6 @@ const Btn = styled.div`
   text-align: center;
 `;
 
-//Todo: better actions, like 'read' for note
 const getBtns = (item, localeName, dispatch) => {
 	const result = [];
 	const genBtn = (text, clickFunc) => ({ text, clickFunc });
@@ -48,13 +47,16 @@ const getBtns = (item, localeName, dispatch) => {
         dispatch(clickFunc());
       }));
 		}
-	};
+  };
+  if(isEquipable(item.name)) {
+    addBtn('Equip', () => equipItem({ entityId: item.entityId }));
+    addBtn('Unequip', () => unequipItem({ entityId: item.entityId }));
+  }
   const itemActions = ItemActions[item.name];
   if(itemActions) {
-    addBtn('Consume', itemActions.onConsume);
-    addBtn('Equip', itemActions.onEquip);
-    addBtn('Unequip', itemActions.onUnequip);
-    addBtn('Use', itemActions.onUse);
+    itemActions.forEach(itemAction => {
+      addBtn(itemAction.name, itemAction.action)
+    });
   }
   addBtn('Drop', () => dropItem({ item, localeName }));
 	return result;
