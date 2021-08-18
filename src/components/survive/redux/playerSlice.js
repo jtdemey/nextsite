@@ -28,6 +28,7 @@ export const playerSlice = createSlice({
     region: REGIONS.FOREST 
   },
   reducers: {
+    handleExamineEntity: () => {},
     handleExamineLocale: () => {},
     handleExitLocale: () => {},
     changeLocale: (state, action) => {
@@ -73,6 +74,6 @@ export const playerSlice = createSlice({
 });
 
 export const { changeLocale, dropItem, equipItem, handleExamineLocale,
-  handleExitLocale, takeItem, unequipItem } = playerSlice.actions;
+  handleExamineEntity, handleExitLocale, takeItem, unequipItem } = playerSlice.actions;
 
 export default playerSlice.reducer;

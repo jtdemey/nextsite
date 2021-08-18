@@ -1,5 +1,7 @@
 \documentclass[11pt]{article}
 
+\usepackage{textcomp}
+
 \title{The Roots Run Deep in Caledonia Forest}
 \author{A game by John Torsten}
 
@@ -13,6 +15,7 @@
 	\begin{itemize}
 		\item \textbf{TRRDCF}: abbreviation for \textit{The Roots Run Deep in Caledonia Forest}
 		\item \textbf{Locale}: A distinct physical location in the game world, such as a room or a clearing in the woods.
+		\item \textbf{Region}: An area in the game world with distinct environmental characteristics consisting of several locales.
 	\end{itemize}
 	
 	
@@ -42,15 +45,47 @@
 	\end{itemize}
 
 	\textbf{Using Commands}
+	\newline
 	
 	To perform actions, the player types commands into the console, such as "go north", which would cause the player to attempt to travel to the locale directly to the north. The resulting output of an action is printed to the console pane in the \textbf{Console View}.
 	
 	Most commands have several aliases; typing "go n" or even just "north" would accomplish the same action in this case.
 	
-	All player actions can be performed in the \textbf{Console View} by typing commands into the console, however the three other views provide alternative interfaces that ease interaction with items and the environment.
+	All player actions can be performed in the \textbf{Console View} by typing commands into the console, however the three other views provide alternative interfaces that ease interaction with items and the environment. Commands are discussed more thoroughly in the \textbf{Commands} section.\linebreak
+	
+	\textbf{Navigation}
+	\newline
+	
+	The game's map can be split into several \textbf{regions}, which are each a collection of connected \textbf{locales}. Locales can contain exits in twelve possible directions: the eight cardinal directions, up, down, inside, and outside.
+	
+	The player can use the EXAMINE command to receive textual output regarding which exits are present in their current locale. The player can use the GO command to attempt to navigate in a direction.
+	
+	\subsection{Vitality}
+	
+	The player has four vital metrics that they must take action to regulate or die. These metrics are:
+	
+	\begin{itemize}
+		\item \textit{Health}: A measure of physical vitality. 100 represents being in ideal physical state while 0 represents death.
+		\item \textit{Sanity}: A measure of mental stature. 100 represents a calm, sane mental state while 0 represents a neurotic insanity -- a complete inability to distinguish hallucinations from reality.
+		\item \textit{Energy}: A measure of physical energy. 100 represents being energetic while 0 represents complete exhaustion and involuntary immobility.
+		\item \textit{Temperature}: A measure of body temperature. Unlike the previous metrics which are quantified on a scale of 0 to 100, this is a standard temperature readout in Fahrenheit and Celsius representing the main character's internal body temperature. 37\textdegree C (98.6\textdegree F) is considered an ideal body temperature. Dropping below this temperature results in freezing while exceeding this temperature results in overheating. Both yield negative effects, eventually resulting in death.
+	\end{itemize}
+
+	These vital metrics can be regulated through the use of items
 	
 	\subsection{Combat}
 	
 	When the player enters a locale occupied by an enemy or an enemy enters the locale occupied by the player, the player exits \textbf{Exploration mode} and enters \textbf{Combat mode}. The player will stay in this mode until the enemy is subdued or the player dies.
+	
+	\section{Commands}
+	
+	\section{Game Entities}
+	\subsection{Items}
+	
+	\subsection{Enemies}
+	
+	\subsection{Bosses}
+	
+	\subsection{Weapons}
 	
 \end{document}

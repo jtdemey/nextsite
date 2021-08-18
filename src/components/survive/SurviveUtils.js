@@ -54,3 +54,7 @@ export const isArray = data => Object.prototype.toString.call(data) === '[object
 export const isStringSimilar = (x, y) => {
   return x === y || x === y.substring(1, y.length) || x === y.substring(0, y.length - 1);
 };
+
+export const lowercaseFirstLetter = str => {
+  return str.substring(0, 1).toLowerCase() + str.substring(1, str.length);
+};

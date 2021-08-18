@@ -28,6 +28,16 @@ export const getItemDisplayName = name => itemMetadata[name].display;
 
 export const getItemDescription = name => itemMetadata[name].description;
 
+export const getItemNameFromDisplay = displayName => {
+  let result = false;
+  Object.keys(itemMetadata).forEach(itemName => {
+    if(itemMetadata[itemName].display.trim().toLowerCase() === displayName.trim().toLowerCase()) {
+      result = itemName;
+    }
+  });
+  return result;
+};
+
 const flag = (itemName, prop) => itemMetadata[itemName] && itemMetadata[itemName][prop] === true;
 
 export const isEquipable = name => flag(name, 'equipable');
