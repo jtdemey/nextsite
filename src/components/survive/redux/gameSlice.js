@@ -16,12 +16,16 @@ export const gameSlice = createSlice({
     cinematicStartTick: 0,
     //Console
     lastInput: '',
+		//Game environment
+		environmentTemperature: 32,
+		temperatureFlux: 0,
     //Notifications
     notificationText: '',
     //UI elements
     exitMenuDestination: GAME_STATES.MAINMENU,
     consoleLineIndex: 0,
-    consoleText: []
+    consoleText: [],
+		usingCelsius: true
   },
   reducers: {
     handleEndCinematic: () => {},
@@ -63,12 +67,18 @@ export const gameSlice = createSlice({
     showOptions: state => {
       state.gameState = GAME_STATES.OPTIONSMENU;
     },
+    setEnvironmentTemperature: (state, action) => {
+      state.environmentTemperature = action.payload.environmentTemperature;
+    },
     setGamePanelView: (state, action) => {
       state.gamePanelView = action.payload;
     },
     setGameState: (state, action) => {
       state.gameState = action.payload;
     },
+		setTemperatureFlux: (state, action) => {
+			state.temperatureFlux = action.payload.temperatureFlux;
+		},
     startCinematic: (state, action) => {
       state.gameState = GAME_STATES.CINEMATIC;
       state.cinematicId = action.cinematicId;
@@ -76,12 +86,18 @@ export const gameSlice = createSlice({
     },
     submitExploreCommand: (state, action) => {
       state.lastInput = action.payload;
-    }
+    },
+		toggleUsingCelsius: state => {
+			state.usingCelsius = !state.usingCelsius;
+		}
   },
   extraReducers: {}
 });
 
-export const { handleEndCinematic, appendLine, exitMenu, gameTick, initGame, loadGame, pauseGame, resumeGame, saveGame,
-  setGamePanelView, setGameState, showOptions, endCinematic, startCinematic, submitExploreCommand } = gameSlice.actions;
+export const { handleEndCinematic, appendLine, exitMenu,
+	gameTick, initGame, loadGame, pauseGame, resumeGame, saveGame,
+  setEnvironmentTemperature, setGamePanelView, setGameState,
+	setTemperatureFlux, showOptions, endCinematic, startCinematic,
+	submitExploreCommand, toggleUsingCelsius } = gameSlice.actions;
 
 export default gameSlice.reducer;

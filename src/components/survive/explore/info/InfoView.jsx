@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
 import PlayerStatuses from './PlayerStatuses';
+import BodyTemperatureStatus from './BodyTemperatureStatus';
 
 const View = styled(animated.div)`
   position: relative;
@@ -18,6 +19,7 @@ const InfoView = props => {
   return (
     <View style={{ display: props.active ? 'block' : 'none', ...spring }}>
       <PlayerStatuses />
+			<BodyTemperatureStatus />
     </View>
   );
 };

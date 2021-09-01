@@ -1,4 +1,5 @@
 import { isStackable } from './world/Items';
+import { TEMPERATURE_AMOUNTS_F } from './world/LocaleConstants';
 
 export const addAOrAn = str => {
   const vowels = [ ...'aeiou' ];
@@ -41,6 +42,13 @@ export const createConsoleLine = (index, text, color) => ({
 
 export const delay = duration => new Promise(resolve => setTimeout(resolve, duration));
 
+export const getCelsiusFromTemperature = temperature => {
+	const fah = TEMPERATURE_AMOUNTS_F[temperature] || 0;
+	return Math.round((fah - 32) * (5 / 9) * 10) / 10;
+};
+
+export const getFahrenheitFromTemperature = temperature => TEMPERATURE_AMOUNTS_F[temperature] || 0;
+
 export const getItemAmountSpan = amount => amount > 1 ? `(${amount})` : '';
 
 export const getTimeFromTick = tick => {
@@ -58,3 +66,5 @@ export const isStringSimilar = (x, y) => {
 export const lowercaseFirstLetter = str => {
   return str.substring(0, 1).toLowerCase() + str.substring(1, str.length);
 };
+
+export const toCelsius = fah => Math.round(((fah - 32) * (5 / 9)) * 10) / 10;

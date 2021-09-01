@@ -29,6 +29,16 @@ export const TEMPERATURES = {
 	HOT: 6
 };
 
+export const TEMPERATURE_AMOUNTS_F = [
+	-10,
+	12,
+	18,
+	24,
+	32,
+	45,
+	62
+];
+
 export const VISIBILITIES = {
 	PITCH_BLACK: 0,
 	VERY_DARK: 1,

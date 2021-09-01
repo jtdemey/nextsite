@@ -6,16 +6,18 @@ import { getTheme } from '../../ui/themes';
 
 const Container = styled.div`
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
   margin-top: 0.5rem;
 `;
 
 const StatusArea = styled.div`
-  margin: 0.5rem;
+  margin: 0.5rem 0 0.5rem 0.5rem;
   padding: 0.5rem 1rem;
   box-shadow: 2px 2px 6px #000;
+	&:last-child {
+		margin-right: 0.5rem;
+	}
 `;
 
 const Amount = styled.p`

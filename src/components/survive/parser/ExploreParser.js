@@ -1,13 +1,16 @@
 import { appendLine } from "../redux/gameSlice";
-import { equipItem, handleExamineEntity, handleExamineLocale, handleExitLocale } from "../redux/playerSlice";
+import { equipItem, handleEquipEntity, handleExamineEntity,
+  handleExamineLocale, handleExitLocale } from "../redux/playerSlice";
 import { DIRECTIONS } from "../world/LocaleConstants";
 import { isSynonym } from '../world/Synonyms';
 
 const ALIASES = {
   attack: ['fight', 'hit', 'assault', 'bonk'],
+  eat: ['bite', 'chew', 'devour', 'ingest', 'inhale', 'swallow', 'digest', 'masticate', 'nosh', 'feast'],
   equip: ['don', 'wear', 'adorn', 'arm', 'dress', 'endow', 'furnish', 'gear', 'fit'],
   examine: ['look', 'perceive', 'search', 'peruse', 'gander', 'where', 'whereami'],
   go: ['move', 'walk', 'travel', 'cross', 'migrate', 'proceed', 'progress', 'relocate', 'leave'],
+  throw: ['toss', 'yeet', 'send', 'fling', 'fire', 'heave', 'hurl', 'lob', 'pitch', 'chuck', 'catapult', 'discharge', 'flick', 'launch', 'sling', 'volley']
 };
 
 const GO_DIRECTIONS = {
@@ -30,7 +33,7 @@ const isAlias = (aliasCollection, input, command) =>
   aliasCollection[command] && (input === command || aliasCollection[command].some(alias => alias === input));
 
 const parseEquip = (input, actions) => {
-  
+  actions.push(handleExamineLocale());
 };
 
 const parseExamine = (input, actions) => {

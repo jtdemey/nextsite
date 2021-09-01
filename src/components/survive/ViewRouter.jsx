@@ -6,6 +6,7 @@ import GameView from './explore/GameView';
 import MainMenuView from './menu/MainMenuView';
 import OptionsView from './menu/OptionsView';
 import CinematicView from './cinematics/CinematicView';
+import DeathView from './menu/DeathView';
 
 const Container = styled.div`
   width: 100%;
@@ -21,6 +22,7 @@ const ViewRouter = () => {
       <GameView active={view === GAME_STATES.EXPLORE} />
       <OptionsView active={view === GAME_STATES.OPTIONSMENU} />
       <CinematicView active={view === GAME_STATES.CINEMATIC} />
+      <DeathView active={view === GAME_STATES.DEATH} />
     </Container>
   );
 };

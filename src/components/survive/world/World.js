@@ -2,6 +2,7 @@ import * as Factory from './LocaleFactory';
 import forest from './Forest';
 import { isStackable } from '../world/Items';
 import { between, isArray } from '../SurviveUtils';
+import { TEMPERATURE_AMOUNTS_F } from './LocaleConstants';
 
 const world = forest;
 export default world;
@@ -22,6 +23,27 @@ export const addItemToLocale = (state, localeName, item) => {
     return;
   }
   locale.items = locale.items.concat([item]);
+};
+
+export const getAffectedBodyTemperature = envTemp => {
+	let temperatureIndex = 4;
+	TEMPERATURE_AMOUNTS_F.forEach((temp, i) => {
+		if(envTemp > temp) {
+			temperatureIndex = i;
+		}
+	});
+	return temperatureIndex - 4;
+};
+
+export const fluxTemperature = currentFlux => {
+	let flux = currentFlux;
+	const fluxChance = Math.random();
+	if(fluxChance > 0.5
+		&& !(currentFlux < -4 || currentFlux > 4)) {
+		const fluxAmt = fluxChance < 0.75 ? 1 : -1;
+		flux = flux + fluxAmt;
+	}
+	return flux;
 };
 
 export const removeItemFromLocale = (state, localeName, item) => {

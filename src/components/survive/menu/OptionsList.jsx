@@ -4,13 +4,6 @@ import { useDispatch } from 'react-redux';
 import { animated, useSprings } from '@react-spring/web';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { saveGame } from '../redux/gameSlice';
-
-const MENU_ACTIONS = [
-  saveGame,
-  saveGame,
-  saveGame
-];
 
 const List = styled(animated.ul)`
   position: absolute;
@@ -36,7 +29,9 @@ const OptionsList = props => {
   return (
     <List>
       {springs.map((spring, i) => (
-        <Li key={i} onClick={() => dispatch(MENU_ACTIONS[i]())} style={spring}>{props.listItems[i].text}</Li>
+        <Li key={i} onClick={() => dispatch(props.listItems[i].action())} style={spring}>
+					{props.listItems[i].text}
+				</Li>
       ))}
     </List>
   );

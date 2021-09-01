@@ -1,9 +1,11 @@
+import { affectPlayerTemperature } from "../redux/playerSlice";
+
 const g = (name, action) => ({ name, action });
 
 const itemActions = {
 	//Consumables
   handwarmers: [
-    g('Consume', () => console.log('oi'))
+    g('Consume', () => affectPlayerTemperature({ temperature: 10 }))
   ],
 	//Tools
   //Weapons

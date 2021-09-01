@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
-import { dropItem, equipItem, unequipItem } from '../../redux/playerSlice';
+import { dropItem, equipItem, handleConsumeItem, unequipItem } from '../../redux/playerSlice';
 import ItemActions from '../../world/ItemActions';
 import { getTheme } from '../../ui/themes';
 import { getItemDescription, isEquipable } from '../../world/Items';
@@ -55,7 +55,14 @@ const getBtns = (item, localeName, dispatch) => {
   const itemActions = ItemActions[item.name];
   if(itemActions) {
     itemActions.forEach(itemAction => {
-      addBtn(itemAction.name, itemAction.action)
+			if(itemAction.name === 'Consume') {
+				addBtn(itemAction.name, () => handleConsumeItem({
+					entityId: item.entityId,
+					itemName: item.name
+				}));
+			} else {
+				addBtn(itemAction.name, itemAction.action)
+			}
     });
   }
   addBtn('Drop', () => dropItem({ item, localeName }));
@@ -63,13 +70,11 @@ const getBtns = (item, localeName, dispatch) => {
 };
 
 const InventoryItemBtns = props => {
-  const state = useSelector(state => ({
-    locale: state.player.locale,
-    region: state.player.region
-  }));
-  const theme = getTheme(state.region);
+	const locale = useSelector(state => state.player.locale);
+	const region = useSelector(state => state.player.region);
+  const theme = getTheme(region);
 	const dispatch = useDispatch();
-	const btns = getBtns(props.item, state.locale, dispatch);
+	const btns = getBtns(props.item, locale, dispatch);
   const [spring, api] = useSpring(() => ({ opacity: 0, y: -8 }));
   React.useEffect(() => api.start({ opacity: 1, y: 0 }));
   return (

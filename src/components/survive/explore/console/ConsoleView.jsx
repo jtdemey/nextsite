@@ -14,12 +14,18 @@ const View = styled(animated.div)`
 `;
 
 const ConsoleView = props => {
+	const inputRef = React.useRef(null);
+	React.useEffect(() => {
+		if(props.active) {
+			inputRef.current.focus();
+		}
+	}, [props.active]);
   const [spring, api] = useSpring(() => ({ opacity: 0, y: 10 }));
   React.useEffect(() => api.start({ opacity: props.active ? 1 : 0, y: props.active ? 0 : 10 }));
   return (
     <View style={{ display: props.active ? 'block' : 'none', ...spring }}>
       <ConsolePane />
-      <CommandLine />
+      <CommandLine inputRef={inputRef} />
     </View>
   );
 };

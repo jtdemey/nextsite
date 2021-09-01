@@ -1,15 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
-import { appendLine, submitExploreCommand } from '../../redux/gameSlice';
+import { submitExploreCommand } from '../../redux/gameSlice';
 
 const handleChange = (e, setTextVal) => {
   setTextVal(e.target.value);
 };
 
 const handleKeyDown = (e, dispatch, textVal, setTextVal) => {
-  if(e.keyCode === 13) {  //Enter
+  if (e.keyCode === 13) {
+    //Enter
     dispatch(submitExploreCommand(textVal));
     setTextVal('');
   }
@@ -33,14 +35,26 @@ const Input = styled(animated.input)`
   }
 `;
 
-const CommandLine = () => {
+const CommandLine = props => {
   const [textVal, setTextVal] = React.useState('');
   const [spring, api] = useSpring(() => ({ opacity: 0, y: 10 }));
   React.useEffect(() => api.start({ opacity: 1, y: 0 }));
   const dispatch = useDispatch();
   return (
-    <Input type="text" placeholder=">>" onChange={e => handleChange(e, setTextVal)} onKeyDown={e => handleKeyDown(e, dispatch, textVal, setTextVal)} style={spring} value={textVal} />
+    <Input
+      type="text"
+      placeholder=">>"
+      onChange={e => handleChange(e, setTextVal)}
+      onKeyDown={e => handleKeyDown(e, dispatch, textVal, setTextVal)}
+			ref={props.inputRef}
+      style={spring}
+      value={textVal}
+    />
   );
+};
+
+CommandLine.propTypes = {
+  inputRef: PropTypes.object
 };
 
 export default CommandLine;

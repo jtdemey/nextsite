@@ -24,7 +24,8 @@ export const GAME_STATES = {
   PAUSEMENU:    3,
   OPTIONSMENU:  4,
   DIALOGUE:     5,
-  CINEMATIC:    6
+  CINEMATIC:    6,
+	DEATH:				7
 };
 
 export const GAME_PANEL_VIEWS = {

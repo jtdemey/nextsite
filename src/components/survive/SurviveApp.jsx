@@ -14,6 +14,8 @@ $dim-gray: #706c6fff;
 $black-coffee: #443c41ff;
 */
 
+let gameClockInterval = undefined;
+
 const App = styled.div`
   position: fixed;
   top: 0;
@@ -26,9 +28,14 @@ const App = styled.div`
 const SurviveApp = () => {
   const theme = getTheme(useSelector(state => state.player.region));
   const dispatch = useDispatch();
-  React.useEffect(() => setInterval(() => {
-    dispatch(gameTick());
-  }, 500), []);
+  React.useEffect(() => {
+		if(gameClockInterval) {
+			clearInterval(gameClockInterval);
+		}
+		gameClockInterval = setInterval(() => {
+			dispatch(gameTick());
+		}, 500);
+	}, []);
   return (
     <App style={{background: theme.base1}}>
       <ViewRouter />

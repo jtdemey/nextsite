@@ -23,11 +23,13 @@ export const playerSlice = createSlice({
     inCombat: false,
     lastCombat: 0,
     currentEnemy: undefined,
-    items: [ Factory.createItem('handwarmers', 1) ],
+    items: [Factory.createItem('handwarmers', 1)],
     equipped: [],
-    region: REGIONS.FOREST 
+    region: REGIONS.FOREST
   },
   reducers: {
+    handleConsumeItem: () => {},
+    handleEquipEntity: () => {},
     handleExamineEntity: () => {},
     handleExamineLocale: () => {},
     handleExitLocale: () => {},
@@ -35,23 +37,45 @@ export const playerSlice = createSlice({
       state.locale = action.payload;
     },
     dropItem: (state, action) => {
-      if(action.payload.item.amount > 1) {
+      if (action.payload.item.amount > 1) {
         state.items.forEach(item => {
-          if(item.entityId === action.payload.item.entityId) {
+          if (item.entityId === action.payload.item.entityId) {
             item.amount -= 1;
           }
         });
         return;
       }
-      state.items = state.items.filter(item => item.entityId !== action.payload.item.entityId);
+      state.items = state.items.filter(
+        item => item.entityId !== action.payload.item.entityId
+      );
     },
     equipItem: (state, action) => {
       state.equipped = state.equipped.concat([action.payload.entityId]);
     },
+    affectPlayerTemperature: (state, action) => {
+      state.temperature = state.temperature + action.payload.temperature;
+    },
+    removeItem: (state, action) => {
+      state.items.forEach(item => {
+        if (item.entityId === action.payload.entityId) {
+          if (item.amount > 1) {
+            item.amount -= 1;
+          } else {
+            state.items = state.items.filter(i => i.entityId !== action.payload.entityId);
+          }
+        }
+      });
+    },
+    setPlayerTemperature: (state, action) => {
+      state.temperature = action.payload.temperature;
+    },
     takeItem: (state, action) => {
-      if(isStackable(action.payload.item.name) && state.items.some(item => item.name === action.payload.item.name)) {
+      if (
+        isStackable(action.payload.item.name) &&
+        state.items.some(item => item.name === action.payload.item.name)
+      ) {
         state.items.forEach(item => {
-          if(item.name === action.payload.item.name) {
+          if (item.name === action.payload.item.name) {
             item.amount += action.payload.item.amount;
             return;
           }
@@ -67,13 +91,26 @@ export const playerSlice = createSlice({
   extraReducers: {
     'game/saveGame': state => {
       const clone = {};
-      Object.keys(state).forEach(k => clone[k] = state[k]);
+      Object.keys(state).forEach(k => (clone[k] = state[k]));
       window.localStorage['JTD_SURVIVE_PS_SAVE'] = clone;
     }
   }
 });
 
-export const { changeLocale, dropItem, equipItem, handleExamineLocale,
-  handleExamineEntity, handleExitLocale, takeItem, unequipItem } = playerSlice.actions;
+export const {
+  changeLocale,
+  dropItem,
+  equipItem,
+  handleConsumeItem,
+  handleExamineLocale,
+  handleEquipEntity,
+  handleExamineEntity,
+  handleExitLocale,
+  affectPlayerTemperature,
+  removeItem,
+  setPlayerTemperature,
+  takeItem,
+  unequipItem
+} = playerSlice.actions;
 
 export default playerSlice.reducer;
