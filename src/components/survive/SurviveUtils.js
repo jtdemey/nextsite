@@ -42,6 +42,17 @@ export const createConsoleLine = (index, text, color) => ({
 
 export const delay = duration => new Promise(resolve => setTimeout(resolve, duration));
 
+export const formatTime = (gt, includeWeekday = false) => {
+  const s = gt.split(' ');
+  const d = s[0] === 'Sat' ? `${s[0]}urday ` : `${s[0]}day `;
+  const pa = s[0] === 'Sat' ? 'PM' : 'AM';
+  let t = s[4];
+  if(t[0] == '0') {
+    t = t.slice(1, t.length);
+  }
+  return includeWeekday ? d + t : `${t} ${pa}`;
+};
+
 export const getCelsiusFromTemperature = temperature => {
 	const fah = TEMPERATURE_AMOUNTS_F[temperature] || 0;
 	return Math.round((fah - 32) * (5 / 9) * 10) / 10;

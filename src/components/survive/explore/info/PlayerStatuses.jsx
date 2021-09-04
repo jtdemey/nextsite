@@ -66,7 +66,7 @@ const getStatusText = (stat, amount) => {
     ]
   };
   const statusText = statusTexts[stat].filter(x => amount >= x.min && amount <= x.max)[0];
-  return statusText.text;
+  return statusText === undefined ? '' : statusText.text;
 };
 
 const getAmountColor = stat => {

@@ -34,3 +34,14 @@ export const GAME_PANEL_VIEWS = {
   MAP:        2,
   INFO:       3
 };
+
+export const PLAYER_EFFECTS = {
+	BLEEDING:				0,
+	DELUSIONAL:			1,
+	IRRATIONAL:			2,
+	HEAT_EXHAUSTED:	3,
+	SHIVERING:			4,
+	FREEZING:				5,
+	EXHAUSTED:			6,
+	IMMOBILE:				7
+};

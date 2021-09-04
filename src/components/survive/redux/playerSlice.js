@@ -8,16 +8,10 @@ export const playerSlice = createSlice({
   initialState: {
     health: 100, //100-75: healthy, 74-50: injured, 49-25: wounded, 24-10: impaired, 9-1: disabled, 0: dead
     sanity: 100, //100-75: sane, 74-50: afraid, 49-25: panicked, 24-10: delusional, 9-1: insane, 0: irrational
-    isDelusional: false,
-    isIrrational: false,
     temperature: 100, //150-125: heat exhausted, 124-101: overheated, 100-75: normal, 74-50: chilly, 49-25: cold, 24-10: shivering, 9-1: freezing, 0: game over
-    isHeatExhausted: false,
-    isShivering: false,
-    isFreezing: false,
     energy: 100, //100-75: spry, 74-50: calm, 49-25: tired, 24-10: fatigued, 9-1: exhausted, 0: immobile
-    isExhausted: false,
-    isImmobile: false,
     isExiting: false,
+		effectFlags: [],
     locale: 'car',
     lastLocale: undefined,
     inCombat: false,
@@ -29,10 +23,15 @@ export const playerSlice = createSlice({
   },
   reducers: {
     handleConsumeItem: () => {},
+    handleDeath: () => {},
     handleEquipEntity: () => {},
     handleExamineEntity: () => {},
     handleExamineLocale: () => {},
     handleExitLocale: () => {},
+    affectPlayerTemperature: (state, action) => {
+			const newTemp = state.temperature + action.payload.temperature;
+      state.temperature = newTemp < 0 ? 0 : newTemp;
+    },
     changeLocale: (state, action) => {
       state.locale = action.payload;
     },
@@ -52,9 +51,9 @@ export const playerSlice = createSlice({
     equipItem: (state, action) => {
       state.equipped = state.equipped.concat([action.payload.entityId]);
     },
-    affectPlayerTemperature: (state, action) => {
-      state.temperature = state.temperature + action.payload.temperature;
-    },
+		hurt: (state, action) => {
+			state.health -= action.payload.damage;
+		},
     removeItem: (state, action) => {
       state.items.forEach(item => {
         if (item.entityId === action.payload.entityId) {
@@ -102,10 +101,12 @@ export const {
   dropItem,
   equipItem,
   handleConsumeItem,
+	handleDeath,
   handleExamineLocale,
   handleEquipEntity,
   handleExamineEntity,
   handleExitLocale,
+	hurt,
   affectPlayerTemperature,
   removeItem,
   setPlayerTemperature,
