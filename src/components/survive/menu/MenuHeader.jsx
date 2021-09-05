@@ -8,7 +8,7 @@ const Header = styled(animated.h2)`
   padding: 3rem;
   color: #f5f5f5;
   font-family: 'DM Serif Display', serif;
-  font-size: 3rem;
+  font-size: 2.5rem;
   opacity: 1;
 `;
 

@@ -1,6 +1,7 @@
 import { call, delay, put, select } from 'redux-saga/effects';
 import { EVENT_TRIGGERS, executeWorldEvents } from '../../world/WorldEvents';
-import { appendLine } from '../gameSlice';
+import { GAME_STATES } from '../gameConstants';
+import { appendLine, setGameState } from '../gameSlice';
 import { changeLocale } from '../playerSlice';
 
 export function* moveSaga(action) {
@@ -19,6 +20,9 @@ export function* moveSaga(action) {
     const destination = yield select(state => state.world[exit.destination])
     yield put(appendLine({ text: destination.enterPhrase || `You enter the location.` }));
 		yield call(executeWorldEvents, destination.name, EVENT_TRIGGERS.ON_ENTER);
+		if(destination.enemies && destination.enemies.length > 0) {
+			yield put(setGameState(GAME_STATES.COMBAT));
+		}
   } catch(err) {
     console.error(err);
   }

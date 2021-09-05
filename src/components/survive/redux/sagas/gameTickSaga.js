@@ -31,9 +31,8 @@ function* playerTick() {
 			yield put(handleDeath());
 		}
 		if(playerData.temperature < 1) {
-			
+			yield put(hurt({ damage: 1 }));
 		}
-		yield put(hurt({ damage: 1 }));
   } catch(err) {
     console.error(err);
   }

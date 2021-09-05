@@ -6,6 +6,7 @@ import GameView from './explore/GameView';
 import MainMenuView from './menu/MainMenuView';
 import OptionsView from './menu/OptionsView';
 import CinematicView from './cinematics/CinematicView';
+import CombatView from './combat/CombatView';
 import DeathView from './menu/DeathView';
 
 const Container = styled.div`
@@ -14,15 +15,28 @@ const Container = styled.div`
   overflow: hidden;
 `;
 
+const getView = gameState => {
+	switch(gameState) {
+		case GAME_STATES.CINEMATIC:
+			return <CinematicView active={true} />;
+		case GAME_STATES.COMBAT:
+			return <CombatView active={true} />;
+		case GAME_STATES.DEATH:
+			return <DeathView active={true} />;
+		case GAME_STATES.EXPLORE:
+			return <GameView active={true} />;
+		case GAME_STATES.MAINMENU:
+			return <MainMenuView active={true} />;
+		case GAME_STATES.OPTIONSMENU:
+			return <OptionsView active={true} />;
+	}
+};
+
 const ViewRouter = () => {
   const view = useSelector(state => state.game.gameState);
   return (
     <Container>
-      <MainMenuView active={view === GAME_STATES.MAINMENU} />
-      <GameView active={view === GAME_STATES.EXPLORE} />
-      <OptionsView active={view === GAME_STATES.OPTIONSMENU} />
-      <CinematicView active={view === GAME_STATES.CINEMATIC} />
-      <DeathView active={view === GAME_STATES.DEATH} />
+			{getView(view)}
     </Container>
   );
 };
