@@ -3,6 +3,7 @@ import { EVENT_TRIGGERS, executeWorldEvents } from '../../world/WorldEvents';
 import { GAME_STATES } from '../gameConstants';
 import { appendLine, setGameState } from '../gameSlice';
 import { changeLocale } from '../playerSlice';
+import { spawnEnemies } from '../worldSlice';
 
 export function* moveSaga(action) {
   try {
@@ -17,10 +18,11 @@ export function* moveSaga(action) {
     yield put(appendLine({ text: exit.exitPhrase || locale.exitPhrase || `You trudge onwards.` }));
     yield delay(exit.duration);
     yield put(changeLocale(exit.destination));
-    const destination = yield select(state => state.world[exit.destination])
+    const destination = yield select(state => state.world[exit.destination]);
     yield put(appendLine({ text: destination.enterPhrase || `You enter the location.` }));
 		yield call(executeWorldEvents, destination.name, EVENT_TRIGGERS.ON_ENTER);
-		if(destination.enemies && destination.enemies.length > 0) {
+		if(destination.spawns && destination.spawns.length > 0) {
+			yield put(spawnEnemies({ locale: destination.name }));
 			yield put(setGameState(GAME_STATES.COMBAT));
 		}
   } catch(err) {

@@ -11,6 +11,7 @@ const Container = styled.div`
   align-items: center;
   font-family: 'DM Serif Display', serif;
   font-size: 1.4rem;
+	padding-right: 0.2rem;
 	justify-content: center;
 	text-align: center;
 `;

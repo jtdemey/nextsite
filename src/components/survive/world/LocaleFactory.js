@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
 import { CONTAINER_STATES } from "../redux/gameConstants";
+import creatureData from "./Creatures";
 import ItemData from './Items';
 import { TEMPERATURES, VISIBILITIES } from "./LocaleConstants";
 
@@ -17,6 +18,7 @@ export const createLocale = (name, display, x, y, z, overrides) => Object.assign
   features: [],
   items: [],
   loot: [],
+	spawns: [],
   visits: 0,
   temperature: TEMPERATURES.NORMAL,
   visibility: VISIBILITIES.NORMAL
@@ -51,14 +53,11 @@ export const createFeature = (name, visibilityThreshold, description) => ({
   description
 });
 
-export const createItem = (name, amount) => {
-  const meta = ItemData[name];
-  return {
-    entityId: nanoid(),
-    amount,
-    name
-  };
-};
+export const createItem = (name, amount) => ({
+	entityId: nanoid(),
+	amount,
+	name
+});
 
 export const createLoot = (probability, name, amounts) => ({
   probability,
@@ -66,7 +65,7 @@ export const createLoot = (probability, name, amounts) => ({
   amounts
 });
 
-export const createEnemy = (name, probability) => ({
+export const createSpawn = (name, probability) => ({
   name,
   probability
 });

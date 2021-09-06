@@ -22,7 +22,7 @@ const SvgDiv = styled.div`
   svg {
     position: absolute;
     top: 0.69rem;
-    width: 1rem;
+    width: 16px;
   }
 `;
 

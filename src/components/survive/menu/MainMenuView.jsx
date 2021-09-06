@@ -17,8 +17,8 @@ const View = styled(animated.div)`
   left: 0;
   width: 100%;
   height: 100%;
-	background-image: url("survive/crow_transparent.png");
-	background-position: 50% 10rem;
+	background-image: url("survive/crow.webp");
+	background-position: 50% 8rem;
 	background-repeat: no-repeat;
 	background-size: cover;
 	@media (min-width: 836px) {

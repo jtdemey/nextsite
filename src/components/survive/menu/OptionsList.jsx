@@ -25,7 +25,7 @@ const Li = styled(animated.li)`
 const OptionsList = props => {
   const dispatch = useDispatch();
   const [springs, api] = useSprings(props.listItems.length, i => ({ opacity: 0, x: 80 }));
-  React.useEffect(() => api.start(i => ({ delay: (i * 300) + 800, opacity: 1, x: 0 })), []);
+  React.useEffect(() => api.start(i => ({ delay: (i * 300) + 100, opacity: 1, x: 0 })), []);
   return (
     <List>
       {springs.map((spring, i) => (

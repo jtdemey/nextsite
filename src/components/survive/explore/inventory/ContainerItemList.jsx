@@ -41,7 +41,7 @@ const ContainerItemList = props => {
         key={props.container.containerId}
         clickFunc={() => props.containerClickFunc(props.container)}
         rgb="60, 60, 60"
-        subSvg={<FontAwesomeIcon icon={getContainerSvgIcon(props.container.containerState)} size="2x" />}
+        subSvg={<FontAwesomeIcon icon={getContainerSvgIcon(props.container.containerState)} size="1x" />}
         subText={props.container.containerState !== CONTAINER_STATES.UNKNOWN && props.container.items.length < 1 ? '(empty)' : ''}
         text={props.container.name} />
       <animated.div style={{ ...spring }}>

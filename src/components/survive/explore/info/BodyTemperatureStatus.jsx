@@ -14,9 +14,10 @@ const Container = styled.div`
 const Label = styled.span`
 	color: #fff;
   font-family: 'DM Serif Display', serif;
-  font-size: 1.05rem;
+  font-size: 1rem;
 	margin: 0.1rem 0;
-	padding-left: 0.5rem;
+	padding: 0 0.5rem;
+	white-space: nowrap;
 `;
 
 const TemperatureBar = styled.div`
@@ -40,7 +41,8 @@ const BodyTemperatureStatus = () => {
     <Container style={{ background: theme.base3 }}>
 			<Label>Body Temperature </Label>
 			<TemperatureBar style={{
-				backgroundImage: `linear-gradient(to right, ${COLD_BLUE}, ${WARM_ORANGE})`
+				backgroundImage: `linear-gradient(to right, ${COLD_BLUE}, ${WARM_ORANGE})`,
+				width: `${playerTemperature > 100 ? 100 : playerTemperature}%`
 			}} />
 			<Amount style={{
 				color: playerTemperature > 49 ? WARM_ORANGE : COLD_BLUE

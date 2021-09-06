@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
-import { getMolassesSpring } from '../ui/springs';
+import { getRunnySpring } from '../ui/springs';
 
 const Indicator = styled.div`
   width: 24px;
@@ -20,7 +20,7 @@ const Fill = styled(animated.div)`
 
 const StatusIndicator = props => {
   const [spring, api] = useSpring(() =>
-    getMolassesSpring({ background: props.color, h: 0 })
+    getRunnySpring({ background: props.color, h: 0 })
   );
   React.useEffect(() =>
     api.start({ background: props.color, h: props.amount })

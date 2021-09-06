@@ -33,6 +33,9 @@ export const worldSlice = createSlice({
     },
 		setEnterPhrase: (state, action) => {
       state[action.payload.localeName].enterPhrase = action.payload.enterPhrase;
+		},
+		spawnEnemies: (state, action) => {
+
 		}
   },
   extraReducers: {
@@ -57,6 +60,10 @@ export const worldSlice = createSlice({
   }
 });
 
-export const { openContainer, setEnterPhrase } = worldSlice.actions;
+export const {
+	openContainer,
+	setEnterPhrase,
+	spawnEnemies
+} = worldSlice.actions;
 
 export default worldSlice.reducer;

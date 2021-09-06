@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { getPlayerStats } from '../../redux/playerSelectors';
+import { getPlayerStats } from '../../redux/selectors/playerSelectors';
 import { getTheme } from '../../ui/themes';
 
 const Container = styled.div`

@@ -39,6 +39,9 @@ const forestLocales = [
     items: [
       F.createItem('handwarmers', 1)
     ],
+		spawn: [
+			F.createSpawn('wolf', 1)
+		],
     temperature: TEMPERATURES.COLD
   }),
 

@@ -65,3 +65,11 @@ export const rollLoot = loot => {
   });
   return items;
 };
+
+export const spawnEnemies = spawns => {
+	spawns.forEach(spawn => {
+
+
+
+	});
+};

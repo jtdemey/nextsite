@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import * as Factory from '../world/LocaleFactory';
 import { REGIONS } from '../world/LocaleConstants';
 import { isStackable } from '../world/Items';
+import { between } from '../SurviveUtils';
 
 export const playerSlice = createSlice({
   name: 'player',
@@ -53,6 +54,10 @@ export const playerSlice = createSlice({
     },
 		hurt: (state, action) => {
 			state.health -= action.payload.damage;
+		},
+		hurtBetween: (state, action) => {
+			const dmg = between(action.payload.min, action.payload.max);
+			state.health -= dmg;
 		},
     removeItem: (state, action) => {
       state.items.forEach(item => {
@@ -107,6 +112,7 @@ export const {
   handleExamineEntity,
   handleExitLocale,
 	hurt,
+	hurtBetween,
   affectPlayerTemperature,
   removeItem,
   setPlayerTemperature,

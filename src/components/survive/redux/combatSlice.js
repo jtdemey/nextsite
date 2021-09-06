@@ -8,7 +8,9 @@ export const combatSlice = createSlice({
     currentEnemy: undefined
   },
   reducers: {
+		setCurrentEnemy: (state, action) => {
 
+		}
   },
   extraReducers: {
     'game/saveGame': state => {
