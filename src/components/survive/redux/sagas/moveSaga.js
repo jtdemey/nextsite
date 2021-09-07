@@ -22,9 +22,17 @@ export function* moveSaga(action) {
     yield put(appendLine({ text: destination.enterPhrase || `You enter the location.` }));
 		yield call(executeWorldEvents, destination.name, EVENT_TRIGGERS.ON_ENTER);
 		if(destination.spawns && destination.spawns.length > 0) {
-			yield put(spawnEnemies({ locale: destination.name }));
+			yield put(spawnEnemies({
+				localeName: destination.name,
+				spawns: destination.spawns
+			}));
+		}
+		const enemies = yield select(state => state.world[exit.destination].enemies);
+		console.log(enemies)
+		if(enemies && enemies.length > 0) {
 			yield put(setGameState(GAME_STATES.COMBAT));
 		}
+
   } catch(err) {
     console.error(err);
   }

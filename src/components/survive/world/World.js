@@ -25,6 +25,17 @@ export const addItemToLocale = (state, localeName, item) => {
   locale.items = locale.items.concat([item]);
 };
 
+export const fluxTemperature = currentFlux => {
+	let flux = currentFlux;
+	const fluxChance = Math.random();
+	if(fluxChance > 0.5
+		&& !(currentFlux < -4 || currentFlux > 4)) {
+		const fluxAmt = fluxChance < 0.75 ? 1 : -1;
+		flux = flux + fluxAmt;
+	}
+	return flux;
+};
+
 export const getAffectedBodyTemperature = envTemp => {
 	let temperatureIndex = 4;
 	TEMPERATURE_AMOUNTS_F.forEach((temp, i) => {
@@ -35,15 +46,19 @@ export const getAffectedBodyTemperature = envTemp => {
 	return temperatureIndex - 4;
 };
 
-export const fluxTemperature = currentFlux => {
-	let flux = currentFlux;
-	const fluxChance = Math.random();
-	if(fluxChance > 0.5
-		&& !(currentFlux < -4 || currentFlux > 4)) {
-		const fluxAmt = fluxChance < 0.75 ? 1 : -1;
-		flux = flux + fluxAmt;
+export const getSpawnedEnemies = spawns => {
+	if(spawns.length < 1) return;
+	const enemies = [];
+	for(let i = 0; i < spawns.length; i++) {
+		if(spawns[i].probability < 1) {
+			const roll = Math.random();
+			if(roll < spawn.probability) {
+				continue;
+			}
+		}
+		enemies.push(Factory.createEnemy(spawns[i].name));
 	}
-	return flux;
+	return enemies;
 };
 
 export const removeItemFromLocale = (state, localeName, item) => {
@@ -64,12 +79,4 @@ export const rollLoot = loot => {
     items.push(Factory.createItem(goodie.name, amount));
   });
   return items;
-};
-
-export const spawnEnemies = spawns => {
-	spawns.forEach(spawn => {
-
-
-
-	});
 };

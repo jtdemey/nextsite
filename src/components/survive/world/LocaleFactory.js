@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
 import { CONTAINER_STATES } from "../redux/gameConstants";
+import { between } from "../SurviveUtils";
 import creatureData from "./Creatures";
 import ItemData from './Items';
 import { TEMPERATURES, VISIBILITIES } from "./LocaleConstants";
@@ -39,6 +40,20 @@ export const createContainer = (name, description, loot, lock = false) => ({
   loot,
   lock
 });
+
+export const createEnemy = name => {
+	const enemyData = creatureData[name];
+	const health = Array.isArray(health)
+		? between(enemyData.hp[0], enemyData.hp[1])
+		: enemyData.hp;
+	return {
+		entityId: nanoid(),
+		name,
+		health,
+		defense: enemyData.defense,
+		moves: enemyData.moves
+	};
+};
 
 export const createExit = (direction, destination, duration, exitPhrase) => ({
   direction,
