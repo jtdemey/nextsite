@@ -3,14 +3,14 @@ import { createSlice } from '@reduxjs/toolkit';
 export const combatSlice = createSlice({
   name: 'combat',
   initialState: {
-    inCombat: false,
-    lastCombat: 0,
+		combatText: [],
     currentEnemy: undefined
   },
   reducers: {
+		handleStartCombat: () => {},
 		setCurrentEnemy: (state, action) => {
-
-		}
+			state.currentEnemy = action.payload.entityId;
+		},
   },
   extraReducers: {
     'game/saveGame': state => {
@@ -21,6 +21,9 @@ export const combatSlice = createSlice({
   }
 });
 
-export const {} = combatSlice.actions;
+export const {
+	handleStartCombat,
+	setCurrentEnemy
+} = combatSlice.actions;
 
 export default combatSlice.reducer;

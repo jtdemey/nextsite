@@ -1,6 +1,18 @@
 import { takeEvery, takeLatest } from 'redux-saga/effects';
-import { gameTick, handleEndCinematic, submitExploreCommand } from '../gameSlice';
-import { handleConsumeItem, handleDeath, handleExamineEntity, handleExamineLocale, handleExitLocale } from '../playerSlice';
+import { handleStartCombat } from '../combatSlice';
+import {
+  gameTick,
+  handleEndCinematic,
+  submitExploreCommand
+} from '../gameSlice';
+import {
+  handleConsumeItem,
+  handleDeath,
+  handleExamineEntity,
+  handleExamineLocale,
+  handleExitLocale
+} from '../playerSlice';
+import { startCombatSaga } from './combat/startCombatSaga';
 import { consumeItemSaga } from './consumeItemSaga';
 import { deathSaga } from './deathSaga';
 import { endCinematicSaga } from './endCinematicSaga';
@@ -19,4 +31,5 @@ export function* watcherSaga() {
   yield takeLatest(handleDeath.type, deathSaga);
   yield takeLatest(handleExitLocale.type, moveSaga);
   yield takeLatest(handleEndCinematic.type, endCinematicSaga);
+  yield takeLatest(handleStartCombat.type, startCombatSaga);
 }

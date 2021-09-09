@@ -1,7 +1,7 @@
 import { call, delay, put, select } from 'redux-saga/effects';
 import { EVENT_TRIGGERS, executeWorldEvents } from '../../world/WorldEvents';
-import { GAME_STATES } from '../gameConstants';
-import { appendLine, setGameState } from '../gameSlice';
+import { handleStartCombat } from '../combatSlice';
+import { appendLine } from '../gameSlice';
 import { changeLocale } from '../playerSlice';
 import { spawnEnemies } from '../worldSlice';
 
@@ -28,11 +28,9 @@ export function* moveSaga(action) {
 			}));
 		}
 		const enemies = yield select(state => state.world[exit.destination].enemies);
-		console.log(enemies)
 		if(enemies && enemies.length > 0) {
-			yield put(setGameState(GAME_STATES.COMBAT));
+			yield put(handleStartCombat());
 		}
-
   } catch(err) {
     console.error(err);
   }

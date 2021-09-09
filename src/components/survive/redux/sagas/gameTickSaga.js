@@ -1,6 +1,7 @@
 import { put, select, spawn } from 'redux-saga/effects';
 import { getFahrenheitFromTemperature } from '../../SurviveUtils';
 import { getAffectedBodyTemperature, fluxTemperature } from '../../world/World';
+import { GAME_STATES } from '../gameConstants';
 import {
 	setEnvironmentTemperature,
 	setTemperatureFlux
@@ -24,13 +25,14 @@ export function* gameTickSaga() {
 function* playerTick() {
 	try {
 		const playerData = yield select(state => ({
+			gameState: state.game.gameState,
 			hp: state.player.health,
 			temperature: state.player.temperature
 		}));
 		if(playerData.hp < 1) {
 			yield put(handleDeath());
 		}
-		if(playerData.temperature < 1) {
+		if(playerData.temperature < 1 && playerData.gameState !== GAME_STATES.COMBAT) {
 			yield put(hurt({ damage: 1 }));
 		}
   } catch(err) {

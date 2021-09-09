@@ -35,9 +35,7 @@ export const worldSlice = createSlice({
       state[action.payload.localeName].enterPhrase = action.payload.enterPhrase;
 		},
 		spawnEnemies: (state, action) => {
-			console.log(action.payload)
 			const enemies = getSpawnedEnemies(action.payload.spawns);
-			console.log(enemies)
 			state[action.payload.localeName].enemies = enemies;
 		}
   },

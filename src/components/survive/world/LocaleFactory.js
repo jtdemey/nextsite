@@ -43,14 +43,16 @@ export const createContainer = (name, description, loot, lock = false) => ({
 
 export const createEnemy = name => {
 	const enemyData = creatureData[name];
-	const health = Array.isArray(health)
+	const health = Array.isArray(enemyData.hp)
 		? between(enemyData.hp[0], enemyData.hp[1])
 		: enemyData.hp;
 	return {
 		entityId: nanoid(),
 		name,
 		health,
+		cooldown: 0,
 		defense: enemyData.defense,
+		display: enemyData.display,
 		moves: enemyData.moves
 	};
 };

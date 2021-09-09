@@ -31,14 +31,14 @@ const getListItems = dispatch => ([
 	['Restart', () => window.location.reload() ],
 	['Load', () => false ],
 	['View Story', () => false ],
-	['Quit', () => window.close() ],
+	['Quit', () => window.close() ]
 ]);
 
 const DeathMenuList = () => {
   const dispatch = useDispatch();
 	const listItems = getListItems(dispatch);
   const [springs, api] = useSprings(listItems.length, i => ({ opacity: 0, x: 80 }));
-  React.useEffect(() => api.start(i => ({ delay: (i * 300) + 800, opacity: 1, x: 0 })), []);
+  React.useEffect(() => api.start(i => ({ delay: (i * 300) + 4000, opacity: 1, x: 0 })), []);
   return (
     <List>
       {springs.map((spring, i) => (
