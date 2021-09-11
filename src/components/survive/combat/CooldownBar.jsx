@@ -2,21 +2,37 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
-import { getSyrupySpring } from '../ui/springs';
+import { getIcySpring } from '../ui/springs';
+import CombatBar from './CombatBar';
+
+const Container = styled.div`
+	display: flex;
+	align-items: center;
+	padding: 0rem 0.25rem;
+`;
+
+const Label = styled.span`
+	padding-right: 0.1rem;
+	color: #130F04;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+`;
 
 const Bar = styled(animated.div)`
-  height: 1rem;
-  padding: 0.5rem;
+  height: 0.75rem;
+  margin: 0.25rem 0rem 0.35rem;
+	border-radius: 1rem 0 0 0.5rem;
 `;
 
 const CooldownBar = props => {
-  const [spring, api] = useSpring(() =>
-    getSyrupySpring({ width: '0%', background: '#333333' })
+  return (
+    <CombatBar
+      amount={100 - props.amount}
+      maxAmount={100}
+      color="#2d5986"
+      labelText="CD"
+    />
   );
-  React.useEffect(() =>
-    api.start({ width: `${100 - props.amount}%`, background: '#2d5986' })
-  );
-  return <Bar style={spring} />;
 };
 
 CooldownBar.propTypes = {

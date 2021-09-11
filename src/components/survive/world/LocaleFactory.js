@@ -50,6 +50,7 @@ export const createEnemy = name => {
 		entityId: nanoid(),
 		name,
 		health,
+		maxHealth: health,
 		cooldown: 0,
 		defense: enemyData.defense,
 		display: enemyData.display,

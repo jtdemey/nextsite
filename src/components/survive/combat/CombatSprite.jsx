@@ -5,11 +5,14 @@ import styled from 'styled-components';
 import { getMolassesSpring } from '../ui/springs';
 
 const Container = styled(animated.section)`
+	display: flex;
+	align-items: center;
+	justify-content: center;
   padding: 0.5rem;
 `;
 
 const Image = styled.img`
-	max-width: 50%;
+	max-width: 80%;
 	padding: 0.5rem;
 `;
 

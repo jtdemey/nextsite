@@ -6,41 +6,51 @@ import { getSyrupySpring } from '../ui/springs';
 import CombatHeader from './CombatHeader';
 import CooldownBar from './CooldownBar';
 import HealthBar from './HealthBar';
+import CombatStatBorder from './CombatStatBorder';
 
 const Container = styled.article`
-	position: relative;
-	width: 100%;
-	height: 100%;
+  position: relative;
+  width: 100%;
+  height: 100%;
 `;
 
 const Block = styled(animated.section)`
-	position: absolute;
-	top: 2rem;
-	left: 0rem;
-	padding: 1rem;
-	border-top: 1px solid #111;
-	border-bottom: 1px solid #111;
+  position: absolute;
+  top: 3rem;
+  width: 80%;
 `;
 
 const CombatStats = props => {
+  const alignmentStyle = props.alignRight
+    ? { right: '1rem' }
+    : { left: '1rem' };
   const [spring, api] = useSpring(() =>
     getSyrupySpring({ opacity: 0, y: -10 })
   );
   React.useEffect(() => api.start({ opacity: 1, y: 0 }));
-	return (
-		<Container>
-			<Block style={spring}>
-				<CombatHeader text={props.title} />
-				<HealthBar amount={props.health} />
-				<CooldownBar amount={props.cooldown} />
-			</Block>
-		</Container>
-	);
+  return (
+    <Container>
+      <Block
+        style={{
+          ...alignmentStyle,
+          ...spring
+        }}
+      >
+        <CombatStatBorder />
+        <CombatHeader text={props.title} />
+        <HealthBar amount={props.health} maxAmount={props.maxHealth} />
+        <CooldownBar amount={props.cooldown} />
+        <CombatStatBorder />
+      </Block>
+    </Container>
+  );
 };
 
 CombatStats.propTypes = {
+  alignRight: PropTypes.bool,
   title: PropTypes.string,
   health: PropTypes.number,
+  maxHealth: PropTypes.number,
   cooldown: PropTypes.number
 };
 

@@ -7,6 +7,15 @@ export const getButterySpring = props => ({
 	}
 });
 
+export const getIcySpring = props => ({
+	...props,
+	config: {
+		mass: 2,
+		tension: 420,
+		friction: 150 
+	}
+});
+
 export const getMolassesSpring = props => ({
 	...props,
 	config: {

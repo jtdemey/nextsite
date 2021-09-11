@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
 
-const Container = styled(animated.article)`
+const Container = styled.article`
   display: flex;
   flex-flow: column;
   width: 100%;
