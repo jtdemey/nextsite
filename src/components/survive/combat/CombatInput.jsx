@@ -7,11 +7,12 @@ import styled from 'styled-components';
 const Container = styled.div`
 	display: flex;
 	justify-content: center;
+	position: absolute;
+  bottom: 0px;
+	width: 100%;
 `;
 
 const Input = styled(animated.input)`
-  position: absolute;
-  bottom: 0px;
   width: 80%;
   height: 2rem;
   margin: 0 0 1rem;

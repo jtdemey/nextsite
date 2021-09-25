@@ -1,16 +1,34 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { CONSOLE_COLORS } from './gameConstants';
+import { createConsoleLine } from '../SurviveUtils';
 
 export const combatSlice = createSlice({
   name: 'combat',
   initialState: {
+		combatLineIndex: 0,
 		combatText: [],
-    currentEnemy: undefined
+    currentEnemy: undefined,
+		enemyCooldown: 0
   },
   reducers: {
+		handlePerformCombatMove: () => {},
 		handleStartCombat: () => {},
+		appendCombatLine: (state, action) => {
+      state.combatText = state.combatText.concat([
+        createConsoleLine(
+          state.combatLineIndex,
+          action.payload.text,
+          CONSOLE_COLORS.BLACK
+        )
+      ]);
+      state.combatLineIndex++;
+		},
 		setCurrentEnemy: (state, action) => {
 			state.currentEnemy = action.payload.entityId;
 		},
+		setEnemyCooldown: (state, action) => {
+			state.enemyCooldown = action.payload.enemyCooldown;
+		}
   },
   extraReducers: {
     'game/saveGame': state => {
@@ -22,8 +40,11 @@ export const combatSlice = createSlice({
 });
 
 export const {
+	appendCombatLine,
+	handlePerformCombatMove,
 	handleStartCombat,
-	setCurrentEnemy
+	setCurrentEnemy,
+	setEnemyCooldown
 } = combatSlice.actions;
 
 export default combatSlice.reducer;

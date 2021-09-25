@@ -1,10 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
 import ConsoleOutput from './ConsoleOutput';
 
-const Pane = styled(animated.div)`
+const Pane = styled.div`
   position: relative;
   top: 0;
   left: 0;

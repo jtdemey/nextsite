@@ -62,6 +62,10 @@ export const getFahrenheitFromTemperature = temperature => TEMPERATURE_AMOUNTS_F
 
 export const getItemAmountSpan = amount => amount > 1 ? `(${amount})` : '';
 
+export const getRandomFrom = value => isArray(value)
+	? value[Math.floor(Math.random() * value.length)]
+	: value;
+
 export const getTimeFromTick = tick => {
   const s = new Date(1987, 11, 12, 9, 44, 0, 0);
   s.setSeconds((1 * s.getSeconds()) + Math.floor(tick / 2));

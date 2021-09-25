@@ -1,31 +1,61 @@
 import React from 'react';
-import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
+import CombatConsoleLine from './CombatConsoleLine';
 
-const Container = styled.article`
-	padding: 1rem;
+const Container = styled.div`
+  position: relative;
+	margin-top: auto;
 `;
 
-const Line = styled(animated.pre)`
-  min-height: 26px;
-  margin: 0;
-  padding: 0.1rem 0.5rem 0;
-  font-family: 'Newsreader', serif;
-  font-size: 1rem;
-	line-height: 1.25rem;
-	white-space: inherit;
+const Pane = styled.section`
+  position: relative;
+  bottom: 0;
+  left: 0;
+  height: 14rem;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+`;
+
+const Output = styled.article`
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  justify-content: left;
+  text-align: left;
+  margin-top: calc(100% - 2rem);
+  padding-bottom: 2rem;
 `;
 
 const CombatConsole = () => {
-	const consoleLines = useSelector(state => state.combat.combatText);
+  const combatConsoleRef = React.useRef(null);
+  const consoleLineIndex = useSelector(state => state.combat.consoleLineIndex);
+  const combatText = useSelector(state => state.combat.combatText);
+  React.useEffect(() => {
+    if (combatConsoleRef.current) {
+      console.log(combatConsoleRef.current.scrollHeight);
+      combatConsoleRef.current.scrollTo(
+        0,
+        combatConsoleRef.current.scrollHeight
+      );
+    }
+  }, [combatText]);
   return (
-		<Container>
-			{consoleLines.map(line => (
-				<Line key={line.index}>{line.text}</Line>
-			))}
-		</Container>
-	);
+    <Container>
+      <Pane ref={combatConsoleRef}>
+        <Output>
+          {combatText.map(line => (
+            <CombatConsoleLine
+              key={line.index}
+              currentIndex={consoleLineIndex}
+              lineIndex={line.index}
+              text={line.text}
+            />
+          ))}
+        </Output>
+      </Pane>
+    </Container>
+  );
 };
 
 export default CombatConsole;

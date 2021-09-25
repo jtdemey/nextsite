@@ -1,6 +1,7 @@
 export const CONSOLE_COLORS = {
   WHITE: 0,
-  RED:   1
+  RED:   1,
+	BLACK: 2
 };
 
 export const CONTAINER_STATES = {

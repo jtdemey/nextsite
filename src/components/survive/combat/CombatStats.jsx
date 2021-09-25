@@ -18,6 +18,7 @@ const Block = styled(animated.section)`
   position: absolute;
   top: 3rem;
   width: 80%;
+	z-index: 1;
 `;
 
 const CombatStats = props => {
