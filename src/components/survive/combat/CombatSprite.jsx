@@ -15,6 +15,7 @@ const Image = styled.img`
 	max-height: 100%;
 	padding: 0 0.5rem;
 	margin: -20% 0;
+	transform: scale(1.25);
 	z-index: 1;
 `;
 

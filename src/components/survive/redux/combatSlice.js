@@ -8,10 +8,10 @@ export const combatSlice = createSlice({
 		combatLineIndex: 0,
 		combatText: [],
     currentEnemy: undefined,
-		enemyCooldown: 0
+		enemyCooldown: 0,
+		playerCooldown: 0
   },
   reducers: {
-		handlePerformCombatMove: () => {},
 		handleStartCombat: () => {},
 		appendCombatLine: (state, action) => {
       state.combatText = state.combatText.concat([
@@ -20,7 +20,7 @@ export const combatSlice = createSlice({
           action.payload.text,
           CONSOLE_COLORS.BLACK
         )
-      ]);
+      ]).filter(line => line.index < (state.combatLineIndex + 10));
       state.combatLineIndex++;
 		},
 		setCurrentEnemy: (state, action) => {
@@ -28,6 +28,9 @@ export const combatSlice = createSlice({
 		},
 		setEnemyCooldown: (state, action) => {
 			state.enemyCooldown = action.payload.enemyCooldown;
+		},
+		setPlayerCooldown: (state, action) => {
+			state.playerCooldown = action.payload.playerCooldown;
 		}
   },
   extraReducers: {
@@ -41,10 +44,10 @@ export const combatSlice = createSlice({
 
 export const {
 	appendCombatLine,
-	handlePerformCombatMove,
 	handleStartCombat,
 	setCurrentEnemy,
-	setEnemyCooldown
+	setEnemyCooldown,
+	setPlayerCooldown
 } = combatSlice.actions;
 
 export default combatSlice.reducer;

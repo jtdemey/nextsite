@@ -15,7 +15,7 @@ const getCombatStats = state =>
   JSON.stringify({
     health: state.player.health,
 		maxHealth: state.player.maxHealth,
-    cooldown: state.player.cooldown
+    cooldown: state.combat.playerCooldown
   });
 
 export const getPlayerCombatStats = createSelector([getCombatStats], stats =>

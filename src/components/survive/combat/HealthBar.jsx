@@ -8,6 +8,7 @@ const HealthBar = props => {
       amount={props.amount}
       maxAmount={props.maxAmount}
       color="#800000"
+			isIncremental={true}
       labelText="HP"
     />
   );

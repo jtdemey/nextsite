@@ -32,6 +32,7 @@ const SpriteArea = styled.div`
 
 const CombatView = props => {
   const currentEnemy = useSelector(state => getCurrentEnemy(state));
+	const enemyCooldown = useSelector(state => state.combat.enemyCooldown);
   const playerStats = useSelector(state => getPlayerCombatStats(state));
   const inputRef = React.useRef(null);
   React.useEffect(() => {
@@ -52,7 +53,7 @@ const CombatView = props => {
 						title={currentEnemy.display || '???'}
 						health={currentEnemy.health}
 						maxHealth={currentEnemy.maxHealth}
-						cooldown={currentEnemy.cooldown}
+						cooldown={enemyCooldown}
 					/>
 					<EnemySprite
 						imgSrc={`survive/creatures/${currentEnemy.name}.webp`}

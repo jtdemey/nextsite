@@ -29,11 +29,10 @@ const Output = styled.article`
 
 const CombatConsole = () => {
   const combatConsoleRef = React.useRef(null);
-  const consoleLineIndex = useSelector(state => state.combat.consoleLineIndex);
+  const consoleLineIndex = useSelector(state => state.combat.combatLineIndex);
   const combatText = useSelector(state => state.combat.combatText);
   React.useEffect(() => {
     if (combatConsoleRef.current) {
-      console.log(combatConsoleRef.current.scrollHeight);
       combatConsoleRef.current.scrollTo(
         0,
         combatConsoleRef.current.scrollHeight

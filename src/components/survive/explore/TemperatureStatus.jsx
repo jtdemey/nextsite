@@ -14,6 +14,7 @@ const Container = styled.div`
 	padding-right: 0.2rem;
 	justify-content: center;
 	text-align: center;
+	margin-right: 0.25rem;
 `;
 
 const TemperatureStatus = props => {

@@ -2,22 +2,21 @@ import * as F from './LocaleFactory';
 import { DIRECTIONS, TEMPERATURES, VISIBILITIES } from './LocaleConstants';
 
 const forestLocales = [
-
   F.createLocale('car', 'Car', 7, 0, 7, {
     enterPhrase: `You sit in the driver's seat.`,
-    examinePhrase: 'Your typically reliable Audi 5000CS Turbo Quattro provides meager solace from the bitter cold.',
+    examinePhrase:
+      'Your typically reliable Audi 5000CS Turbo Quattro provides meager solace from the bitter cold.',
     containers: [
-      F.createContainer('Glovebox', `It's modest glovebox; it seems unlocked.`, [
-        F.createLoot(1, 'handwarmers', 1),
-        F.createLoot(1, 'flashlight', 1)
-      ])
+      F.createContainer(
+        'Glovebox',
+        `It's modest glovebox; it seems unlocked.`,
+        [F.createLoot(1, 'handwarmers', 1), F.createLoot(1, 'flashlight', 1)]
+      )
     ],
     exits: [
       F.createExit(DIRECTIONS.OUTSIDE, 'mailbox', 1000, 'You exit the vehicle.')
     ],
-    items: [
-      F.createItem('handwarmers', 1)
-    ]
+    items: [F.createItem('handwarmers', 1)]
   }),
 
   F.createLocale('mailbox', 'Roadside', 7, 0, 7, {
@@ -28,35 +27,59 @@ const forestLocales = [
       F.createContainer('Car trunk', `The trunk to your sedan.`, [
         F.createLoot(1, 'crowbar', 1)
       ]),
-      F.createContainer('Mailbox', `There's a simple, dark green mailbox here at the cusp of a driveway.`, [
-        F.createLoot(1, 'welcome_note', 1)
-      ])
+      F.createContainer(
+        'Mailbox',
+        `There's a simple, dark green mailbox here at the cusp of a driveway.`,
+        [F.createLoot(1, 'welcome_note', 1)]
+      )
     ],
     exits: [
-      F.createExit(DIRECTIONS.SOUTH, 'farm_front_driveway', 1000, 'You march through the decrepit entrance to the driveway.'),
-      F.createExit(DIRECTIONS.INSIDE, 'car', 1500, 'You open the car door, duck, and step inside.')
+      F.createExit(
+        DIRECTIONS.SOUTH,
+        'farm_front_path',
+        1000,
+        'You march through the decrepit entrance to the driveway.'
+      ),
+      F.createExit(
+        DIRECTIONS.INSIDE,
+        'car',
+        1500,
+        'You open the car door, duck, and step inside.'
+      )
     ],
-    items: [
-      F.createItem('handwarmers', 1)
-    ],
-		spawns: [
-			F.createSpawn('wolf', 1)
-		],
+    items: [F.createItem('handwarmers', 1)],
+    spawns: [F.createSpawn('wolf', 1)],
     temperature: TEMPERATURES.COLD
   }),
 
-  F.createLocale('farm_front_driveway', 'Front Driveway', 7, 0, 6, {
+  F.createLocale('farm_front_path', 'Front Path', 7, 0, 6, {
     exits: [
-      F.createExit(DIRECTIONS.NORTH, 'mailbox', 1000, 'You exit the mouth of the driveway, arriving back at the main road.')
+      F.createExit(
+        DIRECTIONS.NORTH,
+        'mailbox',
+        1000,
+        'You exit the mouth of the driveway, arriving back at the main road.'
+      )
     ],
-    items: [
-      F.createItem('handwarmers', 1)
+    items: [F.createItem('handwarmers', 1)],
+    temperature: TEMPERATURES.COLD
+  }),
+
+  F.createLocale('farm_scrap_pile', 'Front Intersection', 7, 0, 6, {
+    exits: [
+      F.createExit(
+        DIRECTIONS.NORTH,
+        'farm_front_path',
+        1000,
+        'You exit the mouth of the driveway, arriving back at the main road.'
+      )
     ],
+    items: [F.createItem('handwarmers', 1)],
     temperature: TEMPERATURES.COLD
   })
 ];
 
 const forest = {};
-forestLocales.forEach(loc => forest[loc.name] = loc);
+forestLocales.forEach(loc => (forest[loc.name] = loc));
 
 export default forest;

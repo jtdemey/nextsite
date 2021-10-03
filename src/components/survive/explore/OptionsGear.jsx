@@ -10,6 +10,7 @@ const Button = styled.div`
   align-content: center;
   align-items: center;
   text-align: center;
+	margin: 0 0.25rem;
 `;
 
 const Image = styled.img`
