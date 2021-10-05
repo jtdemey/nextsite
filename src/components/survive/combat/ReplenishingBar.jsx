@@ -11,24 +11,22 @@ const Bar = styled(animated.div)`
 `;
 
 const getSpringConfig = props => ({
-	from: { background: '#333333', width: '0%' },
-	to: { background: props.color, width: '100%' },
-	config: {
-		duration: props.replenishTime * 500 
-	}
+  from: { background: '#333333', width: '0%' },
+  to: { background: props.color, width: '100%' },
+  config: {
+    duration: props.replenishTime * 500
+  }
 });
 
 const ReplenishingBar = props => {
   const [spring, api] = useSpring(() => getSpringConfig(props));
   React.useEffect(() => {
-		if(props.replenishTime < 1) {
-			return;
-		}
-		api.start(getSpringConfig(props));
+    if (props.replenishTime < 1) {
+      return;
+    }
+    api.start(getSpringConfig(props));
   }, [props.replenishTime]);
-  return (
-    <Bar style={spring} />
-  );
+  return <Bar style={spring} />;
 };
 
 ReplenishingBar.propTypes = {

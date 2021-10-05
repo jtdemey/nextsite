@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { getPlayerStats } from '../redux/selectors/playerSelectors';
 import StatusIndicator from './StatusIndicator';
 
 const Section = styled.section`
@@ -11,7 +12,7 @@ const Section = styled.section`
 `;
 
 const StatusIndicators = () => {
-  const stats = useSelector(state => ({ hp: state.player.health, sp: state.player.sanity, ep: state.player.energy }));
+  const stats = useSelector(state => getPlayerStats(state));
   return (
     <Section>
       <StatusIndicator amount={stats.ep} color="#2d5986" />

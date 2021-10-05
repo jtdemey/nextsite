@@ -7,7 +7,7 @@ import { getSyrupySpring } from '../ui/springs';
 const Line = styled(animated.pre)`
   min-height: 26px;
   margin: 0;
-  padding: 0.1rem 0.5rem 0;
+  padding: 0.1rem 0.75rem 0;
   font-family: 'Newsreader', serif;
   font-size: 1rem;
   line-height: 1.25rem;
