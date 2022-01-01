@@ -5,6 +5,10 @@ const parseAttack = (input, actions) => {
 
 };
 
+const parseSlap = (input, actions) => {
+
+};
+
 export const combatParse = raw => {
   const actions = [];
   const input = raw
@@ -21,6 +25,7 @@ export const combatParse = raw => {
 				case 'punch':
 					break;
 				case 'slap':
+					parseSlap(input, actions);
 					break;
 				case 'kick':
 					break;

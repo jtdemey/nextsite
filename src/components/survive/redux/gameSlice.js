@@ -34,6 +34,9 @@ export const gameSlice = createSlice({
   },
   reducers: {
     handleEndCinematic: () => {},
+    handleSubmitExploreCommand: (state, action) => {
+      state.lastInput = action.payload;
+    },
     appendLine: (state, action) => {
       state.consoleText = state.consoleText.concat([
         createConsoleLine(
@@ -93,9 +96,6 @@ export const gameSlice = createSlice({
       state.cinematicId = action.cinematicId;
       state.cinematicStartTick = state.tick;
     },
-    submitExploreCommand: (state, action) => {
-      state.lastInput = action.payload;
-    },
     toggleUsingCelsius: state => {
       state.usingCelsius = !state.usingCelsius;
     }
@@ -105,6 +105,7 @@ export const gameSlice = createSlice({
 
 export const {
   handleEndCinematic,
+  handleSubmitExploreCommand,
   appendLine,
   exitMenu,
   gameTick,
@@ -120,7 +121,6 @@ export const {
   showOptions,
   endCinematic,
   startCinematic,
-  submitExploreCommand,
   toggleUsingCelsius
 } = gameSlice.actions;
 

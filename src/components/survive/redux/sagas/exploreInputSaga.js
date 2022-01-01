@@ -1,7 +1,7 @@
 import { all, put } from 'redux-saga/effects';
 import { exploreParse } from '../../parser/ExploreParser';
 
-export function* inputSubmitSaga(action) {
+export function* exploreInputSaga(action) {
   try {
     const actions = exploreParse(action.payload);
     yield all(actions.map(act => put(act)));

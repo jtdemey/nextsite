@@ -11,7 +11,7 @@ const Bar = styled(animated.div)`
 `;
 
 const getSpringConfig = props => ({
-  from: { background: '#333333', width: '0%' },
+  from: { background: '#333333', width: '100%' },
   to: { background: props.color, width: '100%' },
   config: {
     duration: props.replenishTime * 500

@@ -12,12 +12,16 @@ const Section = styled.section`
 `;
 
 const StatusIndicators = () => {
-  const stats = useSelector(state => getPlayerStats(state));
+  const stats = useSelector(state => ({
+		ep: state.player.energy,
+		sp: state.player.sanity,
+		hp: state.player.health
+	}));
   return (
     <Section>
-      <StatusIndicator amount={stats.ep} color="#2d5986" />
-      <StatusIndicator amount={stats.sp} color="#602040" />
-      <StatusIndicator amount={stats.hp} color="#800000" />
+      <StatusIndicator amount={stats.ep} colors={['#19334d', '#2d5986']} />
+      <StatusIndicator amount={stats.sp} colors={['#391326', '#602040']} />
+      <StatusIndicator amount={stats.hp} colors={['#330000', '#800000']} />
     </Section>
   );
 };

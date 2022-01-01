@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
-import { submitExploreCommand } from '../../redux/gameSlice';
+import { handleSubmitExploreCommand } from '../../redux/gameSlice';
 
 const handleChange = (e, setTextVal) => {
   setTextVal(e.target.value);
@@ -12,7 +12,7 @@ const handleChange = (e, setTextVal) => {
 const handleKeyDown = (e, dispatch, textVal, setTextVal) => {
   if (e.keyCode === 13) {
     //Enter
-    dispatch(submitExploreCommand(textVal));
+    dispatch(handleSubmitExploreCommand(textVal));
     setTextVal('');
   }
 };

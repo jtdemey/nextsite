@@ -8,7 +8,6 @@ const Indicator = styled.div`
   width: 24px;
   height: 24px;
   margin: 0.25rem;
-  background: black;
   border-radius: 50%;
   overflow: hidden;
 `;
@@ -18,15 +17,17 @@ const Fill = styled(animated.div)`
   margin: 0px;
 `;
 
+const getRadialGradient = colors => `radial-gradient(${colors[1]}, ${colors[0]})`;
+
 const StatusIndicator = props => {
   const [spring, api] = useSpring(() =>
-    getRunnySpring({ background: props.color, h: 0 })
+    getRunnySpring({ background: getRadialGradient(props.colors), h: 0 })
   );
   React.useEffect(() =>
-    api.start({ background: props.color, h: props.amount })
+    api.start({ background: getRadialGradient(props.colors), h: props.amount })
   );
   return (
-    <Indicator style={{ border: `1px solid ${props.color}` }}>
+    <Indicator style={{ border: `1px solid ${props.colors[1]}` }}>
       <Fill
         style={{
           background: spring.background,
@@ -39,7 +40,7 @@ const StatusIndicator = props => {
 
 StatusIndicator.propTypes = {
   amount: PropTypes.number,
-  color: PropTypes.string
+  colors: PropTypes.array
 };
 
 export default StatusIndicator;

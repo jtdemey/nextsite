@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { animated, useSpring } from '@react-spring/web';
 import styled from 'styled-components';
+import { handleSubmitCombatInput } from '../redux/combatSlice';
 
 const Container = styled.div`
 	display: flex;
@@ -35,8 +36,7 @@ const handleChange = (e, setTextVal) => {
 
 const handleKeyDown = (e, dispatch, textVal, setTextVal) => {
   if (e.keyCode === 13) {
-    //Enter
-    //dispatch(submitExploreCommand(textVal));
+    dispatch(handleSubmitCombatInput(textVal));
     setTextVal('');
   }
 };
