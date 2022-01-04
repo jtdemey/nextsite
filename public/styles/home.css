@@ -115,7 +115,7 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: "";
+  content: '';
   content: none;
 }
 table {
@@ -424,7 +424,7 @@ html {
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
-  font-family: "Arial";
+  font-family: 'Arial';
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -442,7 +442,7 @@ canvas {
 }
 
 h1 {
-  font-family: "Ubuntu", sans-serif;
+  font-family: 'Ubuntu', sans-serif;
 }
 
 h4 {
@@ -455,7 +455,7 @@ h6 {
 }
 
 p {
-  font-family: "Vollkorn", serif;
+  font-family: 'Vollkorn', serif;
 }
 
 strong {
@@ -523,10 +523,15 @@ strong {
   background: linear-gradient(to right, white, #d9d9d9);
 }
 
+.banner-area > a, .banner-area > a:focus, .banner-area > a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
 .jd-logo {
   display: absolute;
-  margin-left: 0.5em;
-  margin-top: 0.3em;
+  margin-left: 0.5rem;
+  margin-top: 0.25rem;
   opacity: 0;
   -webkit-animation: fadein-now 0.5s ease-out 0s 1;
   -moz-animation: fadein-now 0.5s ease-out 0s 1;
@@ -538,7 +543,7 @@ strong {
 .jd-title {
   display: inline-block;
   margin-top: 0.5em;
-  font-family: "Abel", sans-serif;
+  font-family: 'Abel', sans-serif;
   font-size: 3em;
   overflow: hidden;
   white-space: nowrap;
@@ -577,7 +582,7 @@ strong {
 }
 
 .jd-subtitle {
-  font-family: "Abel", sans-serif;
+  font-family: 'Abel', sans-serif;
   font-size: 1.5em;
   display: flex;
   align-items: center;
@@ -639,7 +644,7 @@ strong {
   width: 100%;
   margin: auto;
   color: #fff;
-  font-family: "Abel", sans-serif;
+  font-family: 'Abel', sans-serif;
   font-size: 0.85em;
 }
 
@@ -677,6 +682,7 @@ strong {
 .nav-link {
   margin: 0;
   padding: 0;
+  text-decoration: none;
 }
 
 .navlist li {
@@ -688,7 +694,7 @@ strong {
   width: 86px;
   margin: 0;
   padding: 0;
-  font-family: "Abel", sans-serif;
+  font-family: 'Abel', sans-serif;
 }
 
 .nav-block:hover {
@@ -738,13 +744,13 @@ strong {
 .home-highlight {
   background-color: #4b4e6d;
 }
+.ncryptor-highlight {
+  background-color: #1d3021;
+}
 .imposter-highlight {
   background-color: #334152;
 }
-.pistolwhip-highlight {
-  background-color: #771c2a;
-}
-.survive-highlight {
+.roots-highlight {
   background-color: #451119;
 }
 
@@ -755,7 +761,7 @@ strong {
   background-color: #011936;
 }
 .contact-highlight {
-  background-color: #6b7f82;
+  background-color: #273F3A;
 }
 .doodles-highlight {
   background-color: #175873;
@@ -815,19 +821,22 @@ strong {
 }
 
 .project-content {
-	background: rgba(1, 1, 1, 0.25);
-	border: 0.25rem solid rgba(1, 1, 1, 0.1);
-	margin: 15vh 2rem 0;
-	padding: 2rem 0;
+  margin: 15vh 2rem 0;
+  padding: 2rem 0;
 }
 
 .last-content {
-	margin: 15vh 2rem 2rem;
+  margin: 15vh 2rem 2rem;
 }
 
 .content-header {
   padding-top: 3rem;
   font-size: 4rem;
+}
+
+.content-header-sm {
+  padding-top: 3rem;
+  font-size: 3rem;
 }
 
 .content-text {
@@ -837,6 +846,9 @@ strong {
   line-height: 1.5em;
   padding: 0 1em;
   font-size: 1em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .content-btns {
@@ -865,7 +877,7 @@ strong {
   height: 100%;
   margin: 0;
   padding-top: 0.4em;
-  font-family: "Vollkorn", serif;
+  font-family: 'Vollkorn', serif;
   font-size: 1.1em;
 }
 
@@ -922,15 +934,15 @@ strong {
   margin: -30px -30px 30px -30px;
 }
 
-.contact-form input[type="text"],
-.contact-form input[type="date"],
-.contact-form input[type="datetime"],
-.contact-form input[type="email"],
-.contact-form input[type="number"],
-.contact-form input[type="search"],
-.contact-form input[type="time"],
-.contact-form input[type="url"],
-.contact-form input[type="password"],
+.contact-form input[type='text'],
+.contact-form input[type='date'],
+.contact-form input[type='datetime'],
+.contact-form input[type='email'],
+.contact-form input[type='number'],
+.contact-form input[type='search'],
+.contact-form input[type='time'],
+.contact-form input[type='url'],
+.contact-form input[type='password'],
 .contact-form textarea,
 .contact-form select {
   box-sizing: border-box;
@@ -945,7 +957,7 @@ strong {
   background: transparent;
   margin-bottom: 10px;
   height: 45px;
-  font-family: "Ubuntu", sans-serif;
+  font-family: 'Ubuntu', sans-serif;
 }
 
 .contact-form textarea {
@@ -954,8 +966,8 @@ strong {
   overflow: hidden;
 }
 
-.contact-form input[type="button"],
-.contact-form input[type="submit"] {
+.contact-form input[type='button'],
+.contact-form input[type='submit'] {
   -moz-box-shadow: inset 0px 1px 0px 0px #45d6d6;
   -webkit-box-shadow: inset 0px 1px 0px 0px #45d6d6;
   box-shadow: inset 0px 1px 0px 0px #45d6d6;
@@ -964,15 +976,15 @@ strong {
   display: inline-block;
   cursor: pointer;
   color: #ffffff;
-  font-family: "Open Sans Condensed", sans-serif;
+  font-family: 'Open Sans Condensed', sans-serif;
   font-size: 14px;
   padding: 8px 18px;
   text-decoration: none;
   text-transform: uppercase;
 }
 
-.contact-form input[type="button"]:hover,
-.contact-form input[type="submit"]:hover {
+.contact-form input[type='button']:hover,
+.contact-form input[type='submit']:hover {
   background: linear-gradient(to bottom, #34caca 5%, #30c9c9 100%);
   background-color: #34caca;
 }
@@ -1007,14 +1019,14 @@ strong {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  padding: 1rem;
+  padding: 0 1rem 1rem;
   background: rgba(0, 0, 0, 0);
 }
 
 .doodle-card {
   height: 172px;
   flex: 0 1 96px;
-  margin: 1rem;
+  margin: 0 1rem 1rem;
   background: linear-gradient(#333, rgba(51, 51, 51, 0.7));
 }
 

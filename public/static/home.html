@@ -1,11 +1,13 @@
 <!DOCTYPE HTML>
 <html lang="en">
   <head>
-    <title>JTD // Projects</title>
+    <title>JT // Projects</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <link href="https://fonts.googleapis.com/css?family=Abel|Ubuntu|Vollkorn&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" media="screen" href="styles/home.css" title="Default">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
   </head>
   <noscript>
     <style type="text/css">
@@ -17,6 +19,7 @@
   <body>
     <div class="site-wrapper">
 
+      <a name="home"></a>
       <div class="header-container">
         <div class="banner-area">
           <img class="jd-logo" width=90 height=90 src="homepage/jdlogo1.svg"></img>
@@ -27,24 +30,24 @@
       <div class="mnav-container">
         <div class="mnav-area">
           <ul class="mnavlist">
-            <a class="nav-link" href="#navhome">
+            <a class="nav-link" href="#home">
               <li class="mnav-block">
-                <h5 class="mnav-title home-title">HOME</h5>
+                <h5 class="mnav-title">HOME</h5>
               </li>
             </a>
-            <a class="nav-link" href="#navimposter">
+            <a class="nav-link" href="#ncryptor">
               <li class="mnav-block">
-                <h5 class="mnav-title imposter-title">IMPOSTER</h5>
+                <h5 class="mnav-title">NCRYPTOR</h5>
               </li>
             </a>
-            <a class="nav-link" href="#navpistolwhip">
+            <a class="nav-link" href="#imposter">
               <li class="mnav-block">
-                <h5 class="mnav-title pistolwhip-title">CIVIL DAWN</h5>
+                <h5 class="mnav-title">IMPOSTER</h5>
               </li>
             </a>
-            <a class="nav-link" href="#navsurvive">
+            <a class="nav-link" href="#roots">
               <li class="mnav-block">
-                <h5 class="mnav-title survive-title">SURVIVE</h5>
+                <h5 class="mnav-title">ROOTS</h5>
               </li>
             </a>
           </ul>
@@ -55,35 +58,34 @@
         <div class="nav-area">
           <ul class="navlist">
             <div class="section-tab"></div>
-            <a class="nav-link" href="#navhome">
+            <a class="nav-link" href="#home">
               <li class="nav-block">
                 <div class="nav-highlight home-highlight"></div>
-                <h5 class="nav-title home-title">HOME</h5>
+                <h5 class="nav-title">HOME</h5>
               </li>
             </a>
-            <a class="nav-link" href="#navimposter">
+            <a class="nav-link" href="#ncryptor">
+              <li class="nav-block">
+                <div class="nav-highlight ncryptor-highlight"></div>
+                <h5 class="nav-title">NCRYPTOR</h5>
+              </li>
+            </a>
+            <a class="nav-link" href="#imposter">
               <li class="nav-block">
                 <div class="nav-highlight imposter-highlight"></div>
-                <h5 class="nav-title imposter-title">IMPOSTER</h5>
+                <h5 class="nav-title">IMPOSTER</h5>
               </li>
             </a>
-            <a class="nav-link" href="#navpistolwhip">
+            <a class="nav-link" href="#roots">
               <li class="nav-block">
-                <div class="nav-highlight pistolwhip-highlight"></div>
-                <h5 class="nav-title pistolwhip-title">CIVIL DAWN</h5>
-              </li>
-            </a>
-            <a class="nav-link" href="#navsurvive">
-              <li class="nav-block">
-                <div class="nav-highlight survive-highlight"></div>
-                <h5 class="nav-title survive-title">SURVIVE</h5>
+                <div class="nav-highlight roots-highlight"></div>
+                <h5 class="nav-title">ROOTS</h5>
               </li>
             </a>
           </ul>
         </div>
         <div class="content-area">
 
-          <a name="navhome"></a>
           <div class="content-view">
             <div class="project-content">
               <h1 class="content-header">Projects</h1>
@@ -92,21 +94,46 @@
               </p>
               <div class="content-btns">
                 <div class="content-btn">
-                  <a target="_blank" rel="noopener noreferrer" href="/about">
+                  <a href="/about">
                     <h5 class="content-btn-text">About Me</h5>
                   </a>
                 </div>
               </div>
-              <a class="nav-arrow-link" href="#navimposter">
+              <a class="nav-arrow-link" href="#ncryptor">
                 <img class="arrow-outline-down" src="homepage/arrow-outline-down.svg" />
               </a>
             </div>
           </div>
 
-          <a name="navimposter"></a>
+          <a name="ncryptor"></a>
           <div class="content-view">
             <div class="project-content">
-              <a class="nav-arrow-link" href="#navhome">
+              <a class="nav-arrow-link" href="#home">
+                <img class="arrow-outline-up" src="homepage/arrow-outline-up.svg" />
+              </a>
+              <h1 class="content-header">Ncryptor</h1>
+              <p class="content-text">
+                Ncryptor is a simple web app used to invoke the GNU Privacy Guard (gpg).
+                It is an easy way to encrypt confidential messages to others, decrypt messages to you,
+                and manage your RSA keypairs.
+              </p>
+              <div class="content-btns">
+                <div class="content-btn">
+                  <a href="https://github.com/jtdemey/ncryptor">
+                    <h5 class="content-btn-text">Source</h5>
+                  </a>
+                </div>
+              </div>
+              <a class="nav-arrow-link" href="#imposter">
+                <img class="arrow-outline-down" src="homepage/arrow-outline-down.svg" />
+              </a>
+            </div>
+          </div>
+
+          <a name="imposter"></a>
+          <div class="content-view">
+            <div class="project-content">
+              <a class="nav-arrow-link" href="#ncryptor">
                 <img class="arrow-outline-up" src="homepage/arrow-outline-up.svg" />
               </a>
               <h1 class="content-header">Imposter</h1>
@@ -116,66 +143,42 @@
               </p>
               <div class="content-btns">
                 <div class="content-btn">
-                  <a target="_blank" rel="noopener noreferrer" href="/imposter">
+                  <a href="/imposter">
                     <h5 class="content-btn-text">Play</h5>
                   </a>
                 </div>
                 <div class="content-btn">
-                  <a target="_blank" rel="noopener noreferrer" href="https://github.com/jtdemey/nextsite/tree/master/src/components/imposter">
+                  <a href="https://github.com/jtdemey/nextsite/tree/master/src/components/imposter">
                     <h5 class="content-btn-text">Source</h5>
                   </a>
                 </div>
               </div>
-              <a class="nav-arrow-link" href="#navpistolwhip">
+              <a class="nav-arrow-link" href="#roots">
                 <img class="arrow-outline-down" src="homepage/arrow-outline-down.svg" />
               </a>
             </div>
           </div>
 
-          <a name="navpistolwhip"></a>
-          <div class="content-view">
-            <div class="project-content">
-              <a class="nav-arrow-link" href="#navimposter">
-                <img class="arrow-outline-up" src="homepage/arrow-outline-up.svg" />
-              </a>
-              <h1 class="content-header">Civil Dawn</h1>
-              <p class="content-text">
-                (In development)<br /><br />
-                2D side-scrolling shoot-em-up.
-              </p>
-              <div class="content-btns">
-                <div class="content-btn">
-                  <a target="_blank" rel="noopener noreferrer" href="https://github.com/jtdemey/reacthomepage/tree/master/src/pistolwhip">
-                    <h5 class="content-btn-text">Source</h5>
-                  </a>
-                </div>
-              </div>
-              <a class="nav-arrow-link" href="#navsurvive">
-                <img class="arrow-outline-down" src="homepage/arrow-outline-down.svg" />
-              </a>
-            </div>
-          </div>
-
-          <a name="navsurvive"></a>
+          <a name="roots"></a>
           <div class="content-view">
             <div class="project-content last-content">
-              <a class="nav-arrow-link" href="#navpistolwhip">
+              <a class="nav-arrow-link" href="#imposter">
                 <img class="arrow-outline-up" src="homepage/arrow-outline-up.svg" />
               </a>
-              <h1 class="content-header">Survive</h1>
+              <h1 class="content-header-sm">The Roots Run Deep in Caledonia Forest</h1>
               <p class="content-text">
                 (In development)<br /><br />
-                A text-based adventure game.<br />
+                A text-based adventure game set in a nightmarish forest.<br />
                 Will you live to see the sunrise?
               </p>
               <div class="content-btns">
                 <div class="content-btn">
-                  <a target="_blank" rel="noopener noreferrer" href="https://github.com/jtdemey/nextsite/tree/master/src/components/survive">
+                  <a href="https://github.com/jtdemey/nextsite/tree/master/src/components/survive">
                     <h5 class="content-btn-text">Source</h5>
                   </a>
                 </div>
               </div>
-              <a class="nav-arrow-link" href="#navhome">
+              <a class="nav-arrow-link" href="#home">
                 <img class="arrow-outline-down" src="homepage/arrow-doubleup.svg" />
               </a>
             </div>
@@ -183,6 +186,5 @@
         </div>
       </div>
     </div>
-    <!--<script type="text/javascript" src="scripts/homeScript.js" async></script>-->
-  <script defer src="/static/homeBundle.8b042189.js"></script></body>
+  <script defer src="/static/homeBundle.87467f9b.js"></script></body>
 </html>

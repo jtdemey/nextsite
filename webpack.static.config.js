@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackInjector = require('html-webpack-injector');
 const webpack = require('webpack');
 
-const getHtmlPluginConfig = (chunkName) => ({
+const getHtmlPluginConfig = chunkName => ({
   chunks: [chunkName],
   filename: `${chunkName}.html`,
   minify: false,
@@ -15,9 +15,9 @@ module.exports = {
   target: 'web',
   mode: 'production',
   entry: {
-    home: path.join(process.cwd(), 'public/scripts/homeScript.js'),
-    about: path.join(process.cwd(), 'public/scripts/aboutScript.js'),
-    doodles: path.join(process.cwd(), 'public/scripts/doodleScript.js')
+    home: path.join(process.cwd(), 'src/scripts/home/homeIndex.js'),
+    about: path.join(process.cwd(), 'src/scripts/about/aboutIndex.js'),
+    doodles: path.join(process.cwd(), 'src/scripts/doodles/doodleIndex.js')
   },
   output: {
     path: path.join(process.cwd(), 'public', 'static'),

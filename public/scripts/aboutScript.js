@@ -1,4 +1,4 @@
-import "regenerator-runtime/runtime";
+import 'regenerator-runtime/runtime';
 
 const uiState = {
   background: 0,
@@ -7,12 +7,7 @@ const uiState = {
 };
 
 //About #595F62, Skills #7F9C96, Contact #92BEA6, Doodles #6C474F
-const bgColors = [
-  '#45050C',
-  '#011936',
-  '#6B7F82',
-  '#175873'
-];
+const bgColors = ['#45050C', '#011936', '#6B7F82', '#175873'];
 
 const siteWrapper = document.querySelector('.site-wrapper');
 const mainContainer = document.querySelector('.main-container');
@@ -27,8 +22,11 @@ window.addEventListener('resize', resizeUpdate);
 
 const scrollUpdate = () => {
   const ypos = (siteWrapper.pageYOffset || siteWrapper.scrollTop) - 96; //Banner = 96px
-  let viewInd = Math.floor(ypos / contentHeight) < 0 ? 0 : Math.floor((ypos + (contentHeight / 2)) / contentHeight);
-  if(viewInd !== uiState.background) {
+  let viewInd =
+    Math.floor(ypos / contentHeight) < 0
+      ? 0
+      : Math.floor((ypos + contentHeight / 2) / contentHeight);
+  if (viewInd !== uiState.background) {
     startBgShift(viewInd);
   }
 };
@@ -42,7 +40,7 @@ const clearBgShift = () => {
 
 const startBgShift = v => {
   const c = bgColors[v];
-  if(uiState.bgShiftTimer) {
+  if (uiState.bgShiftTimer) {
     clearBgShift();
   }
   uiState.background = v;
@@ -52,7 +50,7 @@ const startBgShift = v => {
   }, 420);
 };
 
-// F l A i R 
+// F l A i R
 /*const loadParticles = configSrc => {
   const particles = document.createElement('script');
   particles.onload = () => {
@@ -71,7 +69,7 @@ const ajaxPost = (url, payload) => {
       'content-type': 'application/json'
     }
   }).then(res => {
-    if(!res.ok) {
+    if (!res.ok) {
       console.error(res.status);
     }
   });
@@ -79,12 +77,15 @@ const ajaxPost = (url, payload) => {
 
 const genUserHash = () => {
   const n = window.navigator;
-  let str = n.appCodeName + n.appVersion + n.language + n.platform + n.productSub;
-  let hash = 0, i, chr;
+  let str =
+    n.appCodeName + n.appVersion + n.language + n.platform + n.productSub;
+  let hash = 0,
+    i,
+    chr;
   if (str.length === 0) return hash;
   for (i = 0; i < str.length; i++) {
     chr = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + chr;
+    hash = (hash << 5) - hash + chr;
     hash |= 0;
   }
   return Math.abs(hash).toString(16);
@@ -97,9 +98,9 @@ const sanitize = str => {
     '>': '&gt;',
     '"': '&quot;',
     "'": '&#x27;',
-    "/": '&#x2F;',
+    '/': '&#x2F;'
   };
-  const reg = /[&<>"'/]/ig;
+  const reg = /[&<>"'/]/gi;
   return str.replace(reg, m => charMap[m]);
 };
 
@@ -112,14 +113,14 @@ const setBtnStyle = () => {
   contactText.setAttribute('onclick', null);
 };
 
-window.submitContactForm = function() {
+window.submitContactForm = function () {
   const hash = genUserHash();
   const name = sanitize(document.getElementById('contact-name').value);
   const inquiry = sanitize(document.getElementById('contact-text').value);
-  if(name === '' || inquiry === '') {
+  if (name === '' || inquiry === '') {
     return;
   }
-  ajaxPost(window.location.origin + '/contact', {name, inquiry, hash});
+  ajaxPost(window.location.origin + '/contact', { name, inquiry, hash });
   setBtnStyle();
 };
 
@@ -127,7 +128,7 @@ window.submitContactForm = function() {
 const loadDoodle = async ind => {
   const uri = `${window.location.origin}/doodles/`;
   const dood = new Image();
-  dood.src = `${uri}thumbs/img${ind}.jpg`; 
+  dood.src = `${uri}thumbs/img${ind}.jpg`;
 
   const link = document.createElement('a');
   link.href = `${uri}img${ind}.jpg`;
@@ -145,13 +146,13 @@ const loadDoodle = async ind => {
 
 const loadDoodles = () => {
   const randInts = [];
-  while(randInts.length < 5) {
+  while (randInts.length < 5) {
     const ind = Math.floor(Math.random() * uiState.doodleCt);
-    if(!randInts.some(int => int === ind)) {
+    if (!randInts.some(int => int === ind)) {
       randInts.push(ind);
     }
   }
-  for(let i = 0; i < randInts.length; i++) {
+  for (let i = 0; i < randInts.length; i++) {
     loadDoodle(randInts[i]);
   }
 };
@@ -159,6 +160,10 @@ const loadDoodles = () => {
 //Init
 (() => {
   mainContainer.style.transition = 'background 1.2s';
+  resizeUpdate();
+  setTimeout(() => {
+    uiState.contentHeight = contentViews[0].clientHeight;
+  }, 500);
   //loadParticles('../media/particles/homeParticles.json');
   loadDoodles();
 })();
