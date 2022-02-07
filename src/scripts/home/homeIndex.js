@@ -1,7 +1,7 @@
 import backgroundColors from './backgroundColors';
 import uiState from './uiState';
-import { startBgShift } from './backgroundShifter';
 import { resizeUpdate } from './resize';
+import { startBgShift } from './backgroundShifter';
 import { scrollPoll } from './scroll';
 
 const siteWrapper = document.querySelector('.site-wrapper');
@@ -10,9 +10,7 @@ const mobileNav = document.querySelector('.mnav-area');
 const contentViews = document.querySelectorAll('.content-view');
 
 (() => {
-  if (window.getComputedStyle(mobileNav).display !== 'block') {
-    uiState.mobile = false;
-  }
+  uiState.mobile = window.getComputedStyle(mobileNav).display === 'block';
   const shiftBg = viewInd =>
     startBgShift(backgroundColors, mainContainer, uiState, viewInd);
   setInterval(() => scrollPoll(mobileNav, siteWrapper, shiftBg, uiState), 800);

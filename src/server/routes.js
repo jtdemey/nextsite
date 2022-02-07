@@ -16,56 +16,24 @@ const sendHtmlFile = (res, fileName) => {
   res.sendFile(path.join(process.cwd(), 'src', 'pages', fileName));
 };
 
-router.route('/')
-  .get((req, res) => {
-    sendHtmlFile(res, 'home.html');
-  });
+const routeHtml = (endpoint, fileName) =>
+	router.route(endpoint)
+		.get((req, res) => {
+			sendHtmlFile(res, `${fileName}.html`);
+		});
 
-router.route('/about')
-  .get((req, res) => {
-    sendHtmlFile(res, 'about.html');
-  });
-
-router.route('/doodles')
-  .get((req, res) => {
-    sendHtmlFile(res, 'doodles.html');
-  });
+routeHtml('/', 'home');
+routeHtml('/about', 'about');
+routeHtml('/doodles', 'doodles');
+routeHtml('/civildawn', 'civildawn');
 
 /*
-router.route('/imposter')
-  .get((req, res) => {
-    sendHtmlFile(res, 'imposter.html');
-  });
-
-router.route('/imposter/:gameCode')
-  .get((req, res) => {
-    sendHtmlFile(res, 'imposter.html');
-  });
-
-router.route('/meyhemn')
-  .get((req, res) => {
-    sendHtmlFile(res, 'meyhemn.html');
-  });
-
-router.route('/pistolwhip')
-  .get((req, res) => {
-    sendHtmlFile(res, 'pistolwhip.html');
-  });
-
-router.route('/rollfighter')
-  .get((req, res) => {
-    sendHtmlFile(res, 'rollfighter.html');
-  });
-
-router.route('/sandbox')
-  .get((req, res) => {
-    sendHtmlFile(res, 'sandbox.html');
-  });
-
-router.route('/devtut')
-  .get((req, res) => {
-    sendHtmlFile(res, 'tut.html');
-  });
+routeHtml('/imposter', 'imposter');
+routeHtml('/imposter/:gameCode', 'imposter');
+routeHtml('/meyhemn', 'meyhemn');
+routeHtml('/rollfighter', 'rollfighter');
+routeHtml('/sandbox', 'sandbox');
+routeHtml('/devtut', 'devtut');
 */
 
 export default router;

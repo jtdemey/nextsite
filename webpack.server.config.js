@@ -7,6 +7,7 @@ module.exports = {
   entry: {
     server: path.join(process.cwd(), 'src/server/server.js')
   },
+	mode: "production",
   output: {
     path: path.join(process.cwd(), 'dist', 'jtserver'),
     filename: 'jtserver.js'

@@ -2,7 +2,6 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackInjector = require('html-webpack-injector');
-const webpack = require('webpack');
 
 const getHtmlPluginConfig = chunkName => ({
   chunks: [chunkName],
@@ -17,8 +16,10 @@ module.exports = {
   entry: {
     home: path.join(process.cwd(), 'src/scripts/home/homeIndex.js'),
     about: path.join(process.cwd(), 'src/scripts/about/aboutIndex.js'),
+    civildawn: path.join(process.cwd(), 'src/components/civildawn/cdIndex.js'),
     doodles: path.join(process.cwd(), 'src/scripts/doodles/doodleIndex.js')
   },
+	mode: "production",
   output: {
     path: path.join(process.cwd(), 'public', 'static'),
     publicPath: '/static/',
@@ -29,6 +30,7 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin(getHtmlPluginConfig('home')),
     new HtmlWebpackPlugin(getHtmlPluginConfig('about')),
+    new HtmlWebpackPlugin(getHtmlPluginConfig('civildawn')),
     new HtmlWebpackPlugin(getHtmlPluginConfig('doodles')),
     new HtmlWebpackInjector()
   ],

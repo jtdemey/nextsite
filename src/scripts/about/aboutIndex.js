@@ -12,9 +12,7 @@ const mobileNav = document.querySelector('.mnav-area');
 const contentViews = document.querySelectorAll('.content-view');
 
 (() => {
-  if (window.getComputedStyle(mobileNav).display !== 'block') {
-    uiState.mobile = false;
-  }
+  uiState.mobile = window.getComputedStyle(mobileNav).display === 'block';
   const shiftBg = viewInd =>
     startBgShift(backgroundColors, mainContainer, uiState, viewInd);
   setInterval(() => scrollPoll(mobileNav, siteWrapper, shiftBg, uiState), 800);

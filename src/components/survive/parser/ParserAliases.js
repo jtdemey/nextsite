@@ -1,10 +1,66 @@
 export const ALIASES = {
   attack: ['fight', 'hit', 'assault', 'bonk'],
-  eat: ['bite', 'chew', 'devour', 'ingest', 'inhale', 'swallow', 'digest', 'masticate', 'nosh', 'feast'],
-  equip: ['don', 'wear', 'adorn', 'arm', 'dress', 'endow', 'furnish', 'gear', 'fit'],
-  examine: ['look', 'perceive', 'search', 'peruse', 'gander', 'where', 'whereami'],
-  go: ['move', 'walk', 'travel', 'cross', 'migrate', 'proceed', 'progress', 'relocate', 'leave'],
-  throw: ['toss', 'yeet', 'send', 'fling', 'fire', 'heave', 'hurl', 'lob', 'pitch', 'chuck', 'catapult', 'discharge', 'flick', 'launch', 'sling', 'volley']
+  eat: [
+    'bite',
+    'chew',
+    'devour',
+    'digest',
+    'feast',
+    'ingest',
+    'inhale',
+    'masticate',
+    'nosh',
+    'swallow'
+  ],
+  equip: [
+    'adorn',
+    'arm',
+    'don',
+    'dress',
+    'endow',
+    'fit',
+    'furnish',
+    'gear',
+    'wear'
+  ],
+  examine: [
+    'gander',
+    'look',
+    'perceive',
+    'peruse',
+    'search',
+    'where',
+    'whereami'
+  ],
+  go: [
+    'cross',
+    'leave',
+    'migrate',
+    'move',
+    'proceed',
+    'progress',
+    'relocate',
+    'travel',
+    'walk'
+  ],
+  throw: [
+    'catapult',
+    'chuck',
+    'discharge',
+    'fire',
+    'flick',
+    'fling',
+    'heave',
+    'hurl',
+    'launch',
+    'lob',
+    'pitch',
+    'send',
+    'sling',
+    'toss',
+    'volley',
+    'yeet'
+  ]
 };
 
 export const GO_DIRECTIONS = {
