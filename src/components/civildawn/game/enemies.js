@@ -3,10 +3,17 @@ import { ENEMY_TYPES, LEVEL_IDS, ENEMY_TYPE_NAMES, ENEMY_SCORES } from '../const
 import collisionCats from './collision';
 import { genId, getRandBetween } from '../pwUtils';
 
+/**
+ * Enemy entity data
+ */
 const enemies = [];
 
 export default enemies;
 
+/**
+ * Deletes the enemy with the given enemy ID
+ * @param {number} enemyId Enemy ID
+ */
 const deleteEnemy = enemyId => {
   enemies.forEach((e, i) => {
     if(e.enemyId === enemyId) {
@@ -17,12 +24,20 @@ const deleteEnemy = enemyId => {
   });
 };
 
+/**
+ * Clears all enemies from the game
+ */
 export const clearEnemies = () => {
   while(enemies.length) {
     enemies.pop().sprite.destroy();
   }
 };
 
+/**
+ * Triggers a fading text alert above an enemy entity
+ * @param {number} enemyId Enemy ID
+ * @param {string} msg Alert text
+ */
 export const fadingEnemyAlert = (enemyId, msg) => {
   enemies.map(e => {
     if(e.enemyId === enemyId) {
@@ -44,6 +59,11 @@ export const fadingEnemyAlert = (enemyId, msg) => {
   });
 };
 
+/**
+ * Gets the enemy with the given enemy ID
+ * @param {number} enemyId Enemy ID
+ * @returns Enemy entity
+ */
 export const getEnemy = enemyId => {
   const enemy = enemies.map(e => e.enemyId === enemyId)[0];
   if(!enemy) {
@@ -52,6 +72,11 @@ export const getEnemy = enemyId => {
   return enemy;
 };
 
+/**
+ * Gets the enemy with the given Phaser physics body ID
+ * @param {number} bodyId Phaser phyics body ID
+ * @returns Enemy entity
+ */
 export const getEnemyFromBodyId = bodyId => {
   enemies.forEach((goon, i) => {
     if(goon.sprite.body !== undefined) {
@@ -64,6 +89,10 @@ export const getEnemyFromBodyId = bodyId => {
   return false;
 };
 
+/**
+ * Gets a list of applicable enemies for the current level
+ * @returns Array of enemy type IDs for the current level
+ */
 const getPossibleEnemyTypes = () => {
   let ids = LEVEL_IDS;
   let x = ENEMY_TYPES;
@@ -101,6 +130,11 @@ const getPossibleEnemyTypes = () => {
   }
 };
 
+/**
+ * Damages the specified enemy for the given amount
+ * @param {number} enemyId Enemy ID
+ * @param {number} amt Damage amount
+ */
 export const hurtEnemy = (enemyId, amt) => {
   enemies.map(e => {
     if(e.enemyId === enemyId) {
@@ -112,6 +146,11 @@ export const hurtEnemy = (enemyId, amt) => {
   });
 };
 
+/**
+ * Damages the enemy with the specified physics body ID for the given amount
+ * @param {number} bodyId Phaser physics body ID
+ * @param {number} amt Damage amount
+ */
 export const hurtEnemyByBodyId = (bodyId, amt) => {
   enemies.map(e => {
     if(!e.sprite.body) {
@@ -126,10 +165,18 @@ export const hurtEnemyByBodyId = (bodyId, amt) => {
   });
 };
 
+/**
+ * Kills all currently spawned enemies
+ */
 export const killAllEnemies = () => {
   enemies.map(e => killEnemy(e.enemyId, false));
 };
 
+/**
+ * Kills the enemy specified by the provided enemy ID
+ * @param {number} enemyId Enemy ID
+ * @param {boolean} addScore Flag for whether to increase player score
+ */
 export const killEnemy = (enemyId, addScore = true) => {
   enemies.map(e => {
     if(e.enemyId === enemyId && e.speed !== 0) {
@@ -150,6 +197,13 @@ export const killEnemy = (enemyId, addScore = true) => {
   });
 };
 
+/**
+ * Creates a "Roller" enemy
+ * @param {number} enemyId Enemy ID
+ * @param {number} type Civil Dawn enemy type value
+ * @param {Sprite} sprite Phaser sprite
+ * @returns Enemy Roller entity
+ */
 const makeRoller = (enemyId, type, sprite) => {
   let hp = 100;
   let speed = 2;
@@ -182,6 +236,13 @@ const makeRoller = (enemyId, type, sprite) => {
   };
 };
 
+/**
+ * Creates a "Glider" enemy
+ * @param {number} enemyId Enemy ID
+ * @param {number} type Civil Dawn enemy type value
+ * @param {Sprite} sprite Phaser sprite
+ * @returns Enemy Glider entity
+ */
 const makeGlider = (enemyId, type, sprite) => {
   let hp = 130;
   let speed = 2;
@@ -216,6 +277,11 @@ const makeGlider = (enemyId, type, sprite) => {
   };
 };
 
+/**
+ * Creates an enemy of the given type
+ * @param {number} type Civil Dawn enemy type value
+ * @returns Created enemy
+ */
 const makeEnemy = type => {
   const enemyId = genId(16);
   let sprite = game.scene.matter.add.sprite(game.width + 250, 200, ENEMY_TYPE_NAMES[type]);
@@ -235,6 +301,9 @@ const makeEnemy = type => {
   return enemy;
 };
 
+/**
+ * Tick function to check whether to spawn a new enemy
+ */
 export const spawnCheck = () => {
   if(!enemies.some(e => e.sprite && e.sprite.body && e.sprite.body.position.x > game.width - game.enemySpawnDist)
   && !game.isTransitioningLevels) {
@@ -242,6 +311,9 @@ export const spawnCheck = () => {
   }
 };
 
+/**
+ * Spawns the next enemy in the level
+ */
 export const spawnNextEnemy = () => {
   rollNextEnemySpawnDist();
   const types = getPossibleEnemyTypes();

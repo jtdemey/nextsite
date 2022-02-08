@@ -1,5 +1,8 @@
 import { LEVEL_NAMES, POWERUP_NAMES } from "../constants";
 
+/**
+ * Preloads game assets
+ */
 export default function() {
   const bg = str => `civildawn/assets/bg/${str}.png`;
   const png = str => `civildawn/assets/${str}.png`;

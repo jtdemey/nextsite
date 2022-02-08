@@ -6,7 +6,11 @@ import { detectAimLineHits } from './collision';
 import { addShell, addTracer, addHit } from './bullets';
 import { hurtEnemy } from './enemies';
 import player from './player';
+import { refreshAmmoCt } from './gui';
 
+/**
+ * Pistol entity and related data
+ */
 const pistol = {
   aimLine: null,
 	currentAmmo: 10,
@@ -19,6 +23,9 @@ const pistol = {
 
 export default pistol;
 
+/**
+ * Initializes the pistol sprite
+ */
 export const initPistolSprite = () => {
   pistol.sprite = game.scene.matter.add.image(60, 190, 'pistol');
   pistol.sprite.setScale(0.15, 0.15);
@@ -27,7 +34,11 @@ export const initPistolSprite = () => {
   pistol.aimLine = new Phaser.Geom.Line(pistol.sprite.body.position.x, pistol.sprite.body.position.y, 500, 500);
 };
 
+/**
+ * Fires a bullet from the pistol where the player is aiming
+ */
 export const shoot = () => {
+	if (pistol.currentAmmo < 1) return;
   const hits = detectAimLineHits();
   addShell();
   if(!hits.closestPt) {
@@ -42,8 +53,15 @@ export const shoot = () => {
       hurtEnemy(hits.closestPt.enemyId, pistol.damage);
     }
   }
+	if (pistol.currentAmmo > 0) {
+		pistol.currentAmmo--;
+	}
+	refreshAmmoCt();
 };
 
+/**
+ * Updates the line between the pistol and the player's cursor position
+ */
 export const updateAimLine = () => {
   pistol.aimLine.x1 = player.sprite.body.position.x;
   pistol.aimLine.y1 = player.sprite.body.position.y;
@@ -51,6 +69,9 @@ export const updateAimLine = () => {
   pistol.aimLine.y2 = controls.mouseY;
 };
 
+/**
+ * Updates the gun sprite
+ */
 export const updateGunSprite = () => {
   pistol.position = pistol.aimLine.getPoint(24 / getLineLength(pistol.aimLine), pistol.sprite.body);
   if(controls.mouseX - pistol.sprite.body.position.x < 0) {

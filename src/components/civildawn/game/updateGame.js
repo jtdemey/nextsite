@@ -9,6 +9,9 @@ import { updatePowerups } from './powerups';
 import pistol from './pistol';
 import { updateDestructibles } from './destructibles';
 
+/**
+ * Game main tick function
+ */
 export default function() {
   if(game.paused) {
     return;

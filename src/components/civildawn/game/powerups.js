@@ -25,6 +25,9 @@ Immersion idea:
 falling debris from the sky release powerups that float away
 */
 
+/**
+ * Powerup entities and related data
+ */
 const powerups = {
   spawnChance: 0.9,
   sprites: []
@@ -32,6 +35,10 @@ const powerups = {
 
 export default powerups;
 
+/**
+ * Gets the next powerup ID to spawn accounting for the player's current stats
+ * @returns The next powerup ID to spawn
+ */
 const getPowerupId = () => {
   let goodId;
   const badIds = [];
@@ -44,6 +51,10 @@ const getPowerupId = () => {
   return goodId;
 };
 
+/**
+ * Creates a powerup that moves in a straight line across the screen
+ * @param {number} id Powerup ID
+ */
 const makeLinearPowerup = id => {
   const pickup = game.scene.matter.add.sprite(game.width + 32, getRandBetween(game.height - 300, game.height - 400), POWERUP_NAMES[id]);
   pickup.setBody({
@@ -66,6 +77,9 @@ const makeLinearPowerup = id => {
   powerups.sprites.push(pickup);
 };
 
+/**
+ * Spawns a powerup
+ */
 export const addPowerup = () => {
   const nextId = getPowerupId();
   // const powerupType = getRandomProperty(POWERUP_TYPES);
@@ -85,6 +99,10 @@ export const addPowerup = () => {
   makeLinearPowerup(nextId);
 };
 
+/**
+ * Applies the powerup effect of the given ID to the player
+ * @param {number} powerupId Powerup ID
+ */
 export const applyPower = powerupId => {
   let gain;
   switch(powerupId) {
@@ -121,6 +139,9 @@ export const applyPower = powerupId => {
   }
 };
 
+/**
+ * Check if a powerup is valid to spawn and do so if it is
+ */
 export const attemptPowerupSpawn = () => {
   if(!game.paused && !game.isTransitioningLevels && Math.random() < powerups.spawnChance) {
     addPowerup();
@@ -132,16 +153,27 @@ export const attemptPowerupSpawn = () => {
   }
 };
 
+/**
+ * Deletes a powerup entity by body ID
+ * @param {number} bodyId Phaser physics body ID
+ */
 export const consumePowerup = bodyId => {
   const powerup = powerups.sprites.filter(s => s.body.id === bodyId)[0];
   deletePowerup(bodyId);
   applyPower(powerup.powerupId);
 };
 
+/**
+ * Deletes all powerup entities
+ */
 export const deleteAllPowerups = () => {
   powerups.sprites.forEach(s => deletePowerup(s.body.id));
 };
 
+/**
+ * Deletes the powerup specified by the provided body ID
+ * @param {number} bodyId Phaser physics body ID
+ */
 export const deletePowerup = bodyId => {
   powerups.sprites.forEach((powerup, i) => {
     if(powerup.body.id === bodyId) {
@@ -152,6 +184,9 @@ export const deletePowerup = bodyId => {
   });
 };
 
+/**
+ * Powerup tick update
+ */
 export const updatePowerups = () => {
   if(powerups.sprites.length > 0) {
     powerups.sprites.forEach(sprite => sprite.onTick());

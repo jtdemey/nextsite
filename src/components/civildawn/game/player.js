@@ -2,6 +2,9 @@ import { refreshHealthCt } from './gui';
 import { gameOver } from './game';
 import { updateGunSprite, updateAimLine } from './pistol';
 
+/**
+ * Player entity and related data
+ */
 const player = {
   hasControl: true,
   hitCooldown: 0,
@@ -19,6 +22,9 @@ const player = {
   velocityModifier: 0.24
 };
 
+/**
+ * Makes the player jump
+ */
 player.jump = () => {
   if(player.jumps < player.maxJumps) {
     player.jumps++;
@@ -26,6 +32,9 @@ player.jump = () => {
   }
 };
 
+/**
+ * Player tick update
+ */
 player.onTick = () => {
   player.sprite.rotation = 0;
   if(player.isMovingLeft) {
@@ -51,20 +60,35 @@ player.onTick = () => {
   }
 };
 
+/**
+ * Associates a reference to the given scene with the player
+ * @param {Scene} scene Phaser game scene
+ */
 player.setScene = scene => {
   player.scene = scene;
 };
 
+/**
+ * Stops all player movement
+ */
 player.stopMoving = () => {
   player.isJumping = false;
   player.isMovingLeft = false;
   player.isMovingRight = false;
 };
 
+/**
+ * Disables player collision
+ */
 export const disablePlayerCollision = () => {
   player.sprite.body.collisionFilter.mask = 0;
 };
 
+/**
+ * Creates a fading text alert above the player
+ * @param {string} msg Text alert content
+ * @param {string} color Hex color
+ */
 export const fadingPlayerAlert = (msg, color = '#fff') => {
   const text = player.scene.add.text(player.sprite.x - player.sprite.width, player.sprite.y - 10, msg, {
     color: color,
@@ -82,6 +106,10 @@ export const fadingPlayerAlert = (msg, color = '#fff') => {
   });
 };
 
+/**
+ * Subtracts the specified amount of HP from the player
+ * @param {number} amt Amount to hurt
+ */
 export const hurtPlayer = amt => {
   if(player.hitCooldown < 1 && player.isInvulnerable === false) {
     player.hitCooldown = 120;
@@ -94,6 +122,9 @@ export const hurtPlayer = amt => {
   }
 };
 
+/**
+ * Initializes the player sprite
+ */
 export const initPlayerSprite = () => {
   player.sprite = player.scene.matter.add.sprite(50, 190, 'player');
   player.sprite.setBody({
@@ -112,6 +143,12 @@ export const initPlayerSprite = () => {
   player.sprite.anims.play('walk');
 };
 
+/**
+ * Uses a Phaser Tween to ease the player's X coordinate
+ * @param {any} target Target X coordinate for the tween
+ * @param {number} time Duration
+ * @param {Function} cb Optional callback function
+ */
 export const tweenPlayerVelocityX = (target, time, cb = undefined) => {
   let velocityModifer = { x: 1 };
   player.scene.tweens.add({

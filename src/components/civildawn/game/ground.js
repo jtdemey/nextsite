@@ -4,6 +4,9 @@ import { getRandBetween, makePt } from '../pwUtils';
 import player from './player';
 import collisionCats from './collision';
 
+/**
+ * Ground entity data
+ */
 const ground = {
   xInd: 0,
   yInd: 0,
@@ -16,6 +19,12 @@ const ground = {
 
 export default ground;
 
+/**
+ * Adds a physics body to the provided path
+ * @param {Scene} scene Phaser game scene
+ * @param {Path} path Phaser path
+ * @param {number} xPos X coordinate
+ */
 export const addBodyToGround = (scene, path, xPos) => {
   const body = scene.matter.add.fromVertices(xPos, 0, path, {
     collisionFilter: {
@@ -28,6 +37,9 @@ export const addBodyToGround = (scene, path, xPos) => {
   ground.bodies.push(body);
 };
 
+/**
+ * Draws the ground
+ */
 export const drawGround = () => {
   if(ground.paths.length > 0) {
     ground.paths.forEach(path => {
@@ -36,9 +48,18 @@ export const drawGround = () => {
   }
 };
 
+/**
+ * Uses the game's graphics to fill a segment of ground
+ * @param {Path} path Phaser path
+ */
 export const fillGroundSegment = path => game.graphics.fillPoints(path, true);
 
-export const makeGroundSegments = (segmentLength) => {
+/**
+ * Gets a Phaser path for a piece of ground
+ * @param {number} segmentLength Amount of triangles (slopes) to create
+ * @returns Phaser path for a segment of ground
+ */
+export const makeGroundSegments = segmentLength => {
   let xInd = 0, yInd = game.height - 100;
   if(ground.paths.length > 0) {
     let lastPath = ground.paths[ground.paths.length - 1];
@@ -61,6 +82,11 @@ export const makeGroundSegments = (segmentLength) => {
   return path;
 };
 
+/**
+ * Scrolls the ground across the scene
+ * @param {Scene} scene Phaser game scene
+ * @param {number} speed How fast the ground should scroll
+ */
 export const scrollGround = (scene, speed) => {
   if(ground.paths.length > 4) {
     ground.paths.shift();

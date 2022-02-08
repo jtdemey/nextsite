@@ -1,6 +1,7 @@
 import game from "./game";
 import player from "./player";
 import { LEVEL_DISPLAYS } from "../constants";
+import pistol from "./pistol";
 
 const COUNT_COLOR = "#1a0f00";
 const LABEL_COLOR = "#120e07";
@@ -13,6 +14,15 @@ const gui = {
 
 export default gui;
 
+/**
+ * Adds static text to the GUI
+ * @param {number} x X coordinate
+ * @param {number} y Y coordinate
+ * @param {string} text Text content
+ * @param {string} color Hex color
+ * @param {number} size Font size
+ * @returns 
+ */
 const addText = (x, y, text, color, size) =>
   game.scene.add.text(x, y, text, {
     color: color,
@@ -24,11 +34,17 @@ const addText = (x, y, text, color, size) =>
     shadowColor: "#000"
   });
 
+/**
+ * Initializes the GUI
+ */
 export const initGui = () => {
   initLabels();
   initCounts();
 };
 
+/**
+ * Initializes numerical GUI values
+ */
 export const initCounts = () => {
   const hpCt = addText(58, -2, "100", COUNT_COLOR, "3rem");
   gui.counts.health = hpCt;
@@ -38,6 +54,9 @@ export const initCounts = () => {
   gui.counts.score = scoreCt;
 };
 
+/**
+ * Initializes GUI labels
+ */
 export const initLabels = () => {
   const hpLabel = addText(20, 12, "HP", LABEL_COLOR, "1.5rem");
   gui.labels.health = hpLabel;
@@ -56,6 +75,11 @@ export const initLabels = () => {
   gui.labels.lvl = lvlLabel;
 };
 
+/**
+ * Gets the appropriate color given the player's current health
+ * @param {number} hp Current health points
+ * @returns Hex color
+ */
 const getHpColor = hp => {
   let color;
   if (hp > 80) {
@@ -74,22 +98,42 @@ const getHpColor = hp => {
   return color;
 };
 
+/**
+ * Refreshes the GUI
+ */
 export const refreshGui = () => {
+	refreshAmmoCt();
   refreshHealthCt();
   refreshLvlLabel();
   refreshScoreCt();
 };
 
+/**
+ * Refreshes ammo count
+ */
+export const refreshAmmoCt = () => {
+  gui.counts.ammo.setText(pistol.currentAmmo);
+};
+
+/**
+ * Refreshes HP count
+ */
 export const refreshHealthCt = () => {
   gui.counts.health.setText(player.hp);
   gui.counts.health.setColor(getHpColor(player.hp));
 };
 
+/**
+ * Refreshes the level label
+ */
 export const refreshLvlLabel = () => {
   gui.labels.lvl.setText(LEVEL_DISPLAYS[game.level - 1]);
   gui.labels.lvl.x = game.width - gui.labels.lvl.width - 20;
 };
 
+/**
+ * Refreshes the score count
+ */
 export const refreshScoreCt = () => {
   gui.counts.score.setText(`$${game.score}`);
 };

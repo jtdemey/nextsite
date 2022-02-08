@@ -8,6 +8,9 @@ import { initBounds, setExtendedBounds } from './bounds';
 import { initGui } from './gui';
 import { initPistolSprite } from './pistol';
 
+/**
+ * Creates the base scene
+ */
 export default function() {
 
   //Client dims

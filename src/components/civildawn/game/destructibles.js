@@ -3,12 +3,21 @@ import game from "./game";
 import collisionCats from "./collision";
 import { DESTRUCTIBLE_TYPES } from "../constants";
 
+/**
+ * Destructible entity data
+ */
 const destructibles = {
   sprites: []
 };
 
 export default destructibles;
 
+/**
+ * Adds a package destructible at the given position
+ * @param {number} x X position
+ * @param {number} y Y position
+ * @param {number} powerupId Civil Dawn powerup ID
+ */
 export const addPackageDestructible = (x, y, powerupId) => {
   const item = game.scene.matter.add.sprite(x, y, DESTRUCTIBLE_TYPES.PACKAGE);
   item.setBody({
@@ -34,6 +43,10 @@ export const addPackageDestructible = (x, y, powerupId) => {
   destructibles.sprites.push(item);
 };
 
+/**
+ * Deletes the destructible with the given body ID
+ * @param {number} bodyId Phaser body ID for entity
+ */
 export const deleteDestructible = bodyId => {
   destructibles.sprites.forEach((sprite, i) => {
     if(sprite.body.id === bodyId) {
@@ -44,4 +57,7 @@ export const deleteDestructible = bodyId => {
   });
 };
 
+/**
+ * Updates destructible entities on tick
+ */
 export const updateDestructibles = () => destructibles.sprites.forEach(d => d.onTick());

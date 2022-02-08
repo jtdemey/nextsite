@@ -2,6 +2,9 @@ import Phaser from 'phaser';
 import game, { advanceLevel } from './game';
 import player from './player';
 
+/**
+ * Level progress bar and related data
+ */
 const progressBar = {
   complete: 0,
   bar: null,
@@ -13,11 +16,18 @@ const progressBar = {
   rightShadow: null
 };
 
+/**
+ * Initializes the progress bar
+ * @param {Scene} scene Phaser game scene
+ */
 export const initProgressBar = scene => {
   const barColor = new Phaser.Display.Color.HexStringToColor('#556F49');
   progressBar.bar = scene.add.rectangle(game.width / 2, 4, game.width, 8, barColor.color);
 };
 
+/**
+ * Progress bar tick update
+ */
 export const updateProgressBar = () => {
   let ticksComplete = game.tick - game.levelStartTick;
   let tickTotal = game.nextLevelTick;
