@@ -1,5 +1,5 @@
-import { refreshHealthCt } from './gui';
 import { gameOver } from './game';
+import { refreshHealthCt } from './hud';
 import { updateGunSprite, updateAimLine } from './pistol';
 
 /**
@@ -9,10 +9,12 @@ const player = {
   hasControl: true,
   hitCooldown: 0,
   hp: 100,
+  isEnteringLevel: false,
   isInvulnerable: false,
   isJumping: false,
   isMovingLeft: false,
   isMovingRight: false,
+  isReloading: false,
   jumps: 0,
   jumpHeight: -9,
   maxJumps: 1,

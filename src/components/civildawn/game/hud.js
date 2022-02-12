@@ -3,8 +3,8 @@ import player from "./player";
 import { LEVEL_DISPLAYS } from "../constants";
 import pistol from "./pistol";
 
-const COUNT_COLOR = "#1a0f00";
-const LABEL_COLOR = "#120e07";
+const COUNT_COLOR = "#ffffff";
+const LABEL_COLOR = "#ffffff";
 
 //Hp bar gradient: [gui color], #384A30, #574d13, #3e7c1f, #29a329
 const gui = {
@@ -23,16 +23,21 @@ export default gui;
  * @param {number} size Font size
  * @returns 
  */
-const addText = (x, y, text, color, size) =>
-  game.scene.add.text(x, y, text, {
+const addText = (x, y, text, color, size) => {
+  const textEntity = game.scene.add.text(x, y, text, {
     color: color,
+		depth: 2,
     fontFamily: `Coda`,
     fontSize: size,
     shadowOffsetX: 8,
     shadowOffsetY: 12,
     shadowBlur: 2,
-    shadowColor: "#000"
+    shadowColor: "#000",
+		z: 2
   });
+	textEntity.setDepth(1);
+	return textEntity;
+};
 
 /**
  * Initializes the GUI
@@ -46,29 +51,23 @@ export const initGui = () => {
  * Initializes numerical GUI values
  */
 export const initCounts = () => {
-  const hpCt = addText(58, -2, "100", COUNT_COLOR, "3rem");
-  gui.counts.health = hpCt;
-  const ammoCt = addText(252, -2, "10", COUNT_COLOR, "3rem");
-  gui.counts.ammo = ammoCt;
-  const scoreCt = addText(416, -2, "0", COUNT_COLOR, "3rem");
-  gui.counts.score = scoreCt;
+  gui.counts.health = addText(58, game.height - 60, "100", COUNT_COLOR, "3rem");
+  gui.counts.ammo = addText(272, game.height - 60, "10", COUNT_COLOR, "3rem");
+  gui.counts.score = addText(456, game.height - 60, "0", COUNT_COLOR, "3rem");
 };
 
 /**
  * Initializes GUI labels
  */
 export const initLabels = () => {
-  const hpLabel = addText(20, 12, "HP", LABEL_COLOR, "1.5rem");
-  gui.labels.health = hpLabel;
-  const ammoLabel = addText(170, 12, "AMMO", LABEL_COLOR, "1.5rem");
-  gui.labels.ammo = ammoLabel;
-  const scoreLabel = addText(330, 12, "SCORE", LABEL_COLOR, "1.5rem");
-  gui.labels.score = scoreLabel;
+  gui.labels.health = addText(20, game.height - 45, "HP", LABEL_COLOR, "1.5rem");
+  gui.labels.ammo = addText(190, game.height - 45, "AMMO", LABEL_COLOR, "1.5rem");
+  gui.labels.score = addText(370, game.height - 45, "SCORE", LABEL_COLOR, "1.5rem");
   const lvlLabel = addText(
     game.width - 320,
     12,
     "1: CIVIL DUSK",
-    LABEL_COLOR,
+    "#000000",
     "1.5rem"
   );
   lvlLabel.x = game.width - lvlLabel.width - 20;

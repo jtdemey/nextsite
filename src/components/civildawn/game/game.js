@@ -5,7 +5,7 @@ import { getRandBetween } from '../pwUtils';
 import player, { tweenPlayerVelocityX, fadingPlayerAlert } from './player';
 import { showPauseMenu, hidePauseMenu } from '../pausemenu/pauseMenu';
 import { disableBoundCollision, enableBoundCollision } from './bounds';
-import { refreshLvlLabel, refreshGui } from './gui';
+import { refreshLvlLabel, refreshGui } from './hud';
 import { attemptPowerupSpawn, deleteAllPowerups } from './powerups';
 import pistol from './pistol';
 

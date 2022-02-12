@@ -3,7 +3,7 @@ import { POWERUP_IDS, POWERUP_NAMES, POWERUP_TYPES } from "../constants";
 import game from "./game";
 import collisionCats from "./collision";
 import player, { fadingPlayerAlert } from "./player";
-import { refreshHealthCt } from "./gui";
+import { refreshHealthCt } from "./hud";
 import { addPackageDestructible } from "./destructibles";
 
 /*

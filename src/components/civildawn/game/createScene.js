@@ -5,7 +5,7 @@ import { handleCollisions, initCollisionCats } from './collision';
 import { LEVEL_IDS } from '../constants';
 import { initProgressBar } from './progressBar';
 import { initBounds, setExtendedBounds } from './bounds';
-import { initGui } from './gui';
+import { initGui } from './hud';
 import { initPistolSprite } from './pistol';
 
 /**
