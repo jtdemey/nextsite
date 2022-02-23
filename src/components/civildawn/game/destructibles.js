@@ -1,7 +1,13 @@
-import { genId, getRandBetween } from "../pwUtils";
+import { genId, getRandBetween } from "../cdUtils";
 import game from "./game";
 import collisionCats from "./collision";
-import { DESTRUCTIBLE_TYPES } from "../constants";
+
+/**
+ * Destructible type constants
+ */
+export const DESTRUCTIBLE_TYPES = {
+  PACKAGE: 'powerupPackage'
+};
 
 /**
  * Destructible entity data

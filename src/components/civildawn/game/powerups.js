@@ -1,10 +1,28 @@
-import { getRandomProperty, getRandBetween } from "../pwUtils";
-import { POWERUP_IDS, POWERUP_NAMES, POWERUP_TYPES } from "../constants";
+import { getRandomProperty, getRandBetween } from "../cdUtils";
 import game from "./game";
 import collisionCats from "./collision";
 import player, { fadingPlayerAlert } from "./player";
 import { refreshHealthCt } from "./hud";
 import { addPackageDestructible } from "./destructibles";
+import pistol from "./pistol";
+
+export const POWERUP_IDS = {
+  HEAL: 0,
+  DAMAGE: 1,
+  MAX_AMMO: 2,
+  RELOAD_SPEED: 3,
+  JUMP_HEIGHT: 4,
+  JUMP_AMOUNT: 5,
+  RAGE: 6
+};
+
+export const POWERUP_NAMES = ['powerupHeal', 'powerupDamage', 'powerupMaxAmmo', 'powerupReload', 'powerupJumpHeight', 'powerupJumpAmount', 'powerupRage'];
+
+export const POWERUP_TYPES = {
+  LINEAR: 0,
+  PACKAGE: 1,
+  MISSILE: 2
+};
 
 /*
 Reload speed up (gears of war style action reload)
@@ -42,12 +60,29 @@ export default powerups;
 const getPowerupId = () => {
   let goodId;
   const badIds = [];
-  if(player.maxJumps > 2) {
+	//Max ammo: 999
+	if (pistol.maxAmmo >= 999) {
+    badIds.push(POWERUP_IDS.MAX_AMMO);
+	}
+  //Max jumps: 3
+  if (player.maxJumps > 2) {
     badIds.push(POWERUP_IDS.JUMP_AMOUNT);
+  }
+	//Max jump height: -14
+	if (player.jumpHeight <= -14) {
+    badIds.push(POWERUP_IDS.JUMP_HEIGHT);
+	}
+	//Max health: 100 
+	if (player.hp > 100) {
+    badIds.push(POWERUP_IDS.HEAL);
+	}
+  //Max reload speed: 200
+  if (player.reloadSpeed <= 200) {
+    badIds.push(POWERUP_IDS.RELOAD_SPEED);
   }
   do {
     goodId = getRandomProperty(POWERUP_IDS);
-  } while(badIds.some(id => id === goodId));
+  } while (badIds.some(id => id === goodId));
   return goodId;
 };
 
@@ -56,21 +91,27 @@ const getPowerupId = () => {
  * @param {number} id Powerup ID
  */
 const makeLinearPowerup = id => {
-  const pickup = game.scene.matter.add.sprite(game.width + 32, getRandBetween(game.height - 300, game.height - 400), POWERUP_NAMES[id]);
+  const pickup = game.scene.matter.add.sprite(
+    game.width + 32,
+    getRandBetween(game.height - 300, game.height - 400),
+    POWERUP_NAMES[id]
+  );
   pickup.setBody({
-    type: 'circle',
-    radius: 32 
+    type: "circle",
+    radius: 32
   });
   pickup.powerupId = id;
   pickup.powerupType = POWERUP_TYPES.LINEAR;
   pickup.setIgnoreGravity(true);
   pickup.setCollisionCategory(collisionCats.CONSUMABLE);
-  pickup.body.collisionFilter.mask = collisionCats.PLAYER;
+	//pickup.setCollisionGroup(powerupCollisionGroup);
+  //pickup.body.collisionFilter.mask = collisionCats.PLAYER;
   pickup.body.mass = 0.01;
+  const velocity = getRandBetween(-4, -8);
   pickup.onTick = () => {
     pickup.rotation = 0;
-    pickup.setVelocityX(getRandBetween(-4, -6));
-    if(pickup.x < 0 - pickup.width) {
+    pickup.setVelocityX(velocity);
+    if (pickup.x < 0 - pickup.width) {
       deletePowerup(pickup.body.id);
     }
   };
@@ -104,13 +145,13 @@ export const addPowerup = () => {
  * @param {number} powerupId Powerup ID
  */
 export const applyPower = powerupId => {
-  let gain;
-  switch(powerupId) {
+	let gain;
+  switch (powerupId) {
     case POWERUP_IDS.HEAL:
-      gain = getRandBetween(15, 30);
-      player.hp += gain;
-      if(player.hp > 999) {
-        player.hp = 999;
+			gain = getRandBetween(15, 30);
+      player.hp = player.hp + gain;
+      if (player.hp > 100) {
+        player.hp = 100;
       }
       refreshHealthCt();
       fadingPlayerAlert(`+${gain} HEALTH`);
@@ -120,9 +161,11 @@ export const applyPower = powerupId => {
       fadingPlayerAlert(`+10 DAMAGE`);
       break;
     case POWERUP_IDS.MAX_AMMO:
+			pistol.maxAmmo += 2;
       fadingPlayerAlert(`+2 AMMO CAPACITY`);
       break;
     case POWERUP_IDS.RELOAD_SPEED:
+			player.reloadSpeed -= 100;
       fadingPlayerAlert(`RELOAD SPEED UP`);
       break;
     case POWERUP_IDS.JUMP_HEIGHT:
@@ -143,11 +186,15 @@ export const applyPower = powerupId => {
  * Check if a powerup is valid to spawn and do so if it is
  */
 export const attemptPowerupSpawn = () => {
-  if(!game.paused && !game.isTransitioningLevels && Math.random() < powerups.spawnChance) {
+  if (
+    !game.paused &&
+    !game.isTransitioningLevels &&
+    Math.random() < powerups.spawnChance
+  ) {
     addPowerup();
     powerups.spawnChance = 0.5;
   } else {
-    if(powerups.spawnChance < 1) {
+    if (powerups.spawnChance < 1) {
       powerups.spawnChance += 0.1;
     }
   }
@@ -176,7 +223,7 @@ export const deleteAllPowerups = () => {
  */
 export const deletePowerup = bodyId => {
   powerups.sprites.forEach((powerup, i) => {
-    if(powerup.body.id === bodyId) {
+    if (powerup.body.id === bodyId) {
       powerup.destroy();
       powerups.sprites.splice(i, 1);
       i -= 1;
@@ -188,7 +235,7 @@ export const deletePowerup = bodyId => {
  * Powerup tick update
  */
 export const updatePowerups = () => {
-  if(powerups.sprites.length > 0) {
+  if (powerups.sprites.length > 0) {
     powerups.sprites.forEach(sprite => sprite.onTick());
   }
 };

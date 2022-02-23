@@ -1,21 +1,23 @@
 import Phaser from "phaser";
 import player, { hurtPlayer } from "./player";
 import enemies from "./enemies";
-import { detectCatColl, getClosestPtTo } from "../pwUtils";
-import { ENEMY_TYPES, DESTRUCTIBLE_TYPES } from "../constants";
+import { detectCatColl, getClosestPtTo } from "../cdUtils";
+import { DESTRUCTIBLE_TYPES } from "./destructibles";
+import { ENEMY_TYPES } from "../data/enemyData";
 import ground from "./ground";
 import { consumePowerup } from "./powerups";
 import pistol from "./pistol";
 import destructibles from "./destructibles";
 
-const collisionCatNames = [
+const COLLISION_CAT_NAMES = [
   "PLAYER",
   "GROUND",
   "ENEMY",
   "CONSUMABLE",
   "BULLET",
   "BOUNDARY",
-  "DESTRUCTIBLE"
+  "DESTRUCTIBLE",
+	"PICKUP"
 ];
 
 const collisionCats = {};
@@ -85,6 +87,8 @@ const checkPlayerPowerupColl = pair => {
       pair.bodyA.collisionFilter.category === collisionCats.PLAYER
         ? pair.bodyB
         : pair.bodyA;
+				console.log(powerupBody)
+		//powerupBody.disableBody(true, true);
     consumePowerup(powerupBody.id);
   }
 };
@@ -230,7 +234,7 @@ export const handleCollisions = event => {
  */
 export const initCollisionCats = world => {
   const next = () => world.nextCategory();
-  collisionCatNames.forEach((n, i) => {
+  COLLISION_CAT_NAMES.forEach((n, i) => {
     if (i === 0) {
       collisionCats[n] = 0x0001;
     } else {

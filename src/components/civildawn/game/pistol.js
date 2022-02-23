@@ -4,7 +4,7 @@ import {
   getHypotenuseAngle,
   getDistBetweenPts,
   getPhaserColorFromHex
-} from "../pwUtils";
+} from "../cdUtils";
 import controls from "./controls";
 import game from "./game";
 import { detectAimLineHits } from "./collision";
@@ -25,6 +25,7 @@ const pistol = {
   range: 600,
   reloadBar: null,
   reloadFill: null,
+	reloadTween: null,
   sprite: null
 };
 
@@ -46,23 +47,42 @@ export const initPistolSprite = () => {
   );
 };
 
+/**
+ * Reloads the pistol
+ */
 export const reloadPistol = () => {
-	const addBar = (color, width) => player.scene.add.rectangle(
-    player.sprite.body.position.x,
-    player.sprite.body.position.y + 10,
-    width,
-    12,
-    getPhaserColorFromHex(color)
-  );
-	player.isReloading = true;
-  pistol.reloadBar = addBar("#000000", 36);
-  pistol.reloadFill = addBar("#00e600", 1);
-  player.scene.tweens.add({
-    targets: pistol.reloadFill.width,
-    width: 36,
-    ease: 'Sine.easeOut',
-    duration: 1000,
-    repeat: 0
+	if (player.isReloading === true) return;
+	pistol.currentAmmo = 0;
+	refreshAmmoCt();
+  player.isReloading = true;
+  pistol.reloadBar = player.scene.add.rectangle(
+		player.sprite.body.position.x,
+		player.sprite.body.position.y + 9,
+		120,
+		18,
+		getPhaserColorFromHex("#000000")
+	);
+  pistol.reloadFill = player.scene.add.rectangle(
+		player.sprite.body.position.x - 60,
+		player.sprite.body.position.y + 11,
+		1,
+		16,
+		getPhaserColorFromHex("#00e600")
+	);
+  pistol.reloadTween = player.scene.tweens.add({
+    targets: pistol.reloadFill,
+    width: 120,
+    ease: "Linear",
+    duration: player.reloadSpeed,
+    repeat: 0,
+    onComplete: () => {
+			pistol.currentAmmo = pistol.maxAmmo;
+      player.isReloading = false;
+			pistol.reloadBar.destroy();
+			pistol.reloadFill.destroy();
+			refreshAmmoCt();
+			pistol.reloadTween = null;
+    }
   });
 };
 
@@ -70,7 +90,12 @@ export const reloadPistol = () => {
  * Fires a bullet from the pistol where the player is aiming
  */
 export const shoot = () => {
-  if (pistol.currentAmmo < 1) return;
+  if (pistol.currentAmmo < 1) {
+    if (player.isReloading === false) {
+      reloadPistol();
+    }
+		return;
+	}
   const hits = detectAimLineHits();
   addShell();
   if (!hits.closestPt) {
@@ -92,9 +117,7 @@ export const shoot = () => {
   }
   if (pistol.currentAmmo > 0) {
     pistol.currentAmmo--;
-  } else if(!player.isReloading) {
-		reloadPistol();
-	}
+  }
   refreshAmmoCt();
 };
 
@@ -138,4 +161,11 @@ export const updateGunSprite = () => {
       ) / 2;
   }
   pistol.sprite.setPosition(pistol.position.x, pistol.position.y);
+
+	if (player.isReloading) {
+		pistol.reloadBar.x = player.sprite.body.position.x;
+		pistol.reloadBar.y = player.sprite.body.position.y - 52;
+		pistol.reloadFill.x = player.sprite.body.position.x - 60;
+		pistol.reloadFill.y = player.sprite.body.position.y - 52;
+	}
 };

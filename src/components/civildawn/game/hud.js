@@ -1,9 +1,17 @@
 import game from "./game";
 import player from "./player";
-import { LEVEL_DISPLAYS } from "../constants";
+import { LEVEL_DATA } from "../data/levelData";
 import pistol from "./pistol";
 
-const COUNT_COLOR = "#ffffff";
+const CONDITION_COLORS = [
+	"#660000",
+	"#800000",
+	"#6c2509",
+	"#574d13",
+	"#384A30",
+	"#556F49"
+];
+const COUNT_COLOR = "#556F49";
 const LABEL_COLOR = "#ffffff";
 
 //Hp bar gradient: [gui color], #384A30, #574d13, #3e7c1f, #29a329
@@ -51,9 +59,9 @@ export const initGui = () => {
  * Initializes numerical GUI values
  */
 export const initCounts = () => {
-  gui.counts.health = addText(58, game.height - 60, "100", COUNT_COLOR, "3rem");
-  gui.counts.ammo = addText(272, game.height - 60, "10", COUNT_COLOR, "3rem");
-  gui.counts.score = addText(456, game.height - 60, "0", COUNT_COLOR, "3rem");
+  gui.counts.health = addText(58, game.height - 60, "100", CONDITION_COLORS[5], "3rem");
+  gui.counts.ammo = addText(272, game.height - 60, "10", CONDITION_COLORS[5], "3rem");
+  gui.counts.score = addText(456, game.height - 60, "$0", COUNT_COLOR, "3rem");
 };
 
 /**
@@ -75,27 +83,19 @@ export const initLabels = () => {
 };
 
 /**
+ * Gets the appropriate color given the player's current ammo 
+ * @param {number} currentAmmo Current ammunition 
+ * @param {number} maxAmmo Maximum ammunition
+ * @returns Hex color
+ */
+const getAmmoColor = (currentAmmo, maxAmmo) => CONDITION_COLORS[Math.floor(currentAmmo / (maxAmmo / 5))];
+
+/**
  * Gets the appropriate color given the player's current health
  * @param {number} hp Current health points
  * @returns Hex color
  */
-const getHpColor = hp => {
-  let color;
-  if (hp > 80) {
-    color = "#556F49";
-  } else if (hp > 60) {
-    color = "#384A30";
-  } else if (hp > 40) {
-    color = "#574d13";
-  } else if (hp > 20) {
-    color = "#6c2509";
-  } else if (hp > 0) {
-    color = "#800000";
-  } else {
-    color = "#000000";
-  }
-  return color;
-};
+const getHpColor = hp => CONDITION_COLORS[Math.floor(hp / 20)];
 
 /**
  * Refreshes the GUI
@@ -112,6 +112,7 @@ export const refreshGui = () => {
  */
 export const refreshAmmoCt = () => {
   gui.counts.ammo.setText(pistol.currentAmmo);
+	gui.counts.ammo.setColor(getAmmoColor(pistol.currentAmmo, pistol.maxAmmo));
 };
 
 /**
@@ -126,7 +127,7 @@ export const refreshHealthCt = () => {
  * Refreshes the level label
  */
 export const refreshLvlLabel = () => {
-  gui.labels.lvl.setText(LEVEL_DISPLAYS[game.level - 1]);
+  gui.labels.lvl.setText(LEVEL_DATA[game.level - 1].display);
   gui.labels.lvl.x = game.width - gui.labels.lvl.width - 20;
 };
 

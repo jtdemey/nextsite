@@ -1,20 +1,20 @@
-import { mapInputEvents } from './controls';
-import player, { initPlayerSprite } from './player';
-import game, { loadLevel, setGraphics } from './game';
-import { handleCollisions, initCollisionCats } from './collision';
-import { LEVEL_IDS } from '../constants';
-import { initProgressBar } from './progressBar';
-import { initBounds, setExtendedBounds } from './bounds';
-import { initGui } from './hud';
-import { initPistolSprite } from './pistol';
+import { mapInputEvents } from "./controls";
+import player, { initPlayerSprite } from "./player";
+import game, { loadLevel, setGraphics, setOverlaps } from "./game";
+import { handleCollisions, initCollisionCats } from "./collision";
+import { LEVEL_IDS } from "../data/levelData";
+import { initProgressBar } from "./progressBar";
+import { initBounds, setExtendedBounds } from "./bounds";
+import { initGui } from "./hud";
+import { initPistolSprite } from "./pistol";
 
 /**
  * Creates the base scene
  */
-export default function() {
-
+export default function () {
   //Client dims
   initCollisionCats(this.matter.world);
+	console.log(this.matter)
 
   //Inputs
   mapInputEvents(this.input);
@@ -23,7 +23,7 @@ export default function() {
   player.setScene(this);
   game.setScene(this);
   setExtendedBounds();
-  this.matter.world.on('collisionstart', e => handleCollisions(e));
+  this.matter.world.on("collisionstart", e => handleCollisions(e));
 
   //Init
   initGui();
@@ -31,6 +31,7 @@ export default function() {
   initPlayerSprite();
   initPistolSprite();
   setGraphics(this);
+	setOverlaps(this.matter);
   initBounds();
   initProgressBar(this);
 }

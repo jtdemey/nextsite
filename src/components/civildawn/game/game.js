@@ -1,13 +1,13 @@
-import ground, { makeGroundSegments } from './ground';
-import { LEVEL_IDS, LEVEL_NAMES, LEVEL_DATA } from '../constants';
-import { spawnCheck, killAllEnemies } from './enemies';
-import { getRandBetween } from '../pwUtils';
-import player, { tweenPlayerVelocityX, fadingPlayerAlert } from './player';
-import { showPauseMenu, hidePauseMenu } from '../pausemenu/pauseMenu';
-import { disableBoundCollision, enableBoundCollision } from './bounds';
-import { refreshLvlLabel, refreshGui } from './hud';
-import { attemptPowerupSpawn, deleteAllPowerups } from './powerups';
-import pistol from './pistol';
+import { disableBoundCollision, enableBoundCollision } from "./bounds";
+import ground, { makeGroundSegments } from "./ground";
+import { LEVEL_IDS, LEVEL_DATA } from "../data/levelData";
+import { spawnCheck, killAllEnemies } from "./enemies";
+import { getRandBetween } from "../cdUtils";
+import player, { tweenPlayerVelocityX, fadingPlayerAlert } from "./player";
+import { showPauseMenu, hidePauseMenu } from "../pausemenu/pauseMenu";
+import { refreshLvlLabel, refreshGui } from "./hud";
+import powerups, { attemptPowerupSpawn, deleteAllPowerups } from "./powerups";
+import pistol, { reloadPistol } from "./pistol";
 
 /**
  * Civil Dawn game object
@@ -36,7 +36,7 @@ const game = {
 game.onTick = () => {
   game.graphics.clear();
   game.tick += 1;
-  if(game.tick % 500 === 0) {
+  if (game.tick % 500 === 0) {
     attemptPowerupSpawn();
   }
   spawnCheck();
@@ -57,7 +57,7 @@ export default game;
  */
 export const advanceLevel = () => {
   increaseScore(100);
-  fadingPlayerAlert('$100');
+  fadingPlayerAlert("$100");
   game.isTransitioningLevels = true;
   player.hasControl = false;
   player.isInvulnerable = true;
@@ -68,9 +68,10 @@ export const advanceLevel = () => {
     player.sprite.visible = false;
     pistol.sprite.visible = false;
   });
+  reloadPistol();
   game.scene.tweens.add({
     targets: game,
-    ease: 'Sine.easeInOut',
+    ease: "Sine.easeInOut",
     duration: 3000,
     repeat: 0,
     speed: 8,
@@ -82,14 +83,14 @@ export const advanceLevel = () => {
       game.scene.tweens.add({
         targets: player.sprite,
         x: 100,
-        ease: 'Sine.easeInOut',
+        ease: "Sine.easeInOut",
         duration: 2000,
         repeat: 0,
         speed: 1
       });
       game.scene.tweens.add({
         targets: game,
-        ease: 'Sine.easeInOut',
+        ease: "Sine.easeInOut",
         duration: 2000,
         repeat: 0,
         speed: 1,
@@ -108,7 +109,7 @@ export const advanceLevel = () => {
 };
 
 /**
- * Triggers "Game Over" state 
+ * Triggers "Game Over" state
  */
 export const gameOver = () => {
   game.paused = true;
@@ -139,7 +140,10 @@ export const loadLevel = (scene, lvlId) => {
   game.nextLevelTick = game.tick + 2000;
   game.enemySpawnRange = lvlData.enemySpawnRange;
   ground.widthRange = lvlData.groundWidthRange;
-  ground.altRange = [game.height - lvlData.groundAltRange[0], game.height - lvlData.groundAltRange[1]];
+  ground.altRange = [
+    game.height - lvlData.groundAltRange[0],
+    game.height - lvlData.groundAltRange[1]
+  ];
   setBackground(scene, lvlId);
   makeGroundSegments(10);
 };
@@ -151,6 +155,7 @@ export const pauseGame = () => {
   game.paused = true;
   player.hasControl = false;
   game.scene.matter.world.pause();
+  pistol.reloadTween?.pause();
   showPauseMenu();
 };
 
@@ -158,7 +163,10 @@ export const pauseGame = () => {
  * Selects a new random spawn distance for the next spawned enemy
  */
 export const rollNextEnemySpawnDist = () => {
-  game.enemySpawnDist = getRandBetween(game.enemySpawnRange[0], game.enemySpawnRange[1]);
+  game.enemySpawnDist = getRandBetween(
+    game.enemySpawnRange[0],
+    game.enemySpawnRange[1]
+  );
 };
 
 /**
@@ -167,7 +175,9 @@ export const rollNextEnemySpawnDist = () => {
  * @param {number} lvlId Civil Dawn level ID
  */
 export const setBackground = (scene, lvlId) => {
-  game.background = scene.add.image(0, 0, LEVEL_NAMES[lvlId - 1]).setOrigin(0);
+  game.background = scene.add
+    .image(0, 0, LEVEL_DATA[lvlId - 1].name)
+    .setOrigin(0);
   game.background.width = game.width;
   game.background.height = game.height;
   game.background.setDepth(-1);
@@ -184,16 +194,19 @@ export const setGraphics = scene => {
     },
     lineStyle: {
       width: 2,
-      color: '#000'
+      color: "#000"
     }
   });
 };
+
+export const setOverlaps = matterPhysics =>
+	matterPhysics.overlap(player.sprite.body, powerups.sprites.map(p => p.body), () => console.log('eeee'))
 
 /**
  * Toggles game pause state
  */
 export const togglePause = () => {
-  if(game.paused) {
+  if (game.paused) {
     unpauseGame();
   } else {
     pauseGame();
@@ -207,5 +220,6 @@ export const unpauseGame = () => {
   game.paused = false;
   player.hasControl = true;
   game.scene.matter.world.resume();
+  pistol.reloadTween?.resume();
   hidePauseMenu();
 };

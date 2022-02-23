@@ -1,5 +1,5 @@
 import game, { unpauseGame } from '../game/game';
-import { getPhaserColorFromHex } from "../pwUtils";
+import { getPhaserColorFromHex } from "../cdUtils";
 
 const pauseMenu = {
   background: null,

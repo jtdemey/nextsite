@@ -1,7 +1,8 @@
-import game, { rollNextEnemySpawnDist, increaseScore } from './game';
-import { ENEMY_TYPES, LEVEL_IDS, ENEMY_TYPE_NAMES, ENEMY_SCORES } from '../constants';
-import collisionCats from './collision';
-import { genId, getRandBetween } from '../pwUtils';
+import game, { rollNextEnemySpawnDist, increaseScore } from "./game";
+import { ENEMY_TYPES, ENEMY_TYPE_NAMES, ENEMY_SCORES } from "../data/enemyData";
+import { LEVEL_IDS } from "../data/levelData";
+import collisionCats from "./collision";
+import { genId, getRandBetween } from "../cdUtils";
 
 /**
  * Enemy entity data
@@ -16,7 +17,7 @@ export default enemies;
  */
 const deleteEnemy = enemyId => {
   enemies.forEach((e, i) => {
-    if(e.enemyId === enemyId) {
+    if (e.enemyId === enemyId) {
       e.sprite.destroy();
       enemies.splice(i, 1);
       i -= 1;
@@ -28,7 +29,7 @@ const deleteEnemy = enemyId => {
  * Clears all enemies from the game
  */
 export const clearEnemies = () => {
-  while(enemies.length) {
+  while (enemies.length) {
     enemies.pop().sprite.destroy();
   }
 };
@@ -39,19 +40,24 @@ export const clearEnemies = () => {
  * @param {string} msg Alert text
  */
 export const fadingEnemyAlert = (enemyId, msg) => {
-  enemies.map(e => {
-    if(e.enemyId === enemyId) {
-      const text = game.scene.add.text(e.sprite.x - e.sprite.width, e.sprite.y - 10, msg, {
-        color: '#fff',
-        fontFamily: `Coda`,
-        fontSize: '1.5rem' 
-      });
+  enemies.forEach(e => {
+    if (e.enemyId === enemyId) {
+      const text = game.scene.add.text(
+        e.sprite.x - e.sprite.width,
+        e.sprite.y - 10,
+        msg,
+        {
+          color: "#fff",
+          fontFamily: `Coda`,
+          fontSize: "1.5rem"
+        }
+      );
       text.setX(e.sprite.x - text.width / 2);
       game.scene.tweens.add({
         targets: text,
         alpha: 0,
         y: e.sprite.y - 100,
-        ease: 'Sine.easeOut',
+        ease: "Sine.easeOut",
         duration: 1000,
         repeat: 0
       });
@@ -65,8 +71,8 @@ export const fadingEnemyAlert = (enemyId, msg) => {
  * @returns Enemy entity
  */
 export const getEnemy = enemyId => {
-  const enemy = enemies.map(e => e.enemyId === enemyId)[0];
-  if(!enemy) {
+  const enemy = enemies.filter(e => e.enemyId === enemyId)[0];
+  if (!enemy) {
     console.error(`Enemy ${enemyId} not found`);
   }
   return enemy;
@@ -79,10 +85,10 @@ export const getEnemy = enemyId => {
  */
 export const getEnemyFromBodyId = bodyId => {
   enemies.forEach((goon, i) => {
-    if(goon.sprite.body !== undefined) {
+    if (goon.sprite.body !== undefined) {
       console.error(`Enemy sprite ${goon.enemyId} contains no defined body`);
     }
-    if(goon.sprite.body && goon.sprite.body.id === bodyId) {
+    if (goon.sprite.body && goon.sprite.body.id === bodyId) {
       return enemies[i];
     }
   });
@@ -96,7 +102,7 @@ export const getEnemyFromBodyId = bodyId => {
 const getPossibleEnemyTypes = () => {
   let ids = LEVEL_IDS;
   let x = ENEMY_TYPES;
-  switch(game.level) {
+  switch (game.level) {
     case ids.CIVIL_DUSK:
       return [x.ROLLER];
     case ids.NAUTICAL_DUSK:
@@ -136,10 +142,10 @@ const getPossibleEnemyTypes = () => {
  * @param {number} amt Damage amount
  */
 export const hurtEnemy = (enemyId, amt) => {
-  enemies.map(e => {
-    if(e.enemyId === enemyId) {
+  enemies.forEach(e => {
+    if (e.enemyId === enemyId) {
       e.hp -= amt;
-      if(e.hp < 1) {
+      if (e.hp < 1) {
         killEnemy(enemyId);
       }
     }
@@ -152,13 +158,13 @@ export const hurtEnemy = (enemyId, amt) => {
  * @param {number} amt Damage amount
  */
 export const hurtEnemyByBodyId = (bodyId, amt) => {
-  enemies.map(e => {
-    if(!e.sprite.body) {
-      console.error('No sprite body with id ' + bodyId);
+  enemies.forEach(e => {
+    if (!e.sprite.body) {
+      console.error("No sprite body with id " + bodyId);
     }
-    if(e.sprite.body && e.sprite.body.id === bodyId) {
+    if (e.sprite.body && e.sprite.body.id === bodyId) {
       e.hp -= amt;
-      if(e.hp < 1) {
+      if (e.hp < 1) {
         killEnemy(e.enemyId);
       }
     }
@@ -169,7 +175,7 @@ export const hurtEnemyByBodyId = (bodyId, amt) => {
  * Kills all currently spawned enemies
  */
 export const killAllEnemies = () => {
-  enemies.map(e => killEnemy(e.enemyId, false));
+  enemies.forEach(e => killEnemy(e.enemyId, false));
 };
 
 /**
@@ -178,24 +184,40 @@ export const killAllEnemies = () => {
  * @param {boolean} addScore Flag for whether to increase player score
  */
 export const killEnemy = (enemyId, addScore = true) => {
-  enemies.map(e => {
-    if(e.enemyId === enemyId && e.speed !== 0) {
+  enemies.forEach(e => {
+    if (e.enemyId === enemyId && e.speed !== 0) {
       e.speed = 0;
       e.sprite.setVelocity(getRandBetween(-1, 1), getRandBetween(-3, -6));
       e.sprite.setAngularVelocity(getRandBetween(1, 3) / 10);
       e.sprite.body.collisionFilter.category = 0;
       e.sprite.setIgnoreGravity(false);
-      e.onTick = () => { return; }
+      e.onTick = () => {
+        return;
+      };
       setTimeout(() => {
         deleteEnemy(enemyId);
       }, 500);
-      if(addScore) {
+      if (addScore) {
         increaseScore(ENEMY_SCORES[e.type]);
         fadingEnemyAlert(e.enemyId, `$${ENEMY_SCORES[e.type]}`);
       }
     }
   });
 };
+
+/**
+ * Creates a base enemy with the provided properties
+ * @param {object} param0 An enemy object
+ * @returns Enemy object
+ */
+const makeBaseEnemy = ({ enemyId, hp, onTick, speed, sprite, type }) => ({
+  enemyId,
+  hp,
+  onTick,
+  speed,
+  sprite,
+  type
+});
 
 /**
  * Creates a "Roller" enemy
@@ -205,35 +227,30 @@ export const killEnemy = (enemyId, addScore = true) => {
  * @returns Enemy Roller entity
  */
 const makeRoller = (enemyId, type, sprite) => {
-  let hp = 100;
-  let speed = 2;
   sprite.setBody({
-    type: 'circle',
+    type: "circle",
     radius: 32
   });
   sprite.body.collisionFilter = {
     category: collisionCats.ENEMY,
     group: 0,
-    mask: collisionCats.PLAYER | collisionCats.GROUND | collisionCats.ENEMY | collisionCats.BULLET
+    mask:
+      collisionCats.PLAYER |
+      collisionCats.GROUND |
+      collisionCats.ENEMY |
+      collisionCats.BULLET
   };
   sprite.body.friction = 0;
   sprite.body.damage = getRandBetween(15, 18);
   sprite.setBounce(0);
-  let onTick = () => {
+  const onTick = () => {
     sprite.rotation = 0;
     sprite.setVelocityX(-2.5);
-    if(sprite.body.position.x < -50) {
+    if (sprite.body.position.x < -50) {
       deleteEnemy(enemyId);
     }
   };
-  return {
-    enemyId,
-    hp,
-    onTick,
-    speed,
-    sprite,
-    type
-  };
+  return makeBaseEnemy({ enemyId, hp: 100, onTick, speed: 2, sprite, type });
 };
 
 /**
@@ -244,37 +261,35 @@ const makeRoller = (enemyId, type, sprite) => {
  * @returns Enemy Glider entity
  */
 const makeGlider = (enemyId, type, sprite) => {
-  let hp = 130;
-  let speed = 2;
   sprite.setBody({
-    type: 'rectangle',
+    type: "rectangle",
     width: 80,
     height: 40
   });
   sprite.body.collisionFilter = {
     category: collisionCats.ENEMY,
     group: 0,
-    mask: collisionCats.PLAYER | collisionCats.GROUND | collisionCats.ENEMY | collisionCats.BULLET
+    mask:
+      collisionCats.PLAYER |
+      collisionCats.GROUND |
+      collisionCats.ENEMY |
+      collisionCats.BULLET
   };
   sprite.body.ignoreGravity = true;
   sprite.body.damage = getRandBetween(22, 25);
   sprite.setBounce(0);
-  sprite.setPosition(game.width + 250, getRandBetween(game.height - 400, game.height - 600));
-  let onTick = () => {
+  sprite.setPosition(
+    game.width + 250,
+    getRandBetween(game.height - 400, game.height - 600)
+  );
+  const onTick = () => {
     sprite.rotation = 0;
     sprite.setVelocityX(-2);
-    if(sprite.body.position.x < -50) {
+    if (sprite.body.position.x < -50) {
       deleteEnemy(enemyId);
     }
   };
-  return {
-    enemyId,
-    hp,
-    onTick,
-    speed,
-    sprite,
-    type
-  };
+	return makeBaseEnemy({ enemyId, hp: 130, onTick, speed: 2, sprite, type });
 };
 
 /**
@@ -284,9 +299,13 @@ const makeGlider = (enemyId, type, sprite) => {
  */
 const makeEnemy = type => {
   const enemyId = genId(16);
-  let sprite = game.scene.matter.add.sprite(game.width + 250, 200, ENEMY_TYPE_NAMES[type]);
+  let sprite = game.scene.matter.add.sprite(
+    game.width + 250,
+    200,
+    ENEMY_TYPE_NAMES[type]
+  );
   let enemy;
-  switch(type) {
+  switch (type) {
     case ENEMY_TYPES.ROLLER:
       enemy = makeRoller(enemyId, type, sprite);
       break;
@@ -305,8 +324,15 @@ const makeEnemy = type => {
  * Tick function to check whether to spawn a new enemy
  */
 export const spawnCheck = () => {
-  if(!enemies.some(e => e.sprite && e.sprite.body && e.sprite.body.position.x > game.width - game.enemySpawnDist)
-  && !game.isTransitioningLevels) {
+  if (
+    !enemies.some(
+      e =>
+        e.sprite &&
+        e.sprite.body &&
+        e.sprite.body.position.x > game.width - game.enemySpawnDist
+    ) &&
+    !game.isTransitioningLevels
+  ) {
     spawnNextEnemy();
   }
 };

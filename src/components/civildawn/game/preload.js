@@ -1,4 +1,5 @@
-import { LEVEL_NAMES, POWERUP_NAMES } from "../constants";
+import { LEVEL_DATA } from "../data/levelData";
+import { POWERUP_NAMES } from "./powerups";
 
 /**
  * Preloads game assets
@@ -9,7 +10,7 @@ export default function() {
   const pu = str => `civildawn/assets/powerups/${str}.png`;
   const d = str => `civildawn/assets/destructibles/${str}.png`;
   //Backgrounds
-  LEVEL_NAMES.forEach(n => this.load.image(n, bg(n)));
+  LEVEL_DATA.forEach(lvl => this.load.image(lvl.name, bg(lvl.name)));
   //Sprites
   this.load.spritesheet('player', png('playersprite'), {
     frameWidth: 32,

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import game from './game';
-import { getPhaserColorFromHex, xPos, yPos } from '../pwUtils';
+import { getPhaserColorFromHex, xPos, yPos } from '../cdUtils';
 import collisionCats from './collision';
 import pistol from './pistol';
 
@@ -19,7 +19,7 @@ export default bullets;
  * @param {Vec2} pt Phaser position
  */
 export const addHit = pt => {
-  const hit = new Phaser.Geom.Circle(pt.x, pt.y, 2.5);
+  const hit = new Phaser.Geom.Circle(pt.x - 8, pt.y, 2.5);
   if(pt.enemyId) {
     hit.enemyId = pt.enemyId;
     hit.enemySpeed = pt.enemySpeed;

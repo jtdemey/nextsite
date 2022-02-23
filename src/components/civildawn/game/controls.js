@@ -1,6 +1,6 @@
 import player from "./player";
 import { togglePause } from "./game";
-import { shoot } from "./pistol";
+import { reloadPistol, shoot } from "./pistol";
 
 const controls = {
   mouseX: 0,
@@ -58,6 +58,9 @@ export const handleKeyDown = e => {
     case "j":
       shoot();
       break;
+		case "r":
+			reloadPistol();
+			break;
     default:
       break;
   }
