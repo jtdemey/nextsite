@@ -1,6 +1,9 @@
 import game, { unpauseGame } from '../game/game';
 import { getPhaserColorFromHex } from "../cdUtils";
 
+/**
+ * State and elements of the pause menu
+ */
 const pauseMenu = {
   background: null,
   header: null,
@@ -12,6 +15,9 @@ const pauseMenu = {
 
 export default pauseMenu;
 
+/**
+ * Hides the pause menu
+ */
 export const hidePauseMenu = () => {
   pauseMenu.background.visible = false;
   pauseMenu.background.scaleY = 1;
@@ -21,7 +27,16 @@ export const hidePauseMenu = () => {
   pauseMenu.quitText.visible = false;
 };
 
-const addMenuItem = (x, y, key, hoverInteraction, clickFunc = undefined) => {
+/**
+ * Adds a menu item text sprite
+ * @param {number} x X coordinate
+ * @param {number} y Y coordinate
+ * @param {string} key Image sprite key
+ * @param {boolean} hoverInteraction Whether the text will animate upon mouse hover-over
+ * @param {Function} clickFunc Optional function to call on click
+ * @returns Menu item text sprite
+ */
+export const addMenuItem = (x, y, key, hoverInteraction, clickFunc = undefined) => {
   const menuItem = game.scene.add.image(x, y, key);
   menuItem.setInteractive();
   menuItem.depth = 2;
@@ -52,6 +67,9 @@ const addMenuItem = (x, y, key, hoverInteraction, clickFunc = undefined) => {
   return menuItem;
 };
 
+/**
+ * Translates menu items across the screen
+ */
 const animateMenuItems = () => {
   const anim = (menuBtn, delay) => {
     const destX = menuBtn.x;
@@ -76,6 +94,9 @@ const animateMenuItems = () => {
   anim(pauseMenu.quitText, 105);
 };
 
+/**
+ * Shows the pause menu
+ */
 export const showPauseMenu = () => {
   if(pauseMenu.background !== null) {
     pauseMenu.background.visible = true;

@@ -1,3 +1,4 @@
+import { collidingGroup, nonCollidingGroup } from "./collision";
 import { gameOver } from "./game";
 import { refreshHealthCt } from "./hud";
 import { updateGunSprite, updateAimLine } from "./pistol";
@@ -153,6 +154,7 @@ export const initPlayerSprite = () => {
   });
   player.sprite.anims.load("walk");
   player.sprite.anims.play("walk");
+	player.sprite.setCollisionGroup(nonCollidingGroup);
 };
 
 /**

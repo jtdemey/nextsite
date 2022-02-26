@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import player, { hurtPlayer } from "./player";
 import enemies from "./enemies";
-import { detectCatColl, getClosestPtTo } from "../cdUtils";
+import { getClosestPtTo } from "../cdUtils";
 import { DESTRUCTIBLE_TYPES } from "./destructibles";
 import { ENEMY_TYPES } from "../data/enemyData";
 import ground from "./ground";
@@ -23,6 +23,10 @@ const COLLISION_CAT_NAMES = [
 const collisionCats = {};
 
 export default collisionCats;
+
+export let collidingGroup;
+
+export let nonCollidingGroup;
 
 /**
  * Detects collisions between the player and enemies
@@ -87,11 +91,29 @@ const checkPlayerPowerupColl = pair => {
       pair.bodyA.collisionFilter.category === collisionCats.PLAYER
         ? pair.bodyB
         : pair.bodyA;
-				console.log(powerupBody)
-		//powerupBody.disableBody(true, true);
     consumePowerup(powerupBody.id);
   }
 };
+
+/**
+ * Detects if the given sprite body has the given collision category
+ * @param {Body} body Phaser sprite body
+ * @param {number} cat Collision category
+ * @returns True if body's collision category matches, false otherwise
+ */
+const isCollCat = (body, cat) => body.collisionFilter.category === cat;
+
+/**
+ * Detects if two bodies have the two provided collision categories
+ * @param {Body} bodyA Phaser sprite body A
+ * @param {Body} bodyB Phaser sprite body B
+ * @param {number} catA Collision category A
+ * @param {number} catB Collision category B
+ * @returns True if the one of the provided bodies has catA and the other has catB or vice versa
+ */
+const detectCatColl = (bodyA, bodyB, catA, catB) =>
+  (isCollCat(bodyA, catA) && isCollCat(bodyB, catB)) ||
+  (isCollCat(bodyA, catB) && isCollCat(bodyB, catA));
 
 /**
  * Gets collision points between the aim line and destructibles
@@ -241,4 +263,13 @@ export const initCollisionCats = world => {
       collisionCats[n] = next();
     }
   });
+};
+
+/**
+ * Initializes the collision categories with the value found in COLLISION_CAT_NAMES
+ * @param {World} world Phaser matter world
+ */
+export const initCollisionGroups = world => {
+	collidingGroup = world.nextGroup();
+	nonCollidingGroup = world.nextGroup(true);
 };

@@ -1,7 +1,7 @@
 import { mapInputEvents } from "./controls";
 import player, { initPlayerSprite } from "./player";
-import game, { loadLevel, setGraphics, setOverlaps } from "./game";
-import { handleCollisions, initCollisionCats } from "./collision";
+import game, { loadLevel, setGraphics } from "./game";
+import { handleCollisions, initCollisionCats, initCollisionGroups } from "./collision";
 import { LEVEL_IDS } from "../data/levelData";
 import { initProgressBar } from "./progressBar";
 import { initBounds, setExtendedBounds } from "./bounds";
@@ -14,7 +14,7 @@ import { initPistolSprite } from "./pistol";
 export default function () {
   //Client dims
   initCollisionCats(this.matter.world);
-	console.log(this.matter)
+	initCollisionGroups(this.matter.world);
 
   //Inputs
   mapInputEvents(this.input);
@@ -31,7 +31,6 @@ export default function () {
   initPlayerSprite();
   initPistolSprite();
   setGraphics(this);
-	setOverlaps(this.matter);
   initBounds();
   initProgressBar(this);
 }

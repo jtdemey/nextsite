@@ -6,8 +6,8 @@ import { updateProgressBar } from "./progressBar";
 import enemies from "./enemies";
 import { updateBullets } from "./bullets";
 import { updatePowerups } from "./powerups";
-import pistol from "./pistol";
 import { updateDestructibles } from "./destructibles";
+import { updateOverlaps } from "./overlaps";
 
 /**
  * Game main tick function
@@ -16,7 +16,6 @@ export default function () {
   if (game.paused) {
     return;
   } else {
-    game.graphics.strokeLineShape(pistol.aimLine);
     game.onTick();
     player.onTick();
     if (enemies.length > 0) {
@@ -29,5 +28,6 @@ export default function () {
     updateBullets();
     updatePowerups();
     updateDestructibles();
+		updateOverlaps();
   }
 }

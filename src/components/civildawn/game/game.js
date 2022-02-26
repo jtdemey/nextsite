@@ -38,8 +38,13 @@ game.onTick = () => {
   game.tick += 1;
   if (game.tick % 500 === 0) {
     attemptPowerupSpawn();
+		//const newTint = game.background.tintTopLeft - (game.tick - game.levelStartTick);
+		//game.background.setTint(newTint, newTint, newTint, newTint);
   }
   spawnCheck();
+
+	//Debug
+  //game.graphics.strokeLineShape(pistol.aimLine);
 };
 
 /**
@@ -156,6 +161,7 @@ export const pauseGame = () => {
   player.hasControl = false;
   game.scene.matter.world.pause();
   pistol.reloadTween?.pause();
+	game.scene.tweens.pauseAll();
   showPauseMenu();
 };
 
@@ -169,6 +175,7 @@ export const rollNextEnemySpawnDist = () => {
   );
 };
 
+let initialBgTint;
 /**
  * Sets the background image of the game
  * @param {Scene} scene Current Phaser scene
@@ -199,9 +206,6 @@ export const setGraphics = scene => {
   });
 };
 
-export const setOverlaps = matterPhysics =>
-	matterPhysics.overlap(player.sprite.body, powerups.sprites.map(p => p.body), () => console.log('eeee'))
-
 /**
  * Toggles game pause state
  */
@@ -221,5 +225,6 @@ export const unpauseGame = () => {
   player.hasControl = true;
   game.scene.matter.world.resume();
   pistol.reloadTween?.resume();
+	game.scene.tweens.resumeAll();
   hidePauseMenu();
 };

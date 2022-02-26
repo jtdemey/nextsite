@@ -1,6 +1,6 @@
 import { getRandomProperty, getRandBetween } from "../cdUtils";
 import game from "./game";
-import collisionCats from "./collision";
+import collisionCats, { nonCollidingGroup } from "./collision";
 import player, { fadingPlayerAlert } from "./player";
 import { refreshHealthCt } from "./hud";
 import { addPackageDestructible } from "./destructibles";
@@ -100,11 +100,12 @@ const makeLinearPowerup = id => {
     type: "circle",
     radius: 32
   });
+	pickup.isConsumed = false;
   pickup.powerupId = id;
   pickup.powerupType = POWERUP_TYPES.LINEAR;
   pickup.setIgnoreGravity(true);
   pickup.setCollisionCategory(collisionCats.CONSUMABLE);
-	//pickup.setCollisionGroup(powerupCollisionGroup);
+	pickup.setCollisionGroup(nonCollidingGroup);
   //pickup.body.collisionFilter.mask = collisionCats.PLAYER;
   pickup.body.mass = 0.01;
   const velocity = getRandBetween(-4, -8);
@@ -205,9 +206,21 @@ export const attemptPowerupSpawn = () => {
  * @param {number} bodyId Phaser physics body ID
  */
 export const consumePowerup = bodyId => {
-  const powerup = powerups.sprites.filter(s => s.body.id === bodyId)[0];
-  deletePowerup(bodyId);
-  applyPower(powerup.powerupId);
+  const powerupSprite = powerups.sprites.filter(s => s.body.id === bodyId)[0];
+	if (powerupSprite.isConsumed === true) return;
+	powerupSprite.isConsumed = true;
+  applyPower(powerupSprite.powerupId);
+	console.log(powerupSprite)
+	game.scene.tweens.add({
+		targets: powerupSprite,
+		alpha: 0,
+		scaleX: 1.75,
+		scaleY: 1.75,
+    ease: 'Sine.easeOut',
+    duration: 500,
+    repeat: 0,
+		onComplete: () => deletePowerup(bodyId)
+	});
 };
 
 /**
