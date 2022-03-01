@@ -3,6 +3,7 @@ import game from './game';
 import { getRandBetween, makePt } from '../cdUtils';
 import player from './player';
 import collisionCats from './collision';
+import { makePickup } from './pickups';
 
 /**
  * Ground entity data
@@ -99,6 +100,8 @@ export const scrollGround = (scene, speed) => {
       });
       if(index === ground.paths.length - 1 && path[path.length - 1].x < game.width + 200) {
         makeGroundSegments(10);
+				console.log(ground.bodies.length)
+				//makePickup(ground.xInd, ground.yInd - 20)
       }
     });
     drawGround();

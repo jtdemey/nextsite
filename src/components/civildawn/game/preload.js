@@ -4,7 +4,7 @@ import { POWERUP_NAMES } from "./powerups";
 /**
  * Preloads game assets
  */
-export default function() {
+export default function () {
   const bg = str => `civildawn/assets/bg/${str}.png`;
   const png = str => `civildawn/assets/${str}.png`;
   const pu = str => `civildawn/assets/powerups/${str}.png`;
@@ -12,28 +12,30 @@ export default function() {
   //Backgrounds
   LEVEL_DATA.forEach(lvl => this.load.image(lvl.name, bg(lvl.name)));
   //Sprites
-  this.load.spritesheet('player', png('playersprite'), {
+  this.load.spritesheet("player", png("playersprite"), {
     frameWidth: 32,
     frameHeight: 32
   });
-  this.load.image('pistol', png('pistol'));
-  this.load.image('bullet', png('bullet'));
-  this.load.image('gunshot', png('gunshot'));
-  this.load.spritesheet('roller', png('rollerspriteV2'), {
+  this.load.image("pistol", png("pistol"));
+  this.load.image("bullet", png("bullet"));
+  this.load.image("gunshot", png("gunshot"));
+  this.load.spritesheet("roller", png("rollerspriteV2"), {
     frameWidth: 64,
-    frameHeight: 64 
+    frameHeight: 64
   });
-  this.load.spritesheet('glider', png('glidersprite'), {
+  this.load.spritesheet("glider", png("glidersprite"), {
     frameWidth: 80,
-    frameHeight: 40 
+    frameHeight: 40
   });
+	//Pickups
+  this.load.image("pickup", png("pickup"));
   //Powerups
   POWERUP_NAMES.forEach(n => this.load.image(n, pu(n)));
   //Destructibles
-  this.load.image('powerupPackage', d('powerupPackage'));
+  this.load.image("powerupPackage", d("powerupPackage"));
   //Pause
-  this.load.image('pausedHeader', png('pausedHeader'));
-  this.load.image('resumeBtn', png('resumeBtn'));
-  this.load.image('optionsBtn', png('optionsBtn'));
-  this.load.image('quitBtn', png('quitBtn'));
+  this.load.image("pausedHeader", png("pausedHeader"));
+  this.load.image("resumeBtn", png("resumeBtn"));
+  this.load.image("optionsBtn", png("optionsBtn"));
+  this.load.image("quitBtn", png("quitBtn"));
 }

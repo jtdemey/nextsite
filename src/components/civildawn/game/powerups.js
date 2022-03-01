@@ -16,7 +16,15 @@ export const POWERUP_IDS = {
   RAGE: 6
 };
 
-export const POWERUP_NAMES = ['powerupHeal', 'powerupDamage', 'powerupMaxAmmo', 'powerupReload', 'powerupJumpHeight', 'powerupJumpAmount', 'powerupRage'];
+export const POWERUP_NAMES = [
+  "powerupHeal",
+  "powerupDamage",
+  "powerupMaxAmmo",
+  "powerupReload",
+  "powerupJumpHeight",
+  "powerupJumpAmount",
+  "powerupRage"
+];
 
 export const POWERUP_TYPES = {
   LINEAR: 0,
@@ -60,22 +68,22 @@ export default powerups;
 const getPowerupId = () => {
   let goodId;
   const badIds = [];
-	//Max ammo: 999
-	if (pistol.maxAmmo >= 999) {
+  //Max ammo: 999
+  if (pistol.maxAmmo >= 999) {
     badIds.push(POWERUP_IDS.MAX_AMMO);
-	}
+  }
   //Max jumps: 3
   if (player.maxJumps > 2) {
     badIds.push(POWERUP_IDS.JUMP_AMOUNT);
   }
-	//Max jump height: -14
-	if (player.jumpHeight <= -14) {
+  //Max jump height: -14
+  if (player.jumpHeight <= -14) {
     badIds.push(POWERUP_IDS.JUMP_HEIGHT);
-	}
-	//Max health: 100 
-	if (player.hp > 100) {
+  }
+  //Max health: 100
+  if (player.hp > 100) {
     badIds.push(POWERUP_IDS.HEAL);
-	}
+  }
   //Max reload speed: 200
   if (player.reloadSpeed <= 200) {
     badIds.push(POWERUP_IDS.RELOAD_SPEED);
@@ -100,18 +108,18 @@ const makeLinearPowerup = id => {
     type: "circle",
     radius: 32
   });
-	pickup.isConsumed = false;
+  pickup.isConsumed = false;
   pickup.powerupId = id;
   pickup.powerupType = POWERUP_TYPES.LINEAR;
   pickup.setIgnoreGravity(true);
   pickup.setCollisionCategory(collisionCats.CONSUMABLE);
-	pickup.setCollisionGroup(nonCollidingGroup);
-  //pickup.body.collisionFilter.mask = collisionCats.PLAYER;
+  pickup.setCollisionGroup(nonCollidingGroup);
   pickup.body.mass = 0.01;
   const velocity = getRandBetween(-4, -8);
   pickup.onTick = () => {
     pickup.rotation = 0;
     pickup.setVelocityX(velocity);
+    pickup.setVelocityY(0);
     if (pickup.x < 0 - pickup.width) {
       deletePowerup(pickup.body.id);
     }
@@ -146,10 +154,10 @@ export const addPowerup = () => {
  * @param {number} powerupId Powerup ID
  */
 export const applyPower = powerupId => {
-	let gain;
+  let gain;
   switch (powerupId) {
     case POWERUP_IDS.HEAL:
-			gain = getRandBetween(15, 30);
+      gain = getRandBetween(15, 30);
       player.hp = player.hp + gain;
       if (player.hp > 100) {
         player.hp = 100;
@@ -162,11 +170,11 @@ export const applyPower = powerupId => {
       fadingPlayerAlert(`+10 DAMAGE`);
       break;
     case POWERUP_IDS.MAX_AMMO:
-			pistol.maxAmmo += 2;
+      pistol.maxAmmo += 2;
       fadingPlayerAlert(`+2 AMMO CAPACITY`);
       break;
     case POWERUP_IDS.RELOAD_SPEED:
-			player.reloadSpeed -= 100;
+      player.reloadSpeed -= 100;
       fadingPlayerAlert(`RELOAD SPEED UP`);
       break;
     case POWERUP_IDS.JUMP_HEIGHT:
@@ -187,11 +195,8 @@ export const applyPower = powerupId => {
  * Check if a powerup is valid to spawn and do so if it is
  */
 export const attemptPowerupSpawn = () => {
-  if (
-    !game.paused &&
-    !game.isTransitioningLevels &&
-    Math.random() < powerups.spawnChance
-  ) {
+  if (game.paused || game.isTransitioningLevels) return;
+  if (Math.random() < powerups.spawnChance) {
     addPowerup();
     powerups.spawnChance = 0.5;
   } else {
@@ -207,20 +212,19 @@ export const attemptPowerupSpawn = () => {
  */
 export const consumePowerup = bodyId => {
   const powerupSprite = powerups.sprites.filter(s => s.body.id === bodyId)[0];
-	if (powerupSprite.isConsumed === true) return;
-	powerupSprite.isConsumed = true;
+  if (powerupSprite.isConsumed === true) return;
+  powerupSprite.isConsumed = true;
   applyPower(powerupSprite.powerupId);
-	console.log(powerupSprite)
-	game.scene.tweens.add({
-		targets: powerupSprite,
-		alpha: 0,
-		scaleX: 1.75,
-		scaleY: 1.75,
-    ease: 'Sine.easeOut',
+  game.scene.tweens.add({
+    targets: powerupSprite,
+    alpha: 0,
+    scaleX: 1.75,
+    scaleY: 1.75,
+    ease: "Sine.easeOut",
     duration: 500,
     repeat: 0,
-		onComplete: () => deletePowerup(bodyId)
-	});
+    onComplete: () => deletePowerup(bodyId)
+  });
 };
 
 /**

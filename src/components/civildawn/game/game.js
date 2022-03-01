@@ -98,7 +98,7 @@ export const advanceLevel = () => {
         ease: "Sine.easeInOut",
         duration: 2000,
         repeat: 0,
-        speed: 1,
+        speed: 1 + (game.level * 0.25),
         onComplete: () => {
           player.stopMoving();
           player.hasControl = true;
