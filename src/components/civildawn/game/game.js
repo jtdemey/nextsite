@@ -36,12 +36,14 @@ const game = {
 game.onTick = () => {
   game.graphics.clear();
   game.tick += 1;
+	if (game.tick % 10 === 0) {
+		spawnCheck();
+	}
   if (game.tick % 500 === 0) {
     attemptPowerupSpawn();
 		//const newTint = game.background.tintTopLeft - (game.tick - game.levelStartTick);
 		//game.background.setTint(newTint, newTint, newTint, newTint);
   }
-  spawnCheck();
 
 	//Debug
   //game.graphics.strokeLineShape(pistol.aimLine);

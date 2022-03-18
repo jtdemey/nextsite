@@ -8,6 +8,7 @@ import { updateBullets } from "./bullets";
 import { updatePowerups } from "./powerups";
 import { updateDestructibles } from "./destructibles";
 import { updateOverlaps } from "./overlaps";
+import { scrollPickups } from "./pickups";
 
 /**
  * Game main tick function
@@ -23,6 +24,7 @@ export default function () {
     }
     setMousePos(this.input.mousePointer.x, this.input.mousePointer.y);
     scrollGround(this, game.speed);
+		scrollPickups(game.speed);
     drawGround();
     updateProgressBar();
     updateBullets();

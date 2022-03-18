@@ -61,7 +61,7 @@ export const LEVEL_DATA = [
 		LEVEL_IDS.NAUTICAL_DUSK,
 		"nauticaldusk",
 		[380, 490],
-		[150, 300],
+		[80, 230],
 		[180, 260]
 	),
 	genLevelData(
@@ -70,7 +70,7 @@ export const LEVEL_DATA = [
 		LEVEL_IDS.ASTRONOMICAL_DUSK,
 		"astronomicaldusk",
 		[400, 500],
-		[100, 220],
+		[60, 240],
 		[180, 260]
 	),
 	genLevelData(
@@ -79,7 +79,7 @@ export const LEVEL_DATA = [
 		LEVEL_IDS.NIGHTFALL,
 		"nightfall",
 		[400, 500],
-		[100, 220],
+		[40, 250],
 		[180, 260]
 	),
 	genLevelData(
@@ -88,7 +88,7 @@ export const LEVEL_DATA = [
 		LEVEL_IDS.NIGHTFALL2,
 		"nightfall2",
 		[400, 500],
-		[100, 220],
+		[20, 260],
 		[180, 260]
 	),
 	genLevelData(
@@ -97,7 +97,7 @@ export const LEVEL_DATA = [
 		LEVEL_IDS.NIGHTFALL3,
 		"nightfall3",
 		[400, 500],
-		[100, 220],
+		[20, 270],
 		[180, 260]
 	),
 	genLevelData(
@@ -106,7 +106,7 @@ export const LEVEL_DATA = [
 		LEVEL_IDS.NIGHT,
 		"night",
 		[400, 500],
-		[100, 220],
+		[20, 280],
 		[180, 260]
 	),
 	genLevelData(
@@ -115,7 +115,7 @@ export const LEVEL_DATA = [
 		LEVEL_IDS.MIDNIGHT,
 		"midnight",
 		[400, 500],
-		[100, 220],
+		[20, 290],
 		[180, 260]
 	),
 	genLevelData(
@@ -124,7 +124,7 @@ export const LEVEL_DATA = [
 		LEVEL_IDS.MORNING,
 		"morning",
 		[400, 500],
-		[100, 220],
+		[20, 300],
 		[180, 260]
 	),
 	genLevelData(
@@ -133,7 +133,7 @@ export const LEVEL_DATA = [
 		LEVEL_IDS.SUNRISE,
 		"sunrise",
 		[400, 500],
-		[100, 220],
+		[20, 310],
 		[180, 260]
 	),
 	genLevelData(
@@ -142,7 +142,7 @@ export const LEVEL_DATA = [
 		LEVEL_IDS.SUNRISE2,
 		"sunrise2",
 		[400, 500],
-		[100, 220],
+		[20, 320],
 		[180, 260]
 	),
 	genLevelData(
@@ -151,7 +151,7 @@ export const LEVEL_DATA = [
 		LEVEL_IDS.SUNRISE3,
 		"sunrise3",
 		[400, 500],
-		[100, 220],
+		[20, 330],
 		[180, 260]
 	),
 	genLevelData(
@@ -160,7 +160,7 @@ export const LEVEL_DATA = [
 		LEVEL_IDS.ASTRONOMICAL_DAWN,
 		"astronomicaldawn",
 		[400, 500],
-		[100, 220],
+		[20, 340],
 		[180, 260]
 	),
 	genLevelData(
@@ -169,7 +169,7 @@ export const LEVEL_DATA = [
 		LEVEL_IDS.NAUTICAL_DAWN,
 		"nauticaldawn",
 		[400, 500],
-		[100, 220],
+		[20, 350],
 		[180, 260]
 	),
 	genLevelData(
@@ -178,7 +178,7 @@ export const LEVEL_DATA = [
 		LEVEL_IDS.CIVIL_DAWN,
 		"civildawn",
 		[400, 500],
-		[100, 220],
+		[20, 260],
 		[180, 260]
 	)
 ];

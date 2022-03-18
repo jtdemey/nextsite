@@ -300,7 +300,7 @@ const makeGlider = (enemyId, type, sprite) => {
 const makeEnemy = type => {
   const enemyId = genId(16);
   let sprite = game.scene.matter.add.sprite(
-    game.width + 250,
+    game.width + 270,
     200,
     ENEMY_TYPE_NAMES[type]
   );

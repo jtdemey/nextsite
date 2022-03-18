@@ -1,9 +1,9 @@
-import Phaser from 'phaser';
-import game from './game';
-import { getRandBetween, makePt } from '../cdUtils';
-import player from './player';
-import collisionCats from './collision';
-import { makePickup } from './pickups';
+import Phaser from "phaser";
+import game from "./game";
+import { getRandBetween, makePt } from "../cdUtils";
+import player from "./player";
+import collisionCats from "./collision";
+import { makePickup, spawnPickup } from "./pickups";
 
 /**
  * Ground entity data
@@ -33,8 +33,13 @@ export const addBodyToGround = (scene, path, xPos) => {
     }
   });
   body.isStatic = true;
-  body.pwType = 'body';
-  scene.matter.alignBody(body, xPos, path[0].y, Phaser.Display.Align.BOTTOM_LEFT);
+  body.pwType = "body";
+  scene.matter.alignBody(
+    body,
+    xPos,
+    path[0].y,
+    Phaser.Display.Align.BOTTOM_LEFT
+  );
   ground.bodies.push(body);
 };
 
@@ -42,7 +47,7 @@ export const addBodyToGround = (scene, path, xPos) => {
  * Draws the ground
  */
 export const drawGround = () => {
-  if(ground.paths.length > 0) {
+  if (ground.paths.length > 0) {
     ground.paths.forEach(path => {
       fillGroundSegment(path);
     });
@@ -61,15 +66,18 @@ export const fillGroundSegment = path => game.graphics.fillPoints(path, true);
  * @returns Phaser path for a segment of ground
  */
 export const makeGroundSegments = segmentLength => {
-  let xInd = 0, yInd = game.height - 100;
-  if(ground.paths.length > 0) {
+  let xInd = 0,
+    yInd = game.height - 100;
+  if (ground.paths.length > 0) {
     let lastPath = ground.paths[ground.paths.length - 1];
     xInd = lastPath[lastPath.length - 1].x;
     yInd = lastPath[lastPath.length - 2].y;
   }
-  let wr = ground.widthRange, ar = ground.altRange, ogX = xInd;
+  let wr = ground.widthRange,
+    ar = ground.altRange,
+    ogX = xInd;
   const path = [makePt(xInd, game.height), makePt(xInd, yInd)];
-  for(let i = 0; i < segmentLength; i++) {
+  for (let i = 0; i < segmentLength; i++) {
     const w = getRandBetween(wr[0], wr[1]);
     xInd = xInd + w;
     yInd = getRandBetween(ar[0], ar[1]);
@@ -89,27 +97,28 @@ export const makeGroundSegments = segmentLength => {
  * @param {number} speed How fast the ground should scroll
  */
 export const scrollGround = (scene, speed) => {
-  if(ground.paths.length > 4) {
+  if (ground.paths.length > 4) {
     ground.paths.shift();
     ground.bodies.shift();
   }
-  if(ground.paths.length > 0) {
+  if (ground.paths.length > 0) {
     ground.paths.forEach((path, index) => {
       path.forEach(v => {
         v.x -= speed;
       });
-      if(index === ground.paths.length - 1 && path[path.length - 1].x < game.width + 200) {
+      if (
+        index === ground.paths.length - 1 &&
+        path[path.length - 1].x < game.width + 200
+      ) {
         makeGroundSegments(10);
-				console.log(ground.bodies.length)
-				//makePickup(ground.xInd, ground.yInd - 20)
       }
     });
     drawGround();
   }
-  if(ground.bodies.length > 0) {
+  if (ground.bodies.length > 0) {
     ground.bodies.forEach(body => {
       const newX = body.position.x - speed;
-      scene.matter.body.setPosition(body, {x: newX, y: body.position.y});
+      scene.matter.body.setPosition(body, { x: newX, y: body.position.y });
     });
   }
 };
