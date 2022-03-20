@@ -8,6 +8,8 @@ import { showPauseMenu, hidePauseMenu } from "../pausemenu/pauseMenu";
 import { refreshLvlLabel, refreshGui } from "./hud";
 import powerups, { attemptPowerupSpawn, deleteAllPowerups } from "./powerups";
 import pistol, { reloadPistol } from "./pistol";
+import { executeGameEvents } from "./gameEvents";
+import pickups, { beginSpawningPickups } from "./pickups";
 
 /**
  * Civil Dawn game object
@@ -44,6 +46,12 @@ game.onTick = () => {
 		//const newTint = game.background.tintTopLeft - (game.tick - game.levelStartTick);
 		//game.background.setTint(newTint, newTint, newTint, newTint);
   }
+	if (game.tick % 800 === 0) {
+		if (pickups.isSpawningPickups === false) {
+			beginSpawningPickups();
+		}
+	}
+	executeGameEvents();
 
 	//Debug
   //game.graphics.strokeLineShape(pistol.aimLine);
