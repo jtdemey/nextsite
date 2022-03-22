@@ -90,6 +90,7 @@ export const reloadPistol = () => {
  * Fires a bullet from the pistol where the player is aiming
  */
 export const shoot = () => {
+	if (player.hasControl === false) return;
   if (pistol.currentAmmo < 1) {
     if (player.isReloading === false) {
       reloadPistol();

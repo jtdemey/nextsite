@@ -8,8 +8,9 @@ import { showPauseMenu, hidePauseMenu } from "../pausemenu/pauseMenu";
 import { refreshLvlLabel, refreshGui } from "./hud";
 import powerups, { attemptPowerupSpawn, deleteAllPowerups } from "./powerups";
 import pistol, { reloadPistol } from "./pistol";
-import { executeGameEvents } from "./gameEvents";
+import gameEvents, { addGameEvent, executeGameEvents } from "./gameEvents";
 import pickups, { beginSpawningPickups } from "./pickups";
+import { resetCamera } from "./camera";
 
 /**
  * Civil Dawn game object
@@ -27,7 +28,7 @@ const game = {
   paused: false,
   scene: null,
   score: 0,
-  speed: 1,
+  speed: 2,
   tick: 0,
   isTransitioningLevels: false
 };
@@ -71,6 +72,7 @@ export default game;
  * Advances the game to the next level
  */
 export const advanceLevel = () => {
+	const currentSpeed = game.speed;
   increaseScore(100);
   fadingPlayerAlert("$100");
   game.isTransitioningLevels = true;
@@ -108,7 +110,7 @@ export const advanceLevel = () => {
         ease: "Sine.easeInOut",
         duration: 2000,
         repeat: 0,
-        speed: 1 + (game.level * 0.25),
+        speed: currentSpeed + (game.level * 0.25),
         onComplete: () => {
           player.stopMoving();
           player.hasControl = true;
@@ -127,10 +129,14 @@ export const advanceLevel = () => {
  * Triggers "Game Over" state
  */
 export const gameOver = () => {
-  game.paused = true;
+	resetCamera();
+	player.hasControl = false;
   pistol.sprite.setIgnoreGravity(false);
   pistol.sprite.setVelocityX(3);
   pistol.sprite.setVelocityY(-10);
+	addGameEvent(game.tick + 50, () => {
+		game.paused = true;
+	});
 };
 
 /**

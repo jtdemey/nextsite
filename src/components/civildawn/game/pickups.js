@@ -22,14 +22,14 @@ const genPickupPattern = (amount, stagger, heights) => ({
  * Different pickup spawn patterns
  */
 const PICKUP_PATTERNS = {
-  GROUND_LINE: genPickupPattern([3, 6], [40, 90], 50),
-  MID_LINE: genPickupPattern([3, 6], [40, 90], 140),
-  HIGH_LINE: genPickupPattern([3, 6], [40, 90], 280),
-  SHORT_ARC: genPickupPattern(3, 60, [100, 190, 100]),
-  MID_ARC: genPickupPattern(5, [60, 80], [100, 190, 240, 190, 100]),
-  LONG_ARC: genPickupPattern(7, [60, 90], [100, 190, 240, 280, 240, 190, 100]),
-  TRIPLET: genPickupPattern(3, [40, 50], 160),
-  COLUMN: genPickupPattern(3, 0, [100, 150, 200]) 
+  GROUND_LINE: genPickupPattern([3, 9], [40, 90], 30),
+  MID_LINE: genPickupPattern([3, 8], [40, 90], 90),
+  HIGH_LINE: genPickupPattern([3, 7], [40, 90], 140),
+  SHORT_ARC: genPickupPattern(3, 60, [70, 120, 70]),
+  MID_ARC: genPickupPattern(5, [60, 80], [100, 140, 160, 140, 100]),
+  LONG_ARC: genPickupPattern(7, [60, 90], [100, 140, 170, 190, 170, 140, 100]),
+  TRIPLET: genPickupPattern(3, [40, 50], 120),
+  COLUMN: genPickupPattern(3, 0, [60, 100, 140]) 
 };
 
 /**
@@ -37,7 +37,9 @@ const PICKUP_PATTERNS = {
  */
 const pickups = {
   isSpawningPickups: false,
+	isSpawningQueued: false,
   pickupLine: undefined,
+	spawnDelay: 0,
   sprites: []
 };
 
@@ -52,15 +54,12 @@ export const beginSpawningPickups = (pattern = undefined) => {
   const selectedPattern =
     pattern ??
     getRandomProperty(PICKUP_PATTERNS);
-	console.log(`selected pattern heights ${selectedPattern.heights}`)
   const selectedStagger = Array.isArray(selectedPattern.stagger)
 		? getRandBetween(selectedPattern.stagger[0], selectedPattern.stagger[1])
 		: selectedPattern.stagger;
-	console.log(`selected stagger ${selectedStagger}`)
   const spawnCount = Array.isArray(selectedPattern.amount)
 		?	getRandBetween(selectedPattern.amount[0], selectedPattern.amount[1])
 		: selectedPattern.amount;
-	console.log(`selected ct ${spawnCount}`)
   const currentTick = game.tick;
   for (let i = 0; i < spawnCount; i++) {
 		const currentHeight = Array.isArray(selectedPattern.heights)
@@ -72,7 +71,6 @@ export const beginSpawningPickups = (pattern = undefined) => {
   }
   addGameEvent(currentTick + (spawnCount + 1) * selectedStagger, () => {
     pickups.isSpawningPickups = false;
-		console.log('stopped')
   });
 };
 
@@ -127,7 +125,6 @@ export const makePickup = (x, y) => {
   pickup.setCollisionGroup(nonCollidingGroup);
   pickup.setScale(0.12, 0.12);
   pickups.sprites.push(pickup);
-  // console.log(pickup.x, pickup.y);
   return pickup;
 };
 
@@ -150,6 +147,9 @@ export const initPickupLine = () => {
 export const scrollPickups = speed => {
   pickups.sprites.forEach(pickup => {
     pickup.x -= speed;
+		if (pickup.x < -50) {
+			deletePickup(pickup.body.id);
+		}
   });
 };
 
@@ -178,6 +178,5 @@ export const spawnPickup = (height = 100, isLarge = false) => {
   });
   if (intersectingPoints.length < 1) return;
   const destinationPoint = intersectingPoints.sort((a, b) => a.y + b.y)[0];
-  console.log(destinationPoint);
   makePickup(destinationPoint.x, destinationPoint.y - height);
 };

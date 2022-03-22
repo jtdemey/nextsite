@@ -7,7 +7,7 @@ import { initProgressBar } from "./progressBar";
 import { initBounds, setExtendedBounds } from "./bounds";
 import { initGui } from "./hud";
 import { initPistolSprite } from "./pistol";
-import { initPickupLine } from "./pickups";
+import { beginSpawningPickups, initPickupLine } from "./pickups";
 
 /**
  * Creates the base scene
@@ -35,4 +35,5 @@ export default function () {
   initBounds();
   initProgressBar(this);
 	initPickupLine();
+	beginSpawningPickups();
 }

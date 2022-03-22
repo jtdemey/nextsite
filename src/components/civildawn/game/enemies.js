@@ -245,7 +245,7 @@ const makeRoller = (enemyId, type, sprite) => {
   sprite.setBounce(0);
   const onTick = () => {
     sprite.rotation = 0;
-    sprite.setVelocityX(-2.5);
+    sprite.setVelocityX(-2.5 - (game.speed / 4));
     if (sprite.body.position.x < -50) {
       deleteEnemy(enemyId);
     }

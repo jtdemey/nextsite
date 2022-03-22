@@ -1,3 +1,4 @@
+import { shakeCamera } from "./camera";
 import { collidingGroup, nonCollidingGroup } from "./collision";
 import { gameOver } from "./game";
 import { refreshHealthCt } from "./hud";
@@ -132,6 +133,7 @@ export const hurtPlayer = amt => {
     }
     fadingPlayerAlert(`-${amt}`, "#b30000");
     refreshHealthCt();
+		shakeCamera(2);
   }
 };
 
