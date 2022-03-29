@@ -17,19 +17,23 @@ export default function () {
   if (game.paused) {
     return;
   } else {
-    game.onTick();
-    player.onTick();
-    if (enemies.length > 0) {
-      enemies.forEach(e => e.onTick());
-    }
-    setMousePos(this.input.mousePointer.x, this.input.mousePointer.y);
-    scrollGround(this, game.speed);
-		scrollPickups(game.speed);
-    drawGround();
-    updateProgressBar();
-    updateBullets();
-    updatePowerups();
-    updateDestructibles();
-		updateOverlaps();
+		try {
+			game.onTick();
+			player.onTick();
+			if (enemies.length > 0) {
+				enemies.forEach(e => e.onTick());
+			}
+			setMousePos(this.input.mousePointer.x, this.input.mousePointer.y);
+			scrollGround(this, game.speed);
+			scrollPickups(game.speed);
+			drawGround();
+			updateProgressBar();
+			updateBullets();
+			updatePowerups();
+			updateDestructibles();
+			updateOverlaps();
+		} catch (e) {
+			console.error("Error in game tick", e);
+		}
   }
 }

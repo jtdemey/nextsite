@@ -4,7 +4,7 @@ export const ENEMY_TYPES = {
   ROLLER: 0,
   GLIDER: 1,
   HOPPER: 2,
-  DRIVER: 3,
+  DRIVER: 3, //LOS with player = rev animation?
   BOMBER: 4
 };
 

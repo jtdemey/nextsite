@@ -3,6 +3,7 @@ import collisionCats, { nonCollidingGroup } from "./collision";
 import game from "./game";
 import { addGameEvent } from "./gameEvents";
 import ground from "./ground";
+import { refreshScoreCt } from "./hud";
 import { fadingPlayerAlert } from "./player";
 
 /**
@@ -22,14 +23,14 @@ const genPickupPattern = (amount, stagger, heights) => ({
  * Different pickup spawn patterns
  */
 const PICKUP_PATTERNS = {
-  GROUND_LINE: genPickupPattern([3, 9], [40, 90], 30),
-  MID_LINE: genPickupPattern([3, 8], [40, 90], 90),
-  HIGH_LINE: genPickupPattern([3, 7], [40, 90], 140),
-  SHORT_ARC: genPickupPattern(3, 60, [70, 120, 70]),
-  MID_ARC: genPickupPattern(5, [60, 80], [100, 140, 160, 140, 100]),
-  LONG_ARC: genPickupPattern(7, [60, 90], [100, 140, 170, 190, 170, 140, 100]),
-  TRIPLET: genPickupPattern(3, [40, 50], 120),
-  COLUMN: genPickupPattern(3, 0, [60, 100, 140]) 
+  GROUND_LINE: genPickupPattern([3, 9], [30, 60], 30),
+  MID_LINE: genPickupPattern([3, 8], [30, 60], 90),
+  HIGH_LINE: genPickupPattern([3, 7], [30, 60], 140),
+  SHORT_ARC: genPickupPattern(3, 30, [70, 120, 70]),
+  MID_ARC: genPickupPattern(5, [25, 50], [100, 140, 160, 140, 100]),
+  LONG_ARC: genPickupPattern(7, [25, 50], [100, 140, 170, 190, 170, 140, 100]),
+  TRIPLET: genPickupPattern(3, [30, 50], 120),
+  COLUMN: genPickupPattern([3, 5], 0, [60, 100, 140]) 
 };
 
 /**
@@ -46,10 +47,19 @@ const pickups = {
 export default pickups;
 
 /**
+ * Attempts to queue pickup spawning if not already
+ */
+export const attemptSpawningPickups = () => {
+	if (pickups.isSpawningPickups === true || pickups.isSpawningQueued === true) return;
+	queuePickups();
+};
+
+/**
  * Begins spawning pickups
  * @param {object} pattern Optional pickup pattern object, randomly chooses one if not provided
+ * @param {boolean} rollForChain If true, rolls for a chance to queue more pickup spawning
  */
-export const beginSpawningPickups = (pattern = undefined) => {
+export const beginSpawningPickups = (pattern = undefined, rollForChain = false) => {
   pickups.isSpawningPickups = true;
   const selectedPattern =
     pattern ??
@@ -69,9 +79,15 @@ export const beginSpawningPickups = (pattern = undefined) => {
       spawnPickup(currentHeight)
     );
   }
-  addGameEvent(currentTick + (spawnCount + 1) * selectedStagger, () => {
+	const endTick = currentTick + (spawnCount + 1) * selectedStagger;
+  addGameEvent(endTick, () => {
     pickups.isSpawningPickups = false;
   });
+	if (rollForChain === true) {
+		if (Math.random() > 0.4) {
+			addGameEvent(endTick + 1, () => queuePickups());
+		}
+	}
 };
 
 /**
@@ -85,6 +101,7 @@ export const consumePickup = pickupBodyId => {
 	const score = 10;
 	game.score += score;
 	fadingPlayerAlert(`+${score}`);
+	refreshScoreCt();
   game.scene.tweens.add({
     targets: collectedPickup,
     alpha: 0,
@@ -109,6 +126,31 @@ export const deletePickup = bodyId => {
       i -= 1;
     }
   });
+};
+
+/**
+ * Gets the point at the vertical pickup line
+ * @returns {object} Uppermost ground point coordinate at the vertical pickup line
+ */
+export const getGroundPtAtPickupLine = () => {
+  let outPt = new Phaser.Geom.Point(0, 0);
+	const intersectingPoints = [];
+  ground.paths.forEach(path => {
+    path.forEach((pt, i) => {
+      if (!path[i + 1]) return;
+      if (
+        Phaser.Geom.Intersects.LineToLine(
+          new Phaser.Geom.Line(pt.x, pt.y, path[i + 1].x, path[i + 1].y),
+          pickups.pickupLine,
+          outPt
+        )
+      ) {
+        intersectingPoints.push(outPt);
+      }
+    });
+  });
+  if (intersectingPoints.length < 1) return;
+  return intersectingPoints.sort((a, b) => a.y + b.y)[0];
 };
 
 /**
@@ -141,11 +183,24 @@ export const initPickupLine = () => {
 };
 
 /**
+ * After a random delay, schedules pickup spawning
+ */
+export const queuePickups = () => {
+	pickups.isSpawningQueued = true;
+	const delay = getRandBetween(50, 200);
+	addGameEvent(game.tick + delay, () => beginSpawningPickups(undefined, true));
+	addGameEvent(game.tick + delay + 1, () => {
+		pickups.isSpawningQueued = false;
+	});
+};
+
+/**
  * Translates each pickup left by the given speed
  * @param {number} speed Speed at which to scroll
  */
 export const scrollPickups = speed => {
   pickups.sprites.forEach(pickup => {
+		if (!pickup) return;
     pickup.x -= speed;
 		if (pickup.x < -50) {
 			deletePickup(pickup.body.id);
@@ -160,23 +215,6 @@ export const scrollPickups = speed => {
  */
 export const spawnPickup = (height = 100, isLarge = false) => {
   if (game.isTransitioningLevels === true) return;
-  let outPt = new Phaser.Geom.Point(0, 0);
-  const intersectingPoints = [];
-  ground.paths.forEach(path => {
-    path.forEach((pt, i) => {
-      if (!path[i + 1]) return;
-      if (
-        Phaser.Geom.Intersects.LineToLine(
-          new Phaser.Geom.Line(pt.x, pt.y, path[i + 1].x, path[i + 1].y),
-          pickups.pickupLine,
-          outPt
-        )
-      ) {
-        intersectingPoints.push(outPt);
-      }
-    });
-  });
-  if (intersectingPoints.length < 1) return;
-  const destinationPoint = intersectingPoints.sort((a, b) => a.y + b.y)[0];
+	const destinationPoint = getGroundPtAtPickupLine();
   makePickup(destinationPoint.x, destinationPoint.y - height);
 };

@@ -14,7 +14,6 @@ export const resetCamera = () => {
 	const camera = getCamera();
 	camera.setAngle(0);
 	camera.setZoom(1, 1);
-	console.log(camera)
 };
 
 /**

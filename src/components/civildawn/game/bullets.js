@@ -43,6 +43,10 @@ export const addShell = () => {
     yPos(pistol.sprite) - 5,
     "bullet"
   );
+	if (!shell) {
+		console.error("Error creating shell");
+	}
+	shell.setScale(1.1, 1.1);
   shell.setVelocity(-3, -4);
   shell.body.collisionFilter.category = collisionCats.BULLET;
   setTimeout(() => shell.destroy(), 500);

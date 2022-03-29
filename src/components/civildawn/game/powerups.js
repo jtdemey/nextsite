@@ -108,6 +108,7 @@ const makeLinearPowerup = id => {
     type: "circle",
     radius: 32
   });
+	pickup.setScale(0.75, 0.75);
   pickup.isConsumed = false;
   pickup.powerupId = id;
   pickup.powerupType = POWERUP_TYPES.LINEAR;
@@ -125,6 +126,41 @@ const makeLinearPowerup = id => {
     }
   };
   powerups.sprites.push(pickup);
+};
+
+/**
+ * Creates a destructible containing a powerup that moves in a straight line across the screen
+ * @param {number} id Powerup ID
+ */
+const makeMissilePowerup = id => {
+	const dropPowerup = () => {
+		const pickup = game.scene.matter.add.sprite(
+			game.width + 32,
+			getRandBetween(game.height - 300, game.height - 400),
+			POWERUP_NAMES[id]
+		);
+		pickup.setBody({
+			type: "circle",
+			radius: 32
+		});
+		pickup.setScale(0.75, 0.75);
+		pickup.isConsumed = false;
+		pickup.powerupId = id;
+		pickup.powerupType = POWERUP_TYPES.LINEAR;
+		pickup.setCollisionCategory(collisionCats.CONSUMABLE);
+		pickup.setCollisionGroup(nonCollidingGroup);
+		pickup.body.mass = 0.01;
+		const velocity = getRandBetween(-4, -8);
+		pickup.onTick = () => {
+			pickup.rotation = 0;
+			pickup.setVelocityX(velocity);
+			pickup.setVelocityY(0);
+			if (pickup.x < 0 - pickup.width) {
+				deletePowerup(pickup.body.id);
+			}
+		};
+		powerups.sprites.push(pickup);
+	};
 };
 
 /**
@@ -146,7 +182,8 @@ export const addPowerup = () => {
   //     addPackageDestructible(game.width + 64, getRandBetween(100, 200), nextId);
   //     break;
   // }
-  makeLinearPowerup(nextId);
+  //makeLinearPowerup(nextId);
+	makeMissilePowerup(nextId);
 };
 
 /**
@@ -178,7 +215,7 @@ export const applyPower = powerupId => {
       fadingPlayerAlert(`RELOAD SPEED UP`);
       break;
     case POWERUP_IDS.JUMP_HEIGHT:
-      player.jumpHeight -= 2;
+      player.jumpHeight -= 1.5;
       fadingPlayerAlert(`JUMP HEIGHT UP`);
       break;
     case POWERUP_IDS.JUMP_AMOUNT:

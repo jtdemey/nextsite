@@ -3,6 +3,7 @@ import { ENEMY_TYPES, ENEMY_TYPE_NAMES, ENEMY_SCORES } from "../data/enemyData";
 import { LEVEL_IDS } from "../data/levelData";
 import collisionCats from "./collision";
 import { genId, getRandBetween } from "../cdUtils";
+import { getGroundPtAtPickupLine } from "./pickups";
 
 /**
  * Enemy entity data
@@ -245,7 +246,7 @@ const makeRoller = (enemyId, type, sprite) => {
   sprite.setBounce(0);
   const onTick = () => {
     sprite.rotation = 0;
-    sprite.setVelocityX(-2.5 - (game.speed / 4));
+    sprite.setVelocityX(-2.5 - (game.speed / 2));
     if (sprite.body.position.x < -50) {
       deleteEnemy(enemyId);
     }
@@ -301,7 +302,7 @@ const makeEnemy = type => {
   const enemyId = genId(16);
   let sprite = game.scene.matter.add.sprite(
     game.width + 270,
-    200,
+    getGroundPtAtPickupLine().y - 65,
     ENEMY_TYPE_NAMES[type]
   );
   let enemy;

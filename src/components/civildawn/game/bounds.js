@@ -48,7 +48,7 @@ export const initBounds = () => {
  * Sets boundaries past the screen borders for level transitions
  */
 export const setExtendedBounds = () => {
-  game.scene.matter.world.setBounds(-100, 0, game.width + 400, game.height, 1, true, true, false, true);
+  game.scene.matter.world.setBounds(-100, 0, game.width + 520, game.height, 1, true, true, false, true);
 };
 
 /**

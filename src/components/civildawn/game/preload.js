@@ -32,6 +32,7 @@ export default function () {
   //Powerups
   POWERUP_NAMES.forEach(n => this.load.image(n, pu(n)));
   //Destructibles
+  this.load.image("powerupMissile", d("powerupMissile"));
   this.load.image("powerupPackage", d("powerupPackage"));
   //Pause
   this.load.image("pausedHeader", png("pausedHeader"));

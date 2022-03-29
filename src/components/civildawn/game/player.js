@@ -116,7 +116,8 @@ export const fadingPlayerAlert = (msg, color = "#fff") => {
     y: player.sprite.y - 100,
     ease: "Sine.easeOut",
     duration: 1000,
-    repeat: 0
+    repeat: 0,
+		onComplete: () => text.destroy()
   });
 };
 
