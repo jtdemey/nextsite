@@ -2,7 +2,7 @@ import { getRandBetween, getRandomProperty } from "../cdUtils";
 import collisionCats, { nonCollidingGroup } from "./collision";
 import game from "./game";
 import { addGameEvent } from "./gameEvents";
-import ground from "./ground";
+import ground, { getGroundIntersections } from "./ground";
 import { refreshScoreCt } from "./hud";
 import { fadingPlayerAlert } from "./player";
 
@@ -30,7 +30,7 @@ const PICKUP_PATTERNS = {
   MID_ARC: genPickupPattern(5, [25, 50], [100, 140, 160, 140, 100]),
   LONG_ARC: genPickupPattern(7, [25, 50], [100, 140, 170, 190, 170, 140, 100]),
   TRIPLET: genPickupPattern(3, [30, 50], 120),
-  COLUMN: genPickupPattern([3, 5], 0, [60, 100, 140]) 
+  COLUMN: genPickupPattern([3, 5], 0, [60, 100, 140])
 };
 
 /**
@@ -38,9 +38,9 @@ const PICKUP_PATTERNS = {
  */
 const pickups = {
   isSpawningPickups: false,
-	isSpawningQueued: false,
+  isSpawningQueued: false,
   pickupLine: undefined,
-	spawnDelay: 0,
+  spawnDelay: 0,
   sprites: []
 };
 
@@ -50,8 +50,9 @@ export default pickups;
  * Attempts to queue pickup spawning if not already
  */
 export const attemptSpawningPickups = () => {
-	if (pickups.isSpawningPickups === true || pickups.isSpawningQueued === true) return;
-	queuePickups();
+  if (pickups.isSpawningPickups === true || pickups.isSpawningQueued === true)
+    return;
+  queuePickups();
 };
 
 /**
@@ -59,35 +60,36 @@ export const attemptSpawningPickups = () => {
  * @param {object} pattern Optional pickup pattern object, randomly chooses one if not provided
  * @param {boolean} rollForChain If true, rolls for a chance to queue more pickup spawning
  */
-export const beginSpawningPickups = (pattern = undefined, rollForChain = false) => {
+export const beginSpawningPickups = (
+  pattern = undefined,
+  rollForChain = false
+) => {
   pickups.isSpawningPickups = true;
-  const selectedPattern =
-    pattern ??
-    getRandomProperty(PICKUP_PATTERNS);
+  const selectedPattern = pattern ?? getRandomProperty(PICKUP_PATTERNS);
   const selectedStagger = Array.isArray(selectedPattern.stagger)
-		? getRandBetween(selectedPattern.stagger[0], selectedPattern.stagger[1])
-		: selectedPattern.stagger;
+    ? getRandBetween(selectedPattern.stagger[0], selectedPattern.stagger[1])
+    : selectedPattern.stagger;
   const spawnCount = Array.isArray(selectedPattern.amount)
-		?	getRandBetween(selectedPattern.amount[0], selectedPattern.amount[1])
-		: selectedPattern.amount;
+    ? getRandBetween(selectedPattern.amount[0], selectedPattern.amount[1])
+    : selectedPattern.amount;
   const currentTick = game.tick;
   for (let i = 0; i < spawnCount; i++) {
-		const currentHeight = Array.isArray(selectedPattern.heights)
-			? selectedPattern.heights[i]
-			: selectedPattern.heights;
+    const currentHeight = Array.isArray(selectedPattern.heights)
+      ? selectedPattern.heights[i]
+      : selectedPattern.heights;
     addGameEvent(currentTick + (i + 1) * selectedStagger, () =>
       spawnPickup(currentHeight)
     );
   }
-	const endTick = currentTick + (spawnCount + 1) * selectedStagger;
+  const endTick = currentTick + (spawnCount + 1) * selectedStagger;
   addGameEvent(endTick, () => {
     pickups.isSpawningPickups = false;
   });
-	if (rollForChain === true) {
-		if (Math.random() > 0.4) {
-			addGameEvent(endTick + 1, () => queuePickups());
-		}
-	}
+  if (rollForChain === true) {
+    if (Math.random() > 0.4) {
+      addGameEvent(endTick + 1, () => queuePickups());
+    }
+  }
 };
 
 /**
@@ -95,13 +97,15 @@ export const beginSpawningPickups = (pattern = undefined, rollForChain = false) 
  * @param {number} pickupBodyId Phaser Matter physics body ID
  */
 export const consumePickup = pickupBodyId => {
-	const collectedPickup = pickups.sprites.filter(sprite => sprite.body.id === pickupBodyId)[0];
-	if (!collectedPickup || collectedPickup.isConsumed === true) return;
-	collectedPickup.isConsumed = true;
-	const score = 10;
-	game.score += score;
-	fadingPlayerAlert(`+${score}`);
-	refreshScoreCt();
+  const collectedPickup = pickups.sprites.filter(
+    sprite => sprite.body.id === pickupBodyId
+  )[0];
+  if (!collectedPickup || collectedPickup.isConsumed === true) return;
+  collectedPickup.isConsumed = true;
+  const score = 10;
+  game.score += score;
+  fadingPlayerAlert(`+${score}`);
+  refreshScoreCt();
   game.scene.tweens.add({
     targets: collectedPickup,
     alpha: 0,
@@ -132,26 +136,8 @@ export const deletePickup = bodyId => {
  * Gets the point at the vertical pickup line
  * @returns {object} Uppermost ground point coordinate at the vertical pickup line
  */
-export const getGroundPtAtPickupLine = () => {
-  let outPt = new Phaser.Geom.Point(0, 0);
-	const intersectingPoints = [];
-  ground.paths.forEach(path => {
-    path.forEach((pt, i) => {
-      if (!path[i + 1]) return;
-      if (
-        Phaser.Geom.Intersects.LineToLine(
-          new Phaser.Geom.Line(pt.x, pt.y, path[i + 1].x, path[i + 1].y),
-          pickups.pickupLine,
-          outPt
-        )
-      ) {
-        intersectingPoints.push(outPt);
-      }
-    });
-  });
-  if (intersectingPoints.length < 1) return;
-  return intersectingPoints.sort((a, b) => a.y + b.y)[0];
-};
+export const getGroundPtAtPickupLine = () =>
+  getGroundIntersections(pickups.pickupLine).sort((a, b) => a.y + b.y)[0];
 
 /**
  * Creates and returns a pickup sprite at the given position
@@ -161,7 +147,7 @@ export const getGroundPtAtPickupLine = () => {
  */
 export const makePickup = (x, y) => {
   const pickup = game.scene.matter.add.sprite(x, y, "pickup");
-	pickup.isConsumed = false;
+  pickup.isConsumed = false;
   pickup.setIgnoreGravity(true);
   pickup.setCollisionCategory(collisionCats.PICKUP);
   pickup.setCollisionGroup(nonCollidingGroup);
@@ -186,12 +172,12 @@ export const initPickupLine = () => {
  * After a random delay, schedules pickup spawning
  */
 export const queuePickups = () => {
-	pickups.isSpawningQueued = true;
-	const delay = getRandBetween(50, 200);
-	addGameEvent(game.tick + delay, () => beginSpawningPickups(undefined, true));
-	addGameEvent(game.tick + delay + 1, () => {
-		pickups.isSpawningQueued = false;
-	});
+  pickups.isSpawningQueued = true;
+  const delay = getRandBetween(50, 200);
+  addGameEvent(game.tick + delay, () => beginSpawningPickups(undefined, true));
+  addGameEvent(game.tick + delay + 1, () => {
+    pickups.isSpawningQueued = false;
+  });
 };
 
 /**
@@ -200,11 +186,11 @@ export const queuePickups = () => {
  */
 export const scrollPickups = speed => {
   pickups.sprites.forEach(pickup => {
-		if (!pickup) return;
+    if (!pickup) return;
     pickup.x -= speed;
-		if (pickup.x < -50) {
-			deletePickup(pickup.body.id);
-		}
+    if (pickup.x < -50) {
+      deletePickup(pickup.body.id);
+    }
   });
 };
 
@@ -215,6 +201,6 @@ export const scrollPickups = speed => {
  */
 export const spawnPickup = (height = 100, isLarge = false) => {
   if (game.isTransitioningLevels === true) return;
-	const destinationPoint = getGroundPtAtPickupLine();
+  const destinationPoint = getGroundPtAtPickupLine();
   makePickup(destinationPoint.x, destinationPoint.y - height);
 };

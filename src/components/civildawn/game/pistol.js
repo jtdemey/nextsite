@@ -15,6 +15,7 @@ import { addShell, addTracer, addHit } from "./bullets";
 import { hurtEnemy } from "./enemies";
 import player from "./player";
 import { refreshAmmoCt } from "./hud";
+import { damageDestructible } from "./destructibles";
 
 /**
  * Pistol entity and related data
@@ -116,6 +117,9 @@ export const shoot = () => {
     if (dist > 400) {
       addTracer(dist);
     }
+		if (hits.closestPt.destructibleType) {
+			damageDestructible(hits.closestPt.destructibleId);
+		}
     if (hits.closestPt.enemyId) {
       hurtEnemy(hits.closestPt.enemyId, pistol.damage);
     }

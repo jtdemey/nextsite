@@ -61,6 +61,32 @@ export const drawGround = () => {
 export const fillGroundSegment = path => game.graphics.fillPoints(path, true);
 
 /**
+ * Gets the intersecting points between the ground and the given Line 
+ * @param {Phaser.Geom.Line} line Line to check intersections for
+ * @returns {Phaser.Geom.Point[]} Array of intersecting points
+ */
+export const getGroundIntersections = line => {
+  let outPt = new Phaser.Geom.Point(0, 0);
+	const intersectingPoints = [];
+  ground.paths.forEach(path => {
+    path.forEach((pt, i) => {
+      if (!path[i + 1]) return;
+      if (
+        Phaser.Geom.Intersects.LineToLine(
+          new Phaser.Geom.Line(pt.x, pt.y, path[i + 1].x, path[i + 1].y),
+          line,
+          outPt
+        )
+      ) {
+        intersectingPoints.push(outPt);
+      }
+    });
+  });
+  if (intersectingPoints.length < 1) return;
+  return intersectingPoints;
+};
+
+/**
  * Gets a Phaser path for a piece of ground
  * @param {number} segmentLength Amount of triangles (slopes) to create
  * @returns Phaser path for a segment of ground

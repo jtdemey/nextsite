@@ -3,8 +3,9 @@ import game from "./game";
 import collisionCats, { nonCollidingGroup } from "./collision";
 import player, { fadingPlayerAlert } from "./player";
 import { refreshHealthCt } from "./hud";
-import { addPackageDestructible } from "./destructibles";
 import pistol from "./pistol";
+import { getGroundIntersections } from "./ground";
+import { DESTRUCTIBLE_TYPES, makeDestructible } from "./destructibles";
 
 export const POWERUP_IDS = {
   HEAL: 0,
@@ -29,7 +30,8 @@ export const POWERUP_NAMES = [
 export const POWERUP_TYPES = {
   LINEAR: 0,
   PACKAGE: 1,
-  MISSILE: 2
+  MISSILE: 2,
+	DROP: 3
 };
 
 /*
@@ -95,27 +97,65 @@ const getPowerupId = () => {
 };
 
 /**
- * Creates a powerup that moves in a straight line across the screen
- * @param {number} id Powerup ID
+ * Creates and returns a base, template powerup
+ * @param {number} x X coordinate
+ * @param {number} y Y coordinate
+ * @param {number} powerupId Powerup ID
+ * @returns Base powerup
  */
-const makeLinearPowerup = id => {
-  const pickup = game.scene.matter.add.sprite(
-    game.width + 32,
-    getRandBetween(game.height - 300, game.height - 400),
-    POWERUP_NAMES[id]
-  );
+const makeBasePowerup = (x, y, powerupId) => {
+  const pickup = game.scene.matter.add.sprite(x, y, POWERUP_NAMES[powerupId]);
   pickup.setBody({
     type: "circle",
     radius: 32
   });
-	pickup.setScale(0.75, 0.75);
+	pickup.setScale(0.85, 0.85);
   pickup.isConsumed = false;
-  pickup.powerupId = id;
-  pickup.powerupType = POWERUP_TYPES.LINEAR;
+  pickup.powerupId = powerupId;
   pickup.setIgnoreGravity(true);
   pickup.setCollisionCategory(collisionCats.CONSUMABLE);
   pickup.setCollisionGroup(nonCollidingGroup);
   pickup.body.mass = 0.01;
+  powerups.sprites.push(pickup);
+	return pickup;
+};
+
+/**
+ * Creates a powerup that drops in a straight line and hovers a bit above the ground 
+ * @param {number} x X coordinate
+ * @param {number} y Y coordinate
+ * @param {number} id Powerup ID
+ */
+const makeDropPowerup = (x, y, id) => {
+  const pickup = makeBasePowerup(x, y, id);
+  pickup.powerupType = POWERUP_TYPES.DROP;
+	// const yDest = getGroundIntersections(new Phaser.Geom.Line())
+  // game.scene.tweens.add({
+  //   targets: pickup,
+  //   ease: "Sine.easeOut",
+  //   duration: 500,
+  //   repeat: 0,
+
+  //   onComplete: () => deletePowerup(bodyId)
+  // });
+  pickup.onTick = () => {
+    if (pickup.x < 0 - pickup.width) {
+      deletePowerup(pickup.body.id);
+    }
+  };
+};
+
+/**
+ * Creates a powerup that moves in a straight line across the screen
+ * @param {number} id Powerup ID
+ */
+const makeLinearPowerup = id => {
+  const pickup = makeBasePowerup(
+    game.width + 32,
+    getRandBetween(game.height - 300, game.height - 400),
+    id
+  );
+  pickup.powerupType = POWERUP_TYPES.LINEAR;
   const velocity = getRandBetween(-4, -8);
   pickup.onTick = () => {
     pickup.rotation = 0;
@@ -125,7 +165,6 @@ const makeLinearPowerup = id => {
       deletePowerup(pickup.body.id);
     }
   };
-  powerups.sprites.push(pickup);
 };
 
 /**
@@ -133,6 +172,7 @@ const makeLinearPowerup = id => {
  * @param {number} id Powerup ID
  */
 const makeMissilePowerup = id => {
+	const destructible = makeDestructible(DESTRUCTIBLE_TYPES.MISSILE, getPowerupId());
 	const dropPowerup = () => {
 		const pickup = game.scene.matter.add.sprite(
 			game.width + 32,
@@ -146,7 +186,7 @@ const makeMissilePowerup = id => {
 		pickup.setScale(0.75, 0.75);
 		pickup.isConsumed = false;
 		pickup.powerupId = id;
-		pickup.powerupType = POWERUP_TYPES.LINEAR;
+		pickup.powerupType = POWERUP_TYPES.MISSILE;
 		pickup.setCollisionCategory(collisionCats.CONSUMABLE);
 		pickup.setCollisionGroup(nonCollidingGroup);
 		pickup.body.mass = 0.01;
@@ -182,7 +222,7 @@ export const addPowerup = () => {
   //     addPackageDestructible(game.width + 64, getRandBetween(100, 200), nextId);
   //     break;
   // }
-  //makeLinearPowerup(nextId);
+  // makeLinearPowerup(nextId);
 	makeMissilePowerup(nextId);
 };
 

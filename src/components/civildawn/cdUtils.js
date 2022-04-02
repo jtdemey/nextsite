@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import game from "./game/game";
+import { nanoid } from "nanoid";
 
 /**
  * Gets an array of points along a given Path
@@ -23,16 +24,7 @@ export const convertPathToPoints = path => {
  * @param {number} len Length of string
  * @returns Random string
  */
-export const genId = len => {
-  const abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-  let id = "";
-  for (let i = 0; i < len; i++) {
-    const cInd = Math.floor(Math.random() * abc.length);
-    const c = abc.charAt(cInd);
-    id += c;
-  }
-  return id;
-};
+export const genId = len => nanoid(len);
 
 /**
  * Returns the closest point to the specified target in the provided array

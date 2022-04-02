@@ -154,25 +154,6 @@ export const hurtEnemy = (enemyId, amt) => {
 };
 
 /**
- * Damages the enemy with the specified physics body ID for the given amount
- * @param {number} bodyId Phaser physics body ID
- * @param {number} amt Damage amount
- */
-export const hurtEnemyByBodyId = (bodyId, amt) => {
-  enemies.forEach(e => {
-    if (!e.sprite.body) {
-      console.error("No sprite body with id " + bodyId);
-    }
-    if (e.sprite.body && e.sprite.body.id === bodyId) {
-      e.hp -= amt;
-      if (e.hp < 1) {
-        killEnemy(e.enemyId);
-      }
-    }
-  });
-};
-
-/**
  * Kills all currently spawned enemies
  */
 export const killAllEnemies = () => {

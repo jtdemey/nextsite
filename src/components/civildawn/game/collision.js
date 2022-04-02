@@ -17,7 +17,7 @@ const COLLISION_CAT_NAMES = [
   "BULLET",
   "BOUNDARY",
   "DESTRUCTIBLE",
-	"PICKUP"
+  "PICKUP"
 ];
 
 const collisionCats = {};
@@ -120,6 +120,7 @@ const detectCatColl = (bodyA, bodyB, catA, catB) =>
  * @returns Array of collision points
  */
 const getAimLineDestructibleCollisionPts = () => {
+	if (destructibles.length < 1) return [];
   const destHits = [];
   let ptContainer;
   const collectPts = dType => {
@@ -130,12 +131,15 @@ const getAimLineDestructibleCollisionPts = () => {
       });
     }
   };
-  destructibles.sprites.forEach(d => {
-    if (d.destructibleType === DESTRUCTIBLE_TYPES.PACKAGE) {
+  destructibles.forEach(d => {
+    if (!d.sprite.body) {
+      return;
+    }
+    if (d.sprite.destructibleType === DESTRUCTIBLE_TYPES.PACKAGE) {
       const circle = new Phaser.Geom.Circle(
-        d.body.position.x,
-        d.body.position.y,
-        d.body.circleRadius
+        d.sprite.body.position.x,
+        d.sprite.body.position.y,
+        d.sprite.body.circleRadius
       );
       ptContainer = Phaser.Geom.Intersects.GetLineToCircle(
         pistol.aimLine,
@@ -152,6 +156,7 @@ const getAimLineDestructibleCollisionPts = () => {
  * @returns Array of collision points
  */
 const getAimLineEnemyCollisionPts = () => {
+	if (enemies.length < 1) return [];
   const enemyHits = [];
   let ptContainer;
   const collectPts = (enemyId, speed) => {
@@ -168,7 +173,7 @@ const getAimLineEnemyCollisionPts = () => {
     if (!e.sprite.body) {
       return;
     }
-    if (e.type === ENEMY_TYPES.ROLLER) {
+    if (e.sprite.body.label === "Circle Body") {
       const circle = new Phaser.Geom.Circle(
         e.sprite.body.position.x,
         e.sprite.body.position.y,
@@ -178,7 +183,7 @@ const getAimLineEnemyCollisionPts = () => {
         pistol.aimLine,
         circle
       );
-    } else if (e.type === ENEMY_TYPES.GLIDER) {
+    } else if (e.sprite.body.label === "Rectangle Body") {
       const rect = new Phaser.Geom.Rectangle(
         e.sprite.body.position.x - e.sprite.width / 2,
         e.sprite.body.position.y - e.sprite.height / 2,
@@ -224,15 +229,15 @@ const getAimLineGroundCollisionPts = () => {
  * @returns Object with closest point, enemy hits, and ground hits
  */
 export const detectAimLineHits = () => {
+  const destructibleHits = getAimLineDestructibleCollisionPts();
   const enemyHits = getAimLineEnemyCollisionPts();
   const groundHits = getAimLineGroundCollisionPts();
-  const closestPt = getClosestPtTo(
-    player.sprite.body.position.x,
-    player.sprite.body.position.y,
-    enemyHits.concat(groundHits)
-  );
   return {
-    closestPt,
+    closestPt: getClosestPtTo(
+      player.sprite.body.position.x,
+      player.sprite.body.position.y,
+      destructibleHits.concat(enemyHits).concat(groundHits)
+    ),
     enemyHits,
     groundHits
   };
@@ -270,6 +275,6 @@ export const initCollisionCats = world => {
  * @param {World} world Phaser matter world
  */
 export const initCollisionGroups = world => {
-	collidingGroup = world.nextGroup();
-	nonCollidingGroup = world.nextGroup(true);
+  collidingGroup = world.nextGroup();
+  nonCollidingGroup = world.nextGroup(true);
 };
