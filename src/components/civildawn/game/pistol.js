@@ -117,8 +117,8 @@ export const shoot = () => {
     if (dist > 400) {
       addTracer(dist);
     }
-		if (hits.closestPt.destructibleType) {
-			damageDestructible(hits.closestPt.destructibleId);
+		if (hits.closestPt.destructibleId) {
+			damageDestructible(hits.closestPt.destructibleId, pistol.damage);
 		}
     if (hits.closestPt.enemyId) {
       hurtEnemy(hits.closestPt.enemyId, pistol.damage);

@@ -1,6 +1,7 @@
 import { getRandBetween } from "../cdUtils";
 import game from "./game";
 import collisionCats from "./collision";
+import { nanoid } from "nanoid";
 
 /**
  * Destructible type constants
@@ -19,15 +20,31 @@ export default destructibles;
 
 /**
  * Damages the designated destructible by the given amount
- * @param {string} bodyId Phaser physics body ID
+ * @param {string} destructibleId Destructible ID
  * @param {number} damage Damage amount
  */
-export const damageDestructible = (bodyId, damage) => {
-  destructibles.forEach((destructible, i) => {
-    if (destructible.sprite.body && destructible.sprite.body.id === bodyId) {
+export const damageDestructible = (destructibleId, damage) => {
+  destructibles.forEach(destructible => {
+    if (destructible.destructibleId === destructibleId) {
       destructible.hp -= damage;
+			if (destructible.hp < 1) {
+				destroyDestructible(destructible.destructibleId);
+			}
     }
   });
+};
+
+/**
+ * Destroys the specified destructible
+ * @param {number} destructibleId Destructible ID
+ */
+const destroyDestructible = destructibleId => {
+	const d = getDestructible(destructibleId);
+	if (!d) return;
+	if (d.onDestroy) {
+		d.onDestroy();
+	}
+	deleteDestructible(d.sprite.body.id);
 };
 
 /**
@@ -45,12 +62,18 @@ export const deleteDestructible = bodyId => {
 };
 
 /**
+ * Gets a destructible by its Destructible ID
+ * @param {number} destructibleId Destructible ID
+ * @returns Destructible with specified ID or undefined if not found
+ */
+const getDestructible = destructibleId => destructibles.filter(d => d.destructibleId === destructibleId)[0] ?? undefined;
+
+/**
  * Creates a destructible of the given type
  * @param {string} destructibleType Destructible type sprite asset key
- * @param {number} powerupId Powerup ID of contained powerup
  * @returns Created destructible
  */
-export const makeDestructible = (destructibleType, powerupId) => {
+export const makeDestructible = destructibleType => {
   let destructible;
   let sprite = game.scene.matter.add.sprite(
     game.width + 270,
@@ -59,7 +82,7 @@ export const makeDestructible = (destructibleType, powerupId) => {
   );
   switch (destructibleType) {
     case DESTRUCTIBLE_TYPES.MISSILE:
-      destructible = makeMissileDestructible(sprite, powerupId);
+      destructible = makeMissileDestructible(sprite);
       break;
     case DESTRUCTIBLE_TYPES.PACKAGE:
       destructible = makePackageDestructible(sprite);
@@ -72,12 +95,25 @@ export const makeDestructible = (destructibleType, powerupId) => {
 };
 
 /**
+ * Creates a base destructible
+ * @param {object} param0 Object representing a destructible
+ * @returns Destructible object
+ */
+const makeBaseDestructible = ({ destructibleId, destructibleType, hp, onTick, speed, sprite }) => ({
+  destructibleId,
+	destructibleType,
+  hp,
+  onTick,
+  speed,
+  sprite
+});
+
+/**
  * Adds a missile destructible at the given position that drops a powerup when destroyed
  * @param {Phaser.Physics.Matter.Sprite} sprite Base destructible sprite
- * @param {number} powerupId Powerup ID of contained powerup
  * @returns {object} Missile destructible
  */
-const makeMissileDestructible = (sprite, powerupId) => {
+const makeMissileDestructible = sprite => {
   sprite.setBody({
     type: "rectangle",
     width: 120,
@@ -86,21 +122,25 @@ const makeMissileDestructible = (sprite, powerupId) => {
   sprite.setIgnoreGravity(true);
   sprite.setCollisionCategory(collisionCats.DESTRUCTIBLE);
   sprite.setPosition(game.width + 270, getRandBetween(70, 200));
-  sprite.destructibleType = DESTRUCTIBLE_TYPES.MISSILE;
-  sprite.powerupId = powerupId;
   sprite.body.collisionFilter.mask =
     collisionCats.PLAYER & collisionCats.BOUNDARY;
   sprite.body.mass = 0.01;
   const velocity = getRandBetween(-4, -6);
-  sprite.onTick = () => {
+  const onTick = () => {
     sprite.rotation = 0;
     sprite.setVelocityX(velocity);
     if (sprite.x < 0 - sprite.width) {
       deleteDestructible(sprite.body.id);
     }
   };
-  console.log(sprite);
-  return sprite;
+  return makeBaseDestructible({
+		destructibleId: nanoid(16),
+		destructibleType: DESTRUCTIBLE_TYPES.MISSILE,
+		hp: 50,
+		onTick,
+		speed: velocity,
+		sprite
+	});
 };
 
 /**
@@ -113,10 +153,6 @@ const makePackageDestructible = sprite => {
     type: "circle",
     radius: 16
   });
-  sprite.destructibleType = DESTRUCTIBLE_TYPES.PACKAGE;
-  sprite.powerupId = powerupId;
-  sprite.damage = 0;
-  sprite.scale = 1.25;
   sprite.setIgnoreGravity(true);
   sprite.setCollisionCategory(collisionCats.DESTRUCTIBLE);
   sprite.body.collisionFilter.mask =

@@ -32,7 +32,7 @@ export default function () {
   //Powerups
   POWERUP_NAMES.forEach(n => this.load.image(n, pu(n)));
   //Destructibles
-  this.load.image("destructibleMissile", "civildawn/assets/destructibles/destructibleMissile.jpg");
+  this.load.image("destructibleMissile", d("destructibleMissile"));
   this.load.image("destructiblePackage", d("destructiblePackage"));
   //Pause
   this.load.image("pausedHeader", png("pausedHeader"));

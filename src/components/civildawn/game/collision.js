@@ -3,7 +3,6 @@ import player, { hurtPlayer } from "./player";
 import enemies from "./enemies";
 import { getClosestPtTo } from "../cdUtils";
 import { DESTRUCTIBLE_TYPES } from "./destructibles";
-import { ENEMY_TYPES } from "../data/enemyData";
 import ground from "./ground";
 import { consumePowerup } from "./powerups";
 import pistol from "./pistol";
@@ -116,17 +115,40 @@ const detectCatColl = (bodyA, bodyB, catA, catB) =>
   (isCollCat(bodyA, catB) && isCollCat(bodyB, catA));
 
 /**
+ * Gets an array of intersection points between a game entity and a line
+ * @param {object} entity Game entity containing a sprite property
+ * @param {Phaser.Geom.Line} line Line to check for intersections along
+ */
+const getLineAndShapeIntersections = (entity, line) => {
+  if (entity.sprite.body.label === "Circle Body") {
+    const circle = new Phaser.Geom.Circle(
+      entity.sprite.body.position.x,
+      entity.sprite.body.position.y,
+      entity.sprite.body.circleRadius
+    );
+    return Phaser.Geom.Intersects.GetLineToCircle(line, circle);
+  } else if (entity.sprite.body.label === "Rectangle Body") {
+    const rect = new Phaser.Geom.Rectangle(
+      entity.sprite.body.position.x - entity.sprite.width / 2,
+      entity.sprite.body.position.y - entity.sprite.height / 2,
+      entity.sprite.width,
+      entity.sprite.height
+    );
+    return Phaser.Geom.Intersects.GetLineToRectangle(line, rect);
+  }
+};
+
+/**
  * Gets collision points between the aim line and destructibles
  * @returns Array of collision points
  */
 const getAimLineDestructibleCollisionPts = () => {
-	if (destructibles.length < 1) return [];
+  if (destructibles.length < 1) return [];
   const destHits = [];
-  let ptContainer;
-  const collectPts = dType => {
-    if (ptContainer.length) {
-      ptContainer.forEach(pt => {
-        pt.destructibleType = dType;
+  const collectPts = (pts, dId) => {
+    if (pts.length) {
+      pts.forEach(pt => {
+        pt.destructibleId = dId;
         destHits.push(pt);
       });
     }
@@ -135,18 +157,8 @@ const getAimLineDestructibleCollisionPts = () => {
     if (!d.sprite.body) {
       return;
     }
-    if (d.sprite.destructibleType === DESTRUCTIBLE_TYPES.PACKAGE) {
-      const circle = new Phaser.Geom.Circle(
-        d.sprite.body.position.x,
-        d.sprite.body.position.y,
-        d.sprite.body.circleRadius
-      );
-      ptContainer = Phaser.Geom.Intersects.GetLineToCircle(
-        pistol.aimLine,
-        circle
-      );
-    }
-    collectPts(DESTRUCTIBLE_TYPES.PACKAGE);
+    const intersections = getLineAndShapeIntersections(d, pistol.aimLine);
+    collectPts(intersections, d.destructibleId);
   });
   return destHits;
 };
@@ -156,12 +168,11 @@ const getAimLineDestructibleCollisionPts = () => {
  * @returns Array of collision points
  */
 const getAimLineEnemyCollisionPts = () => {
-	if (enemies.length < 1) return [];
+  if (enemies.length < 1) return [];
   const enemyHits = [];
-  let ptContainer;
-  const collectPts = (enemyId, speed) => {
-    if (ptContainer.length) {
-      ptContainer.forEach(pt => {
+  const collectPts = (pts, enemyId, speed) => {
+    if (pts.length) {
+      pts.forEach(pt => {
         pt.enemyId = enemyId;
         pt.enemySpeed = speed;
         enemyHits.push(pt);
@@ -169,33 +180,11 @@ const getAimLineEnemyCollisionPts = () => {
     }
   };
   enemies.forEach(e => {
-    ptContainer = [];
     if (!e.sprite.body) {
       return;
     }
-    if (e.sprite.body.label === "Circle Body") {
-      const circle = new Phaser.Geom.Circle(
-        e.sprite.body.position.x,
-        e.sprite.body.position.y,
-        e.sprite.body.circleRadius
-      );
-      ptContainer = Phaser.Geom.Intersects.GetLineToCircle(
-        pistol.aimLine,
-        circle
-      );
-    } else if (e.sprite.body.label === "Rectangle Body") {
-      const rect = new Phaser.Geom.Rectangle(
-        e.sprite.body.position.x - e.sprite.width / 2,
-        e.sprite.body.position.y - e.sprite.height / 2,
-        e.sprite.width,
-        e.sprite.height
-      );
-      ptContainer = Phaser.Geom.Intersects.GetLineToRectangle(
-        pistol.aimLine,
-        rect
-      );
-    }
-    collectPts(e.enemyId, e.speed);
+    const intersections = getLineAndShapeIntersections(e, pistol.aimLine);
+    collectPts(intersections, e.enemyId, e.speed);
   });
   return enemyHits;
 };

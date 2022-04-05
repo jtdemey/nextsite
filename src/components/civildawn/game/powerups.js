@@ -29,9 +29,7 @@ export const POWERUP_NAMES = [
 
 export const POWERUP_TYPES = {
   LINEAR: 0,
-  PACKAGE: 1,
-  MISSILE: 2,
-	DROP: 3
+	DROP: 1 
 };
 
 /*
@@ -173,33 +171,20 @@ const makeLinearPowerup = id => {
  */
 const makeMissilePowerup = id => {
 	const destructible = makeDestructible(DESTRUCTIBLE_TYPES.MISSILE, getPowerupId());
-	const dropPowerup = () => {
-		const pickup = game.scene.matter.add.sprite(
+	destructible.onDestroy = () => {
+		const pickup = makeBasePowerup(
 			game.width + 32,
 			getRandBetween(game.height - 300, game.height - 400),
-			POWERUP_NAMES[id]
+			id
 		);
-		pickup.setBody({
-			type: "circle",
-			radius: 32
-		});
-		pickup.setScale(0.75, 0.75);
-		pickup.isConsumed = false;
-		pickup.powerupId = id;
-		pickup.powerupType = POWERUP_TYPES.MISSILE;
-		pickup.setCollisionCategory(collisionCats.CONSUMABLE);
-		pickup.setCollisionGroup(nonCollidingGroup);
-		pickup.body.mass = 0.01;
-		const velocity = getRandBetween(-4, -8);
+		pickup.powerupType = POWERUP_TYPES.DROP;
+		pickup.setIgnoreGravity(false);
 		pickup.onTick = () => {
 			pickup.rotation = 0;
-			pickup.setVelocityX(velocity);
-			pickup.setVelocityY(0);
 			if (pickup.x < 0 - pickup.width) {
 				deletePowerup(pickup.body.id);
 			}
 		};
-		powerups.sprites.push(pickup);
 	};
 };
 

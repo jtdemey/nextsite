@@ -1,6 +1,7 @@
 import { disableBoundCollision, enableBoundCollision } from "./bounds";
 import ground, { makeGroundSegments } from "./ground";
 import { LEVEL_IDS, LEVEL_DATA } from "../data/levelData";
+import { updateDestructibles } from "./destructibles";
 import { spawnCheck, killAllEnemies } from "./enemies";
 import { getRandBetween } from "../cdUtils";
 import player, { tweenPlayerVelocityX, fadingPlayerAlert } from "./player";
@@ -55,6 +56,7 @@ game.onTick = () => {
     attemptSpawningPickups();
   }
   executeGameEvents();
+	updateDestructibles();
 
   //Debug
   //game.graphics.strokeLineShape(pistol.aimLine);

@@ -6,7 +6,6 @@ import { updateProgressBar } from "./progressBar";
 import enemies from "./enemies";
 import { updateBullets } from "./bullets";
 import { updatePowerups } from "./powerups";
-import { updateDestructibles } from "./destructibles";
 import { updateOverlaps } from "./overlaps";
 import { scrollPickups } from "./pickups";
 
@@ -30,7 +29,6 @@ export default function () {
 			updateProgressBar();
 			updateBullets();
 			updatePowerups();
-			updateDestructibles();
 			updateOverlaps();
 		} catch (e) {
 			console.error("Error in game tick", e);
