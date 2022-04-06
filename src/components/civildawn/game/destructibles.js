@@ -125,7 +125,8 @@ const makeMissileDestructible = sprite => {
   sprite.body.collisionFilter.mask =
     collisionCats.PLAYER & collisionCats.BOUNDARY;
   sprite.body.mass = 0.01;
-  const velocity = getRandBetween(-4, -6);
+  // const velocity = getRandBetween(-7, -11);
+  const velocity = getRandBetween(-1, -2);
   const onTick = () => {
     sprite.rotation = 0;
     sprite.setVelocityX(velocity);
@@ -136,7 +137,7 @@ const makeMissileDestructible = sprite => {
   return makeBaseDestructible({
 		destructibleId: nanoid(16),
 		destructibleType: DESTRUCTIBLE_TYPES.MISSILE,
-		hp: 50,
+		hp: 1,
 		onTick,
 		speed: velocity,
 		sprite

@@ -2,7 +2,7 @@ import { getRandBetween, getRandomProperty } from "../cdUtils";
 import collisionCats, { nonCollidingGroup } from "./collision";
 import game from "./game";
 import { addGameEvent } from "./gameEvents";
-import ground, { getGroundIntersections } from "./ground";
+import { getGroundIntersections } from "./ground";
 import { refreshScoreCt } from "./hud";
 import { fadingPlayerAlert } from "./player";
 
@@ -102,7 +102,7 @@ export const consumePickup = pickupBodyId => {
   )[0];
   if (!collectedPickup || collectedPickup.isConsumed === true) return;
   collectedPickup.isConsumed = true;
-  const score = 10;
+  const score = 10 + 5 * (game.level - 1);
   game.score += score;
   fadingPlayerAlert(`+${score}`);
   refreshScoreCt();

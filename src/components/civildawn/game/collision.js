@@ -2,9 +2,8 @@ import Phaser from "phaser";
 import player, { hurtPlayer } from "./player";
 import enemies from "./enemies";
 import { getClosestPtTo } from "../cdUtils";
-import { DESTRUCTIBLE_TYPES } from "./destructibles";
 import ground from "./ground";
-import { consumePowerup } from "./powerups";
+import { consumePowerup, getPowerupByBodyId } from "./powerups";
 import pistol from "./pistol";
 import destructibles from "./destructibles";
 
@@ -91,6 +90,30 @@ const checkPlayerPowerupColl = pair => {
         ? pair.bodyB
         : pair.bodyA;
     consumePowerup(powerupBody.id);
+  }
+};
+
+/**
+ * Detects collisions between falling powerups and the ground
+ * @param {CollisionPair} pair Phaser collision pair
+ */
+const checkPowerupGroundColl = pair => {
+  if (
+		detectCatColl(
+			pair.bodyA,
+			pair.bodyB,
+			collisionCats.GROUND,
+			collisionCats.CONSUMABLE
+		)
+  ) {
+		const powerupBody =
+			pair.bodyA.collisionFilter.category === collisionCats.CONSUMABLE
+				? pair.bodyA
+				: pair.bodyB;
+		const powerup = getPowerupByBodyId(powerupBody.id);
+		if (powerup.isDropping) {
+			powerup.onGroundCollision();
+		}
   }
 };
 
@@ -241,6 +264,7 @@ export const handleCollisions = event => {
     checkPlayerEnemyColl(pair);
     checkPlayerGroundColl(pair);
     checkPlayerPowerupColl(pair);
+		checkPowerupGroundColl(pair);
   });
 };
 
