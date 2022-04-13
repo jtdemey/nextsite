@@ -842,13 +842,17 @@ strong {
 .content-text {
   max-width: 40em;
   color: white;
-  margin: 3em auto;
+  margin: 3em auto 0;
   line-height: 1.5em;
   padding: 0 1em;
   font-size: 1em;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.m-b-3 {
+	margin-bottom: 3em;
 }
 
 .content-btns {
@@ -904,6 +908,20 @@ strong {
   width: 3em;
   fill: #fff;
 }
+
+#skills-list {
+	max-width: 40em;
+	margin: 1.5em auto 3em;
+	padding-left: 4rem;
+  font-family: 'Vollkorn', serif;
+	list-style: disclosure-closed;
+	text-align: left;
+}
+
+#skills-list > li {
+	padding: 0.25rem;
+}
+
 /* CONTACT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 .contact-text {
   max-width: 40em;
@@ -1087,8 +1105,8 @@ strong {
   }
 
   .doodle-card {
-    height: 172px;
-    flex: 0 1 128px;
+    height: 212px;
+    flex: 0 1 164px;
   }
 }
 

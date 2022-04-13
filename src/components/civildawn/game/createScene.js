@@ -8,6 +8,7 @@ import { initBounds, setExtendedBounds } from "./bounds";
 import { initGui } from "./hud";
 import { initPistolSprite } from "./pistol";
 import { beginSpawningPickups, initPickupLine } from "./pickups";
+import { initParticles } from "./particles";
 
 /**
  * Creates the base scene
@@ -30,10 +31,11 @@ export default function () {
   initGui();
   loadLevel(this, LEVEL_IDS.CIVIL_DUSK);
   initPlayerSprite();
+	initParticles();
   initPistolSprite();
   setGraphics(this);
   initBounds();
-  initProgressBar(this);
 	initPickupLine();
+  initProgressBar(this);
 	beginSpawningPickups();
 }

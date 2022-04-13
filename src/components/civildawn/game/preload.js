@@ -6,6 +6,7 @@ import { POWERUP_NAMES } from "./powerups";
  */
 export default function () {
   const bg = str => `civildawn/assets/bg/${str}.png`;
+  const pa = str => `civildawn/assets/particles/${str}.png`;
   const png = str => `civildawn/assets/${str}.png`;
   const pu = str => `civildawn/assets/powerups/${str}.png`;
   const d = str => `civildawn/assets/destructibles/${str}.png`;
@@ -27,6 +28,8 @@ export default function () {
     frameWidth: 80,
     frameHeight: 40
   });
+	//Particles
+  this.load.image("dust", pa("dust"));
 	//Pickups
   this.load.image("pickup", png("pickup"));
   //Powerups

@@ -2,12 +2,14 @@ import { shakeCamera } from "./camera";
 import { collidingGroup, nonCollidingGroup } from "./collision";
 import { gameOver } from "./game";
 import { refreshHealthCt } from "./hud";
+import particles from "./particles";
 import { updateGunSprite, updateAimLine } from "./pistol";
 
 /**
  * Player entity and related data
  */
 const player = {
+	dustParticleEmitter: null,
   hasControl: true,
   hitCooldown: 0,
   hp: 100,
@@ -67,6 +69,7 @@ player.onTick = () => {
   if (player.hitCooldown > 0) {
     player.hitCooldown -= 1;
   }
+	particles.dustParticles.setPosition(player.sprite.x, player.sprite.y);
 };
 
 /**

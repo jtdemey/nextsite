@@ -267,14 +267,14 @@ const makeDropPowerup = (x, y, id) => {
 		player.scene.tweens.add({
 			targets: powerup,
 			ease: "Sine.easeOut",
-			duration: 800,
+			duration: 600,
 			repeat: 0,
 			x: xOnHit,
 			y: powerup.y - 160,
 			onComplete: () => {
 				powerup.onTick = () => {
 					powerup.rotation = 0;
-					powerup.setVelocityX(-6);
+					powerup.setVelocityX(-(game.speed));
 				};
 			}
 		});

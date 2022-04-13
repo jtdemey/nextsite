@@ -205,7 +205,6 @@ export const rollNextEnemySpawnDist = () => {
   );
 };
 
-let initialBgTint;
 /**
  * Sets the background image of the game
  * @param {Scene} scene Current Phaser scene
